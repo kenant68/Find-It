@@ -1,0 +1,24 @@
+.card{
+    width: 497px;
+    height: 439px;
+    border-radius: 34px;
+    opacity: 100%;
+    background-color: rgb(255 255 255/ 5%);
+}
+
+
+.container{
+    display: inline-block;
+    margin-top: 10%;
+}
+
+.container button{
+    margin-top: 65%;
+}
+
+section h1{
+    color: white;
+    font-size: 40px;
+
+
+}
