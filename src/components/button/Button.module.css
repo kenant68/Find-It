@@ -1,0 +1,29 @@
+.button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    background: linear-gradient(90deg, #FC1D72, #961144);
+    z-index: 0;
+}
+
+
+.button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, #60D9FB, #961144);
+    opacity: 0;
+    transition: opacity 350ms ease;
+    border-radius: inherit;
+}
+
+
+.button:hover::before {
+    opacity: 1;
+}
