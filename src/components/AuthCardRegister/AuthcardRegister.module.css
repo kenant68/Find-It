@@ -1,6 +1,6 @@
 .card {
     width: 497px;
-    height: 490px;
+    height: 550px;
     border-radius: 34px;
     opacity: 100%;
     background-color: rgb(255 255 255 / 5%);
@@ -28,12 +28,16 @@ section h1 {
     margin-bottom: 20px;
 }
 
-.linkToLogin{
+
+.linkToLogin {
     color: white;
-    margin-left: 60%;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+    transition: color 0.2s ease;
 }
 
-.linkToLogin:hover{
+.linkToLogin:hover {
     color: #60D9FB;
     cursor: pointer;
 }
