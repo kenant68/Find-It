@@ -1,24 +1,39 @@
-.card{
+.card {
     width: 497px;
-    height: 439px;
+    height: 490px;
     border-radius: 34px;
     opacity: 100%;
-    background-color: rgb(255 255 255/ 5%);
+    background-color: rgb(255 255 255 / 5%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-
-.container{
-    display: inline-block;
-    margin-top: 10%;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin-top: 3%;
+    gap: 15px;
 }
 
-.container button{
-    margin-top: 65%;
+.container-button {
+    margin-top: 20%;
 }
 
-section h1{
+section h1 {
     color: white;
     font-size: 40px;
+    margin-bottom: 20px;
+}
 
+.linkToLogin{
+    color: white;
+    margin-left: 60%;
+}
 
+.linkToLogin:hover{
+    color: #60D9FB;
+    cursor: pointer;
 }

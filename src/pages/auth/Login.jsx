@@ -1,9 +1,11 @@
 import React from 'react';
+import styles from './Login.module.css'
+import AuthcardLogin from "../../components/AuthCardLogin/AuthcardLogin.jsx";
 
 const Login = () => {
     return (
         <div>
-            <h1>Login Page</h1>
+            <AuthcardLogin title={"Se connecter"}/>
         </div>
     );
 };
