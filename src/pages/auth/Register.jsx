@@ -1,5 +1,6 @@
 import React from 'react';
 import AuthcardRegister from "../../components/AuthCardRegister/AuthcardRegister.jsx";
+import styles from './Register.module.css'
 
 const Register = () => {
     return (
