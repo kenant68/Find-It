@@ -1,0 +1,8 @@
+.divButtons{
+    display: flex;
+    justify-content: space-between;
+}
+
+.title{
+    margin-bottom: 50px;
+}
