@@ -1,6 +1,7 @@
 import React from 'react';
-import Button from "../../../../src/components/button/Button.jsx";
+import Button from "../../components/button/Button.jsx";
 import styles from "./Home.module.css";
+import {Link} from "react-router-dom";
 
 
 const Home = () => {
@@ -11,8 +12,10 @@ const Home = () => {
                 <p>L'application pour programmer vos scrims</p>
             </div>
             <div className={styles.divButtons}>
-                <Button text={"S'inscrire"}></Button>
-                <Button text={"Se connecter"}></Button>
+                <Link to="/register" className={styles.linkToLogin}>
+                    <Button text={"S'inscrire"}></Button>
+                </Link>
+                <Link to="/login" className={styles.linkToRegister}><Button text={"Se connecter"}></Button></Link>
             </div>
         </div>
     );
