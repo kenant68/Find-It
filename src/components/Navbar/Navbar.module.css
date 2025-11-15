@@ -24,6 +24,13 @@
     border: none;
     cursor: pointer;
     padding: 0;
+    outline: none;
+}
+
+.toggleBtn:focus-visible {
+   outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .toggleIcon {
@@ -46,6 +53,11 @@
     color: white;
     border-radius: 8px;
     transition: background 0.2s ease;
+}
+
+.link:focus-visible{
+    background: rgba(255, 255, 255, 0.1);
+    outline-offset:-2px ;
 }
 
 .link:hover {

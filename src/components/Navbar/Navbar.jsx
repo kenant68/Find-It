@@ -21,7 +21,8 @@ export default function Navbar() {
                 >
                     <img
                         src={isCollapsed ? sidebarOpenIcon : sidebarClosedIcon}
-                        alt="toggle sidebar"
+                        alt=""
+                        aria-hidden="true"
                         className={styles.toggleIcon}
                     />
                 </button>
@@ -37,7 +38,7 @@ export default function Navbar() {
                             }
                         >
                             <img src={teamsIcon} className={styles.icon} alt="teams" />
-                            {!isCollapsed && <span>Teams</span>}
+                            {!isCollapsed && <span>Equipes</span>}
                         </NavLink>
                     </li>
 
@@ -49,7 +50,7 @@ export default function Navbar() {
                             }
                         >
                             <img src={matchsIcon} className={styles.icon} alt="matchs" />
-                            {!isCollapsed && <span>Matchs</span>}
+                            {!isCollapsed && <span>Matches</span>}
                         </NavLink>
                     </li>
 
