@@ -15,6 +15,7 @@ export default function Navbar() {
     return (
         <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}>
             <div className={styles.topSection}>
+                {!isCollapsed && <span className={styles.title}>FindIT</span>}
                 <button
                     className={styles.toggleBtn}
                     onClick={() => setIsCollapsed(!isCollapsed)}

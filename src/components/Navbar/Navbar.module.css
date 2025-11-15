@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
+
 .sidebar {
     width: 220px;
     height: calc(97vh - 5px);
@@ -72,4 +75,9 @@
     width: 22px;
     height: 22px;
     object-fit: contain;
+}
+
+
+.title{
+    font-family: Silkscreen, cursive;
 }
