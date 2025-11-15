@@ -1,0 +1,75 @@
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background-color: #101633;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    transition: width 0.25s ease;
+}
+
+.collapsed {
+    width: 70px;
+}
+
+.topSection {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.toggleBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+}
+
+.toggleBtn:focus-visible {
+   outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.toggleIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.navList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.link:focus-visible{
+    background: rgba(255, 255, 255, 0.1);
+    outline-offset:-2px ;
+}
+
+.link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
