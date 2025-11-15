@@ -1,0 +1,9 @@
+.navbar {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+body{
+    height: 100%;
+}
