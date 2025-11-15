@@ -8,6 +8,7 @@ import teamsIcon from "../../assets/teams.png";
 import matchsIcon from "../../assets/matchs.png";
 import announceIcon from "../../assets/announce.png";
 import notificationIcon from "../../assets/notifications.png";
+import logo from "../../assets/logo.png";
 
 export default function Navbar() {
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -15,7 +16,17 @@ export default function Navbar() {
     return (
         <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}>
             <div className={styles.topSection}>
-                {!isCollapsed && <span className={styles.title}>FindIT</span>}
+                <div className={styles.logoTitle}>
+                    <img
+                        src={logo}
+                        alt=""
+                        aria-hidden="true"
+                        className={styles.toggleIcon}
+                    />
+                    {!isCollapsed && <span className={styles.title}>FindIT</span>}
+
+                </div>
+
                 <button
                     className={styles.toggleBtn}
                     onClick={() => setIsCollapsed(!isCollapsed)}

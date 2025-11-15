@@ -81,3 +81,10 @@
 .title{
     font-family: Silkscreen, cursive;
 }
+
+.logoTitle{
+    position: absolute;
+    margin-right: 50%;
+    justify-content: space-between;
+    gap: 16px;
+}
