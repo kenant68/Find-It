@@ -30,6 +30,22 @@ export const router = createBrowserRouter([
                     <Login/>
                 )
             },
+            {
+                path: "teams",
+                element: <Teams/>
+            },
+            {
+                path: "matchs",
+                element: <Matchs/>
+            },
+            {
+                path: "announces",
+                element: <Announces/>
+            },
+            {
+                path: "notifications",
+                element: <Notifications/>
+            }
         ]
     },
 ])
