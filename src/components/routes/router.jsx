@@ -3,6 +3,7 @@ import App from "../../App.jsx"
 import Home from "../../pages/home/Home.jsx"
 import Register from "../../pages/auth/Register.jsx";
 import Login from "../../pages/auth/Login.jsx";
+ import Dashboard from "../../pages/dashboard/Dashboard.jsx";
 
 export const router = createBrowserRouter([
 
@@ -30,6 +31,12 @@ export const router = createBrowserRouter([
                     <Login/>
                 )
             },
+            {
+                path: "dashboard",
+                element:(
+                    <Dashboard/>
+                )
+            }
             // {
             //     path: "teams",
             //     element: <Teams/>
