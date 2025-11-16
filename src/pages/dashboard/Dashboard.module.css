@@ -1,7 +1,23 @@
-.navbar {
-    position: absolute;
-    left: 0;
-    top: 0;
+.layout {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
 }
 
 
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 20;
+}
+
+
+.content {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+    padding: 20px;
+    overflow-y: auto;
+}
