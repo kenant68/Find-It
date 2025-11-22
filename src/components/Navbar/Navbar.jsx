@@ -10,91 +10,93 @@ import announceIcon from "../../assets/announce.png";
 import notificationIcon from "../../assets/notifications.png";
 import logo from "../../assets/logo.png";
 
-export default function Navbar() {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+export default function Navbar({ isCollapsed, setIsCollapsed }) {
+  const [localCollapsed, setLocalCollapsed] = useState(false);
+  const collapsed = isCollapsed !== undefined ? isCollapsed : localCollapsed;
+  const setCollapsed =
+    setIsCollapsed !== undefined ? setIsCollapsed : setLocalCollapsed;
 
-    return (
-        <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ""}`}>
-            <div className={styles.topSection}>
-                <div className={styles.logoTitle}>
-                    <img
-                        src={logo}
-                        alt=""
-                        aria-hidden="true"
-                        className={styles.toggleIcon}
-                    />
-                    {!isCollapsed && <span className={styles.title}>FindIT</span>}
+  return (
+    <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}>
+      <div className={styles.topSection}>
+        <div className={styles.logoTitle}>
+          <img
+            src={logo}
+            alt=""
+            aria-hidden="true"
+            className={styles.toggleIcon}
+          />
+          {!collapsed && <span className={styles.title}>FindIT</span>}
+        </div>
 
-                </div>
+        <button
+          className={styles.toggleBtn}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <img
+            src={collapsed ? sidebarOpenIcon : sidebarClosedIcon}
+            alt=""
+            aria-hidden="true"
+            className={styles.toggleIcon}
+          />
+        </button>
+      </div>
 
-                <button
-                    className={styles.toggleBtn}
-                    onClick={() => setIsCollapsed(!isCollapsed)}
-                >
-                    <img
-                        src={isCollapsed ? sidebarOpenIcon : sidebarClosedIcon}
-                        alt=""
-                        aria-hidden="true"
-                        className={styles.toggleIcon}
-                    />
-                </button>
-            </div>
+      <nav>
+        <ul className={styles.navList}>
+          <li>
+            <NavLink
+              to="/teams"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              <img src={teamsIcon} className={styles.icon} alt="teams" />
+              {!collapsed && <span>Equipes</span>}
+            </NavLink>
+          </li>
 
-            <nav>
-                <ul className={styles.navList}>
-                    <li>
-                        <NavLink
-                            to="/teams"
-                            className={({ isActive }) =>
-                                isActive ? `${styles.link} ${styles.active}` : styles.link
-                            }
-                        >
-                            <img src={teamsIcon} className={styles.icon} alt="teams" />
-                            {!isCollapsed && <span>Equipes</span>}
-                        </NavLink>
-                    </li>
+          <li>
+            <NavLink
+              to="/matchs"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              <img src={matchsIcon} className={styles.icon} alt="matchs" />
+              {!collapsed && <span>Matches</span>}
+            </NavLink>
+          </li>
 
-                    <li>
-                        <NavLink
-                            to="/matchs"
-                            className={({ isActive }) =>
-                                isActive ? `${styles.link} ${styles.active}` : styles.link
-                            }
-                        >
-                            <img src={matchsIcon} className={styles.icon} alt="matchs" />
-                            {!isCollapsed && <span>Matches</span>}
-                        </NavLink>
-                    </li>
+          <li>
+            <NavLink
+              to="/announces"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              <img src={announceIcon} className={styles.icon} alt="announces" />
+              {!collapsed && <span>Annonces</span>}
+            </NavLink>
+          </li>
 
-                    <li>
-                        <NavLink
-                            to="/announces"
-                            className={({ isActive }) =>
-                                isActive ? `${styles.link} ${styles.active}` : styles.link
-                            }
-                        >
-                            <img src={announceIcon} className={styles.icon} alt="announces" />
-                            {!isCollapsed && <span>Annonces</span>}
-                        </NavLink>
-                    </li>
-
-                    <li>
-                        <NavLink
-                            to="/notifications"
-                            className={({ isActive }) =>
-                                isActive ? `${styles.link} ${styles.active}` : styles.link
-                            }
-                        >
-                            <img
-                                src={notificationIcon}
-                                className={styles.icon}
-                                alt="notifications"
-                            />
-                            {!isCollapsed && <span>Notifications</span>}
-                        </NavLink>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-    );
+          <li>
+            <NavLink
+              to="/notifications"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              <img
+                src={notificationIcon}
+                className={styles.icon}
+                alt="notifications"
+              />
+              {!collapsed && <span>Notifications</span>}
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  );
 }

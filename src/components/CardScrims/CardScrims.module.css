@@ -1,34 +1,50 @@
-.card {
-    width: 497px;
-    height: 439px;
-    border-radius: 34px;
-    opacity: 100%;
-    background-color: rgb(13 17 23 / 90%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    margin-top: 3%;
-    gap: 15px;
-}
-
-.container-button {
-    margin-top: 20%;
+    margin: 20px;
 }
 
 .title {
-    color: white;
-    font-size: 40px;
+    font-size: 24px;
     margin-bottom: 20px;
+    color: white;
+    font-family: Orbitron,sans-serif ;
 }
 
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
+.card {
+    display: flex;
+    align-items: center;
+    background: #1c1c1c;
+    padding: 15px;
+    border-radius: 12px;
+    gap: 20px;
+    color: white;
+}
 
+.image {
+    width: 140px;
+    border-radius: 8px;
+}
 
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
+.mapName {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.horaire,
+.team {
+    font-size: 16px;
+    opacity: 0.8;
+}
