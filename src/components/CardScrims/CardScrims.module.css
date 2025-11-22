@@ -1,50 +1,129 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
 .container {
-    margin: 20px;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .title {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: white;
-    font-family: Orbitron,sans-serif ;
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 0;
+  color: white;
+  font-family: Orbitron, sans-serif;
+  font-weight: 700;
+  text-align: center;
 }
 
 .list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px;
+  box-sizing: border-box;
 }
 
-.card {
-    display: flex;
-    align-items: center;
-    background: #1c1c1c;
-    padding: 15px;
-    border-radius: 12px;
-    gap: 20px;
-    color: white;
+.list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.scrimCard {
+  display: flex;
+  align-items: center;
+  background: rgb(255 255 255 / 5%);
+  padding: 15px;
+  border-radius: 12px;
+  gap: 15px;
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background 0.2s ease, transform 0.2s ease;
+  min-height: 0;
+}
+
+.scrimCard:hover {
+  background: rgb(255 255 255 / 8%);
+  transform: translateY(-2px);
 }
 
 .image {
-    width: 140px;
-    border-radius: 8px;
+  width: 100px;
+  height: 100px;
+  min-width: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.mapName {
-    font-size: 20px;
-    font-weight: bold;
+.info h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+  font-family: Orbitron, sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.horaire,
-.team {
-    font-size: 16px;
-    opacity: 0.8;
+.info p {
+  font-size: 14px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.horaire {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.vs {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.separator {
+  margin: 0 5px;
 }
