@@ -1,7 +1,14 @@
+.pageWrapper {
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+}
 
-    body {
-        margin: 0;
-        height: 100vh;
-        background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
-    }
-
+.cardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
