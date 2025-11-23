@@ -5,6 +5,7 @@ import Card from "../../components/Card/Card.jsx";
 import CardScrims from "../../components/CardScrims/CardScrims.jsx";
 import CardTeamMates from "../../components/CardTeamMates/CardTeamMates.jsx";
 import CardStats from "../../components/CardStats/CardStats.jsx";
+import CardFavStat from "../../components/CardFavStat/CardFavStat.jsx";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -37,7 +38,9 @@ const Dashboard = () => {
                 <CardTeamMates />
               </Card>
 
-              <Card>{/* Quatrième card - à remplacer */}</Card>
+              <Card>
+                <CardFavStat />
+              </Card>
             </div>
           </div>
         </div>
