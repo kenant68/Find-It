@@ -51,9 +51,37 @@
       "avatar_url": "https://imgs.search.brave.com/xJ2YFmxZb4_WZ4g3mfBshOVXxc9d72YAV3GbNi6Jxnc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzYxLzEvZXRlcm5h/bC1maXJlLWJsYWNr/LWxvZ28tcG5nX3Nl/ZWtsb2dvLTYxMzAz/MS5wbmc",
       "faceit_level": "8"
     }
-  ]
-
+  ],
   
+
+  "faceit_stats": [
+    {
+      "id": "1",
+      "user_id": "1",
+      "elo": "1350",
+      "matches_played": "150",
+      "wins": "50",
+      "win_rate": "33.33%",
+      "winstreak": "0",
+      "recent_matches": "W L W W L",
+      "average_headshots": "65.2%",
+      "average_K/D": "0.9",
+      "last_update": "2025-01-01"
+    },
+    {
+      "id": "2",
+      "user_id": "2",
+      "elo": "1250",
+      "matches_played": "100",
+      "wins": "75",
+      "win_rate": "75%",
+      "winstreak": "5",
+      "recent_matches": "W W W W W",
+      "average_headshots": "72.5%",
+      "average_K/D": "1.3",
+      "last_update": "2025-01-01"
+    }
+  ]
 }
 
 
