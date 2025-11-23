@@ -12,7 +12,7 @@ const CardTeamMates = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Joueurs</h1>
+      <h1 className={styles.title}>Joueurs de l'équipe</h1>
 
       <div className={styles.list}>
         {users.map((user) => (
