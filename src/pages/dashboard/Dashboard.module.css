@@ -23,7 +23,7 @@
   margin-left: 220px;
   width: calc(100% - 220px);
   padding: 20px;
-  padding-left: 40px;
+  padding-left: 50px;
   overflow-y: auto;
   transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
 }
@@ -31,4 +31,11 @@
 .contentCollapsed {
   margin-left: 70px;
   width: calc(100% - 70px);
+}
+
+.cardsContainer {
+  display: flex;
+  gap: 250px;
+  width: 100%;
+  align-items: flex-start;
 }
