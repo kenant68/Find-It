@@ -32,5 +32,28 @@
       "teamB": "1",
       "mapId": "2"
     }
+  ],
+
+  "users": [
+    {
+      "id": "1",
+      "username": "Musashiii_",
+      "email": "musashi@gmail.com",
+      "password": "123456",
+      "avatar_url": "https://i.imgur.com/123456.png",
+      "faceit_level": "7"
+    },
+    {
+      "id": "2",
+      "username": "w0xic",
+      "email": "w0xic@gmail.com",
+      "password": "123456",
+      "avatar_url": "https://i.imgur.com/123456.png",
+      "faceit_level": "8"
+    }
   ]
+
+  
 }
+
+
