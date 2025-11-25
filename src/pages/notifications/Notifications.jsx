@@ -6,9 +6,6 @@ import nouveauMembre from "../../assets/notifs/nv-membre.svg";
 import quitterEquipe from "../../assets/notifs/member-quit.svg";
 import scrimNotif from "../../assets/notifs/nv-scrim.svg";
 
-/**
- * Mappe le type de notification à son icône correspondante
- */
 const iconMap = {
   new_member: nouveauMembre,
   member_quit: quitterEquipe,
@@ -19,9 +16,6 @@ const Notifications = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [notifications, setNotifications] = useState([]);
 
-  /**
-   * Charge les notifications depuis db.json
-   */
   useEffect(() => {
     const loadNotifications = async () => {
       try {
@@ -36,10 +30,6 @@ const Notifications = () => {
     loadNotifications();
   }, []);
 
-  /**
-   * Supprime une notification par son ID
-   * @param {string} id - L'identifiant unique de la notification à supprimer
-   */
   const handleDeleteNotification = (id) => {
     setNotifications((prevNotifications) =>
       prevNotifications.filter((notification) => notification.id !== id)
