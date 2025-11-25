@@ -49,7 +49,34 @@
       "email": "w0xic@gmail.com",
       "password": "123456",
       "avatar_url": "https://imgs.search.brave.com/xJ2YFmxZb4_WZ4g3mfBshOVXxc9d72YAV3GbNi6Jxnc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMuc2Vla2xvZ28u/Y29tL2xvZ28tcG5n/LzYxLzEvZXRlcm5h/bC1maXJlLWJsYWNr/LWxvZ28tcG5nX3Nl/ZWtsb2dvLTYxMzAz/MS5wbmc",
-      "faceit_level": "8"
+      "faceit_level": "10"
+    }
+    ,
+    {
+      "id": "3",
+      "username": "r0pz",
+      "email": "r0pz@gmail.com",
+      "password": "123456",
+      "avatar_url": "https://imgs.search.brave.com/HSLfpKGHp4O7eq4Y0x8_QD_lpnS33kcU6jRxRL0aZhk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmxv/Z29zLWRvd25sb2Fk/LmNvbS8xMTM5NzUv/Mjk2MDUtczEyODAt/NzM4MDQwMjQ4ZGVk/N2M0MzEwYzQ2NTI0/ODk2NTRiYmIucG5n/L1RlYW1fVml0YWxp/dHlfTG9nb18yMDE4/LXMxMjgwLnBuZw",
+      "faceit_level": "10"
+    }
+    ,
+    {
+      "id": "4",
+      "username": "f0rsaken",
+      "email": "f0rsaken@gmail.com",
+      "password": "Louvre",
+      "avatar_url": "https://imgs.search.brave.com/5Yz1vNFv1SILHsCVQwvo8VFlATv2nRHZa1tNTzkpF4s/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzc4L2Jl/L2JiLzc4YmViYjZh/NGFhZDViZjU3MjVm/YTUyZTM1YWNjOTIw/LmpwZw",
+      "faceit_level": "6"
+    }
+    ,
+    {
+      "id": "5",
+      "username": "donk666",
+      "email": "donk666@gmail.com",
+      "password": "123456",
+      "avatar_url": "https://imgs.search.brave.com/Gigl0NaSsoaRIhDtzIF33p8UbNZTaQkt72GYqMMY3Yo/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9paDEu/cmVkYnViYmxlLm5l/dC9pbWFnZS41NzIy/NDE5OTE4LjkzMzIv/cmFmLDM2MHgzNjAs/MDc1LHQsZmFmYWZh/OmNhNDQzZjQ3ODYu/anBn",
+      "faceit_level": "10"
     }
   ],
   
