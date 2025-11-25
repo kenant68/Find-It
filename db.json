@@ -114,6 +114,37 @@
       "fav_side": "T",
       "last_update": "2025-01-01"
     }
+  ],
+
+  "notifications": [
+    {
+      "id": "1",
+      "type": "new_member",
+      "title": "Nouveau membre de l'équipe",
+      "subtitle": "Musashiii_",
+      "timestamp": "il y a 5 minutes"
+    },
+    {
+      "id": "2",
+      "type": "new_scrim",
+      "title": "Nouveau scrim en approche",
+      "subtitle": "team_w0xic",
+      "timestamp": "il y a 1 heure"
+    },
+    {
+      "id": "3",
+      "type": "member_quit",
+      "title": "Un membre a quitté l'équipe",
+      "subtitle": "XANTARES",
+      "timestamp": "il y a 3 heures"
+    },
+    {
+      "id": "4",
+      "type": "new_member",
+      "title": "Nouveau membre de l'équipe",
+      "subtitle": "w0xic",
+      "timestamp": "il y a 3 heures"
+    }
   ]
 }
 

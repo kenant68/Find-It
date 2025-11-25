@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { useState } from "react";
 
@@ -11,6 +11,7 @@ import notificationIcon from "../../assets/notifications.png";
 import logo from "../../assets/logo.png";
 
 export default function Navbar({ isCollapsed, setIsCollapsed }) {
+  const navigate = useNavigate();
   const [localCollapsed, setLocalCollapsed] = useState(false);
   const collapsed = isCollapsed !== undefined ? isCollapsed : localCollapsed;
   const setCollapsed =
@@ -22,9 +23,10 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
         <div className={styles.logoTitle}>
           <img
             src={logo}
-            alt=""
-            aria-hidden="true"
+            alt="FindIT Logo"
             className={styles.toggleIcon}
+            onClick={() => navigate("/dashboard")}
+            style={{ cursor: "pointer" }}
           />
           {!collapsed && <span className={styles.title}>FindIT</span>}
         </div>
@@ -35,8 +37,7 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
         >
           <img
             src={collapsed ? sidebarOpenIcon : sidebarClosedIcon}
-            alt=""
-            aria-hidden="true"
+            alt={collapsed ? "Ouvrir la sidebar" : "Fermer la sidebar"}
             className={styles.toggleIcon}
           />
         </button>

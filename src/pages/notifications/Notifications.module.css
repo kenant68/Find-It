@@ -1,0 +1,35 @@
+.pageWrapper {
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 20;
+}
+
+.content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 20px;
+  padding-left: 100px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

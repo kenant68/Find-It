@@ -1,0 +1,40 @@
+import React from "react";
+import styles from "./CardLong.module.css";
+import Bubble from "../Bubble/Bubble.jsx";
+import deleteIcon from "../../assets/notifs/X.svg";
+
+const CardLong = ({ icon, title, subtitle, timestamp, onDelete }) => {
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (onDelete) {
+      onDelete();
+    }
+  };
+
+  return (
+    <div className={styles.card}>
+      <Bubble>
+        <img src={icon} alt={title} />
+      </Bubble>
+      <div className={styles.content}>
+        <h2 className={styles.title}>{title}</h2>
+        <p className={styles.subtitle}>{subtitle}</p>
+      </div>
+      <div className={styles.rightSection}>
+        <p className={styles.timestamp}>{timestamp}</p>
+        {onDelete && (
+          <button
+            className={styles.deleteButton}
+            onClick={handleDelete}
+            aria-label="Supprimer la notification"
+            type="button"
+          >
+            <img src={deleteIcon} alt="Supprimer" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CardLong;
