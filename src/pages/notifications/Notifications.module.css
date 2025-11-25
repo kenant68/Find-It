@@ -18,3 +18,18 @@
   height: 100vh;
   z-index: 20;
 }
+
+.content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 20px;
+  padding-left: 100px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
