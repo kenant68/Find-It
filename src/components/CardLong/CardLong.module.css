@@ -34,6 +34,12 @@
   line-height: 1.4;
 }
 
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .timestamp {
   font-size: 14px;
   color: #b0b0b0;
@@ -41,4 +47,46 @@
   white-space: nowrap;
   align-self: flex-start;
   padding-top: 2px;
+}
+
+.deleteButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b0b0b0;
+  transition: color 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+  border-radius: 4px;
+  outline: none;
+}
+
+.deleteButton img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) saturate(100%) invert(70%) sepia(0%) saturate(0%)
+    hue-rotate(0deg) brightness(100%) contrast(100%);
+  transition: filter 0.2s ease;
+}
+
+.deleteButton:hover {
+  color: #ff4444;
+  background-color: rgba(255, 68, 68, 0.1);
+  transform: scale(1.1);
+}
+
+.deleteButton:hover img {
+  filter: brightness(0) saturate(100%) invert(40%) sepia(95%) saturate(5000%)
+    hue-rotate(350deg) brightness(100%) contrast(100%);
+}
+
+.deleteButton:focus-visible {
+  outline: 2px solid rgba(255, 68, 68, 0.5);
+  outline-offset: 2px;
+}
+
+.deleteButton:active {
+  transform: scale(0.95);
 }
