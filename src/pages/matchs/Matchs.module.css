@@ -1,0 +1,158 @@
+.pageWrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 10;
+}
+
+.content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 40px 40px 40px 100px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
+}
+
+.contentCollapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 60px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sectionLabel {
+  margin: 0;
+  color: #f7f7ff;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.pageTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+.matchCard {
+  width: 100%;
+  max-width: 1038px;
+  min-height: 110px;
+  padding: 30px 60px;
+  border-radius: 20px;
+  background-color: rgba(7, 10, 31, 0.9);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+.teamName {
+  color: #d0d0ff;
+  font-size: 20px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.scoreBlock {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #ffffff;
+  font-size: 48px;
+  font-weight: 600;
+  letter-spacing: 4px;
+}
+
+.scoreValue {
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+}
+
+.scoreSeparator {
+  font-size: 40px;
+  opacity: 0.7;
+}
+
+.statusMessage {
+  color: #f5f5f5;
+  font-size: 18px;
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  font-size: 18px;
+}
+
+@media (max-width: 1200px) {
+  .content,
+  .contentCollapsed {
+    padding: 30px;
+    padding-left: 90px;
+  }
+
+  .matchCard {
+    padding: 24px 32px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content,
+  .contentCollapsed {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .matchCard {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .teamName {
+    font-size: 18px;
+  }
+
+  .scoreBlock {
+    font-size: 40px;
+  }
+}

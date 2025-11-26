@@ -5,6 +5,7 @@ import Register from "../../pages/auth/Register.jsx";
 import Login from "../../pages/auth/Login.jsx";
 import Dashboard from "../../pages/dashboard/Dashboard.jsx";
 import Notifications from "../../pages/notifications/Notifications.jsx";
+import Matchs from "../../pages/matchs/Matchs.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -31,10 +32,10 @@ export const router = createBrowserRouter([
       //     path: "teams",
       //     element: <Teams/>
       // },
-      // {
-      //     path: "matchs",
-      //     element: <Matchs/>
-      // },
+      {
+        path: "matchs",
+        element: <Matchs />,
+      },
       // {
       //     path: "announces",
       //     element: <Announces/>

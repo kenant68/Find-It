@@ -34,6 +34,37 @@
     }
   ],
 
+  "matches": [
+    {
+      "id": "1",
+      "teamA": "team_XANTARES",
+      "teamB": "team_r0pz",
+      "scoreA": 13,
+      "scoreB": 11
+    },
+    {
+      "id": "2",
+      "teamA": "team_XANTARES",
+      "teamB": "team_ZywOo",
+      "scoreA": 13,
+      "scoreB": 9
+    },
+    {
+      "id": "3",
+      "teamA": "team_XANTARES",
+      "teamB": "team_MaJ3r",
+      "scoreA": 13,
+      "scoreB": 5
+    },
+    {
+      "id": "4",
+      "teamA": "team_XANTARES",
+      "teamB": "team_ApEX",
+      "scoreA": 11,
+      "scoreB": 13
+    }
+  ],
+
   "users": [
     {
       "id": "1",
