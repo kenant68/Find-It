@@ -3,7 +3,14 @@ import styles from "./CardLong.module.css";
 import Bubble from "../Bubble/Bubble.jsx";
 import deleteIcon from "../../assets/notifs/X.svg";
 
-const CardLong = ({ icon, title, subtitle, timestamp, onDelete }) => {
+const CardLong = ({
+  icon,
+  title,
+  subtitle,
+  timestamp,
+  onDelete,
+  actionButton,
+}) => {
   const handleDelete = (e) => {
     e.stopPropagation();
     if (onDelete) {
@@ -18,10 +25,13 @@ const CardLong = ({ icon, title, subtitle, timestamp, onDelete }) => {
       </Bubble>
       <div className={styles.content}>
         <h2 className={styles.title}>{title}</h2>
-        <p className={styles.subtitle}>{subtitle}</p>
+        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       </div>
       <div className={styles.rightSection}>
         <p className={styles.timestamp}>{timestamp}</p>
+        {actionButton && (
+          <div className={styles.actionButtonContainer}>{actionButton}</div>
+        )}
         {onDelete && (
           <button
             className={styles.deleteButton}
