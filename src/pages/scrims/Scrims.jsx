@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "./Scrims.module.css";
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import CardLong from "../../components/CardLong/CardLong.jsx";
+import CreateScrimModal from "../../components/CreateScrimModal/CreateScrimModal.jsx";
 import scrimIcon from "../../assets/scrims/scrim-swords.svg";
 
 const Scrims = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [scrims, setScrims] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const loadScrims = async () => {
@@ -39,7 +41,22 @@ const Scrims = () => {
   };
 
   const handleCreate = () => {
-    console.log("Créer une nouvelle annonce de scrim");
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmit = (formData) => {
+    const newScrim = {
+      id: String(Date.now()),
+      title: `Annonce de ${formData.teamName}`,
+      timestamp: "À l'instant",
+    };
+
+    setScrims((prevScrims) => [newScrim, ...prevScrims]);
+    setIsModalOpen(false);
   };
 
   return (
@@ -90,6 +107,12 @@ const Scrims = () => {
           </button>
         </div>
       </div>
+
+      <CreateScrimModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 };
