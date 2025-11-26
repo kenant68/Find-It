@@ -176,6 +176,29 @@
       "subtitle": "w0xic",
       "timestamp": "il y a 3 heures"
     }
+  ],
+
+  "scrimAnnouncements": [
+    {
+      "id": "1",
+      "teamName": "team_APEX",
+      "timestamp": "30 min"
+    },
+    {
+      "id": "2",
+      "teamName": "team_donk666",
+      "timestamp": "il y a 1 heure"
+    },
+    {
+      "id": "3",
+      "teamName": "team_w0xic",
+      "timestamp": "il y a 3 heures"
+    },
+    {
+      "id": "4",
+      "teamName": "team_XANTARES",
+      "timestamp": "il y a 3 heures"
+    }
   ]
 }
 
