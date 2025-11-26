@@ -40,6 +40,11 @@
   gap: 16px;
 }
 
+.actionButtonContainer {
+  display: flex;
+  align-items: center;
+}
+
 .timestamp {
   font-size: 14px;
   color: #b0b0b0;
