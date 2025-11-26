@@ -199,7 +199,47 @@
       "teamName": "team_XANTARES",
       "timestamp": "il y a 3 heures"
     }
-  ]
+  ],
+
+  "teamMembers": [
+    {
+      "id": "1",
+      "username": "Mbaye67",
+      "avatar": "ef-blue-pfp.svg",
+      "faceitLevel": 10,
+      "isLeader": false
+    },
+    {
+      "id": "2",
+      "username": "Donkey kong peek",
+      "avatar": "itachi-pfp.svg",
+      "faceitLevel": 10,
+      "isLeader": false
+    },
+    {
+      "id": "3",
+      "username": "Musashiii_",
+      "avatar": "ef-gold-pfp.svg",
+      "faceitLevel": 10,
+      "isLeader": true
+    },
+    {
+      "id": "4",
+      "username": "JAMAL",
+      "avatar": "ef-red-pfp.svg",
+      "faceitLevel": 10,
+      "isLeader": false
+    },
+    {
+      "id": "5",
+      "username": "Ziiiiz67",
+      "avatar": "golem-pfp.svg",
+      "faceitLevel": 10,
+      "isLeader": false
+    }
+  ],
+
+  "teamRecentResults": "W L W W L"
 }
 
 
