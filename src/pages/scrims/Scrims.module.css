@@ -1,0 +1,153 @@
+.pageWrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 10;
+}
+
+.content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 40px 40px 40px 100px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
+  position: relative;
+}
+
+.contentCollapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 60px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pageTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 100px;
+}
+
+.emptyMessage {
+  color: #f5f5f5;
+  font-size: 18px;
+}
+
+.acceptButton {
+  background-color: #60d9fb;
+  color: #ffffff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.acceptButton:hover {
+  background-color: #4fc5e8;
+  transform: translateY(-1px);
+}
+
+.acceptButton:active {
+  transform: translateY(0);
+}
+
+.createButton {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background-color: #4caf50;
+  color: #ffffff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease,
+    box-shadow 0.2s ease;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.createButton:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.createButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 1200px) {
+  .content,
+  .contentCollapsed {
+    padding: 30px;
+    padding-left: 90px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+
+  .createButton {
+    bottom: 30px;
+    right: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content,
+  .contentCollapsed {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+  }
+
+  .createButton {
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
