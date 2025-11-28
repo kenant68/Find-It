@@ -10,6 +10,7 @@ const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [recentResults, setRecentResults] = useState("");
   const [teamStats, setTeamStats] = useState(null);
+  const [teamName, setTeamName] = useState("");
 
   useEffect(() => {
     const loadTeamData = async () => {
@@ -24,6 +25,15 @@ const Team = () => {
 
         setTeamMembers(membersData);
         setRecentResults(data.teamRecentResults || "W L W W L");
+
+        if (data.currentTeam) {
+          const team = (data.teams || []).find(
+            (t) => t.id === data.currentTeam.id
+          );
+          setTeamName(team ? team.name : data.currentTeam.name);
+        } else if (data.teams && data.teams.length > 0) {
+          setTeamName(data.teams[0].name);
+        }
 
         if (data.faceit_stats && data.faceit_stats.length > 0) {
           const stats = data.faceit_stats;
@@ -73,7 +83,7 @@ const Team = () => {
         >
           <header className={styles.header}>
             <p className={styles.sectionLabel}>Mon équipe</p>
-            <h1 className={styles.pageTitle}>team_Musashiii_</h1>
+            <h1 className={styles.pageTitle}>{teamName || "Mon équipe"}</h1>
           </header>
 
           <div className={styles.membersSection}>

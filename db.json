@@ -13,8 +13,9 @@
   ],
 
   "teams": [
-    { "id": "1", "name": "team_XANTARES" },
-    { "id": "2", "name": "team_w0xic" }
+    { "id": 1, "name": "team_XANTARES" },
+    { "id": 2, "name": "team_w0xic" },
+    { "id": 9, "name": "team_Musashiii_" }
   ],
 
   "scrims": [
@@ -239,7 +240,12 @@
     }
   ],
 
-  "teamRecentResults": "W L W W L"
+  "teamRecentResults": "W L W W L",
+
+  "currentTeam": {
+    "id": 9,
+    "name": "team_Musashiii_"
+  }
 }
 
 
