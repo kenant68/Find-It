@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./UserProfile.module.css";
 
 const UserProfile = ({ isCollapsed }) => {
@@ -35,7 +35,7 @@ const UserProfile = ({ isCollapsed }) => {
 
   return (
     <div className={styles.userSection}>
-      <div className={styles.userInfo}>
+      <Link to="/profil" className={styles.userInfo}>
         <div className={styles.avatarContainer}>
           <img
             src={user.avatar_url}
@@ -46,7 +46,7 @@ const UserProfile = ({ isCollapsed }) => {
         {!isCollapsed && (
           <span className={styles.username}>{user.username}</span>
         )}
-      </div>
+      </Link>
       {!isCollapsed && (
         <button className={styles.logoutButton} onClick={handleLogout}>
           <span>Déconnexion</span>
