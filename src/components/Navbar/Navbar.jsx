@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { useState } from "react";
+import UserProfile from "../UserProfile/UserProfile.jsx";
 
 import sidebarOpenIcon from "../../assets/sidebar-open.png";
 import sidebarClosedIcon from "../../assets/sidebar-closed.png";
@@ -98,6 +99,8 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
           </li>
         </ul>
       </nav>
+
+      <UserProfile isCollapsed={collapsed} />
     </aside>
   );
 }

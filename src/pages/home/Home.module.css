@@ -4,6 +4,28 @@
   height: 100vh;
   overflow: hidden;
   background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+  position: relative;
+}
+
+.githubLink {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.githubLink:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.githubIcon {
+  width: 40px;
+  height: 40px;
 }
 
 .container {

@@ -1,0 +1,89 @@
+.pageWrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+  overflow: hidden;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 10;
+}
+
+.content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 40px 40px 40px 100px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
+}
+
+.contentCollapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 60px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pageTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 1200px) {
+  .content,
+  .contentCollapsed {
+    padding: 30px;
+    padding-left: 90px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .content,
+  .contentCollapsed {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+  }
+}
+
