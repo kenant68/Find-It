@@ -39,15 +39,13 @@ const Team = () => {
             (sum, stat) => sum + parseInt(stat.matches_played),
             0
           );
-          const avgWinRate =
-            stats.reduce((sum, stat) => {
-              const winRate = parseFloat(stat.win_rate.replace("%", ""));
-              return sum + winRate;
-            }, 0) / stats.length;
+
+          const teamWinRate =
+            totalMatches > 0 ? (totalWins / totalMatches) * 100 : 0;
 
           setTeamStats({
             averageElo: Math.round(totalElo / stats.length),
-            winRate: avgWinRate.toFixed(1),
+            winRate: teamWinRate.toFixed(1),
             totalMatches: totalMatches,
           });
         }
