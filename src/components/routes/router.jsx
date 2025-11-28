@@ -7,6 +7,7 @@ import Dashboard from "../../pages/dashboard/Dashboard.jsx";
 import Notifications from "../../pages/notifications/Notifications.jsx";
 import Matchs from "../../pages/matchs/Matchs.jsx";
 import Scrims from "../../pages/scrims/Scrims.jsx";
+import Team from "../../pages/team/Team.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -29,10 +30,10 @@ export const router = createBrowserRouter([
         path: "dashboard",
         element: <Dashboard />,
       },
-      // {
-      //     path: "teams",
-      //     element: <Teams/>
-      // },
+      {
+        path: "teams",
+        element: <Team />,
+      },
       {
         path: "matchs",
         element: <Matchs />,
