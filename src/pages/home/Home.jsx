@@ -3,10 +3,19 @@ import Button from "../../components/button/Button.jsx";
 import styles from "./Home.module.css";
 import { Link } from "react-router-dom";
 import Logo from "../../components/icons/Logo.jsx";
+import githubIcon from "../../assets/github.svg";
 
 const Home = () => {
   return (
     <div className={styles.pageWrapper}>
+      <a
+        href="https://github.com/kenant68"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.githubLink}
+      >
+        <img src={githubIcon} alt="GitHub" className={styles.githubIcon} />
+      </a>
       <div className={styles.container}>
         <Logo></Logo>
         <div className={styles.title}>
