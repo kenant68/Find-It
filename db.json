@@ -13,9 +13,9 @@
   ],
 
   "teams": [
-    { "id": 1, "name": "team_XANTARES" },
-    { "id": 2, "name": "team_w0xic" },
-    { "id": 9, "name": "team_Musashiii_" }
+    { "id": 1, "name": "team_XANTARES", "region": "Europe" },
+    { "id": 2, "name": "team_w0xic", "region": "Europe" },
+    { "id": 9, "name": "team_Musashiii_", "region": "Europe" }
   ],
 
   "scrims": [
@@ -73,7 +73,10 @@
       "email": "musashi@gmail.com",
       "password": "123456",
       "avatar_url": "https://imgs.search.brave.com/tOtsxfnSfGhxfJLRHciJBekaSlm5E8MdYgGzqWLe7Dc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLmxv/Z29zLWRvd25sb2Fk/LmNvbS8xMTM5NzUv/Mjk2MDYtczEyODAt/OWRkYjlmNmQzOTM2/OTYwZTliZTY3MThk/OTJiZWI0YTMucG5n/L1RlYW1fVml0YWxp/dHlfTG9nb18yMDEz/LXMxMjgwLnBuZw",
-      "faceit_level": "7"
+      "faceit_level": "7",
+      "region": "Europe",
+      "steam_url": "https://steamcommunity.com/id/musashiii",
+      "discord_username": "Musashiii_#1234"
     },
     {
       "id": "2",
