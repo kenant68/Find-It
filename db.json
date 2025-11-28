@@ -1,36 +1,37 @@
 {
   "maps": [
     {
-      "id": "1",
+      "id": 1,
       "title": "Mirage",
       "img": "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Mirage_%28Counter-Strike_2%29.jpg/375px-Mirage_%28Counter-Strike_2%29.jpg"
     },
     {
-      "id": "2",
+      "id": 2,
       "title": "Nuke",
       "img": "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Nuke_%28CSGO%29.png/375px-Nuke_%28CSGO%29.png"
     }
   ],
 
   "teams": [
-    { "id": "1", "name": "team_XANTARES" },
-    { "id": "2", "name": "team_w0xic" }
+    { "id": 1, "name": "team_XANTARES" },
+    { "id": 2, "name": "team_w0xic" },
+    { "id": 9, "name": "team_Musashiii_" }
   ],
 
   "scrims": [
     {
-      "id": "1",
+      "id": 1,
       "horaire": "21:00",
-      "teamA": "1",
-      "teamB": "2",
-      "mapId": "1"
+      "teamA": 1,
+      "teamB": 2,
+      "mapId": 1
     },
     {
-      "id": "2",
+      "id": 2,
       "horaire": "13:30",
-      "teamA": "2",
-      "teamB": "1",
-      "mapId": "2"
+      "teamA": 2,
+      "teamB": 1,
+      "mapId": 2
     }
   ],
 
@@ -239,7 +240,12 @@
     }
   ],
 
-  "teamRecentResults": "W L W W L"
+  "teamRecentResults": "W L W W L",
+
+  "currentTeam": {
+    "id": 9,
+    "name": "team_Musashiii_"
+  }
 }
 
 

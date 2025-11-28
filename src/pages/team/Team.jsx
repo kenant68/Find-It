@@ -10,6 +10,7 @@ const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [recentResults, setRecentResults] = useState("");
   const [teamStats, setTeamStats] = useState(null);
+  const [teamName, setTeamName] = useState("");
 
   useEffect(() => {
     const loadTeamData = async () => {
@@ -25,6 +26,15 @@ const Team = () => {
         setTeamMembers(membersData);
         setRecentResults(data.teamRecentResults || "W L W W L");
 
+        if (data.currentTeam) {
+          const team = (data.teams || []).find(
+            (t) => t.id === data.currentTeam.id
+          );
+          setTeamName(team ? team.name : data.currentTeam.name);
+        } else if (data.teams && data.teams.length > 0) {
+          setTeamName(data.teams[0].name);
+        }
+
         if (data.faceit_stats && data.faceit_stats.length > 0) {
           const stats = data.faceit_stats;
           const totalElo = stats.reduce(
@@ -39,15 +49,13 @@ const Team = () => {
             (sum, stat) => sum + parseInt(stat.matches_played),
             0
           );
-          const avgWinRate =
-            stats.reduce((sum, stat) => {
-              const winRate = parseFloat(stat.win_rate.replace("%", ""));
-              return sum + winRate;
-            }, 0) / stats.length;
+
+          const teamWinRate =
+            totalMatches > 0 ? (totalWins / totalMatches) * 100 : 0;
 
           setTeamStats({
             averageElo: Math.round(totalElo / stats.length),
-            winRate: avgWinRate.toFixed(1),
+            winRate: teamWinRate.toFixed(1),
             totalMatches: totalMatches,
           });
         }
@@ -75,7 +83,7 @@ const Team = () => {
         >
           <header className={styles.header}>
             <p className={styles.sectionLabel}>Mon équipe</p>
-            <h1 className={styles.pageTitle}>team_Musashiii_</h1>
+            <h1 className={styles.pageTitle}>{teamName || "Mon équipe"}</h1>
           </header>
 
           <div className={styles.membersSection}>
