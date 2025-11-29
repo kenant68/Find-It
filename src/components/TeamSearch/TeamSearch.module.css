@@ -1,0 +1,195 @@
+.pageWrapper {
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1b2f 0%, #b5238a 100%);
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 20;
+}
+
+.content {
+  margin-left: 220px;
+  width: calc(100% - 220px);
+  padding: 40px;
+  padding-left: 100px;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  transition: margin-left 0.25s ease, width 0.25s ease, padding-left 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contentCollapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 60px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pageTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 1038px;
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  font-size: 16px;
+  padding: 10px 0;
+  outline: none;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  border-bottom-color: white;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.regionSelect {
+  appearance: none;
+  padding: 10px 40px 10px 20px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(90deg, #fc1d72, #961144);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  outline: none;
+  min-width: 180px;
+}
+
+.regionSelect:hover {
+  opacity: 0.9;
+}
+
+.regionSelect option {
+  background: #1a1b2f;
+  color: white;
+  padding: 10px;
+}
+
+.selectArrow {
+  position: absolute;
+  right: 20px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.selectWrapper:hover .selectArrow {
+  transform: translateY(2px);
+}
+
+.teamsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 1038px;
+  flex: 1;
+  padding-bottom: 20px;
+}
+
+.emptyMessage {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+}
+
+.error {
+  color: rgba(255, 100, 100, 0.9);
+}
+
+@media (max-width: 1200px) {
+  .content,
+  .contentCollapsed {
+    padding: 30px;
+    padding-left: 90px;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .content,
+  .contentCollapsed {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+  }
+
+  .searchBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selectWrapper {
+    width: 100%;
+  }
+
+  .regionSelect {
+    width: 100%;
+  }
+}
