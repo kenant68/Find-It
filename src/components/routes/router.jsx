@@ -9,6 +9,7 @@ import Matchs from "../../pages/matchs/Matchs.jsx";
 import Scrims from "../../pages/scrims/Scrims.jsx";
 import Team from "../../pages/team/Team.jsx";
 import Profil from "../../pages/profil/Profil.jsx";
+import OtherTeams from "../../pages/other-teams/OtherTeams.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
       {
         path: "profil",
         element: <Profil />,
+      },
+      {
+        path: "other-teams",
+        element: <OtherTeams />,
       },
     ],
   },
