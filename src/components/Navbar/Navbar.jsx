@@ -54,6 +54,18 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
               }
             >
               <img src={teamsIcon} className={styles.icon} alt="teams" />
+              {!collapsed && <span>Mon Equipe</span>}
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
+              to="/other-teams"
+              className={({ isActive }) =>
+                isActive ? `${styles.link} ${styles.active}` : styles.link
+              }
+            >
+              <img src={teamsIcon} className={styles.icon} alt="other-teams" />
               {!collapsed && <span>Equipes</span>}
             </NavLink>
           </li>
