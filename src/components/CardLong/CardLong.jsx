@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./CardLong.module.css";
 import Bubble from "../Bubble/Bubble.jsx";
-import deleteIcon from "../../assets/notifs/X.svg";
+import defaultDeleteIcon from "../../assets/notifs/X.svg";
 
 const CardLong = ({
   icon,
@@ -10,6 +10,8 @@ const CardLong = ({
   timestamp,
   onDelete,
   actionButton,
+  deleteIcon,
+  bubbleVariant,
 }) => {
   const handleDelete = (e) => {
     e.stopPropagation();
@@ -18,9 +20,11 @@ const CardLong = ({
     }
   };
 
+  const iconToUse = deleteIcon || defaultDeleteIcon;
+
   return (
     <div className={styles.card}>
-      <Bubble>
+      <Bubble variant={bubbleVariant}>
         <img src={icon} alt={title} />
       </Bubble>
       <div className={styles.content}>
@@ -36,10 +40,10 @@ const CardLong = ({
           <button
             className={styles.deleteButton}
             onClick={handleDelete}
-            aria-label="Supprimer la notification"
+            aria-label="Supprimer"
             type="button"
           >
-            <img src={deleteIcon} alt="Supprimer" />
+            <img src={iconToUse} alt="Supprimer" />
           </button>
         )}
       </div>

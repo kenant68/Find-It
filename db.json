@@ -13,9 +13,10 @@
   ],
 
   "teams": [
-    { "id": 1, "name": "team_XANTARES", "region": "Europe" },
+    { "id": 1, "name": "team_XANTARES", "region": "Asie" },
     { "id": 2, "name": "team_w0xic", "region": "Europe" },
-    { "id": 9, "name": "team_Musashiii_", "region": "Europe" }
+    { "id": 9, "name": "team_Musashiii_", "region": "Asie"},
+    { "id": 10, "name": "team_donk666", "region": "Europe"}
   ],
 
   "scrims": [
@@ -246,7 +247,7 @@
   "teamRecentResults": "W L W W L",
 
   "currentTeam": {
-    "id": 9,
+    "id": "9",
     "name": "team_Musashiii_"
   }
 }
