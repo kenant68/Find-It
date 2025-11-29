@@ -13,16 +13,17 @@ const Scrims = () => {
   useEffect(() => {
     const loadScrims = async () => {
       try {
-        const response = await fetch("/db.json");
+        const response = await fetch("http://localhost:3000/scrimAnnouncements");
+        if (!response.ok) {
+          throw new Error("Erreur lors du chargement des annonces de scrims");
+        }
         const data = await response.json();
 
-        const scrimsData = (data.scrimAnnouncements || []).map(
-          (announcement) => ({
-            id: announcement.id,
-            title: `Annonce de ${announcement.teamName}`,
-            timestamp: announcement.timestamp,
-          })
-        );
+        const scrimsData = (data || []).map((announcement) => ({
+          id: announcement.id,
+          title: `Annonce de ${announcement.teamName}`,
+          timestamp: announcement.timestamp,
+        }));
 
         setScrims(scrimsData);
       } catch (error) {

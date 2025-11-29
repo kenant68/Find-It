@@ -19,9 +19,12 @@ const Notifications = () => {
   useEffect(() => {
     const loadNotifications = async () => {
       try {
-        const response = await fetch("/db.json");
+        const response = await fetch("http://localhost:3000/notifications");
+        if (!response.ok) {
+          throw new Error("Erreur lors du chargement des notifications");
+        }
         const data = await response.json();
-        setNotifications(data.notifications || []);
+        setNotifications(data || []);
       } catch (error) {
         console.error("Erreur lors du chargement des notifications:", error);
       }

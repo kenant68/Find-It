@@ -15,38 +15,68 @@ const Team = () => {
   useEffect(() => {
     const loadTeamData = async () => {
       try {
-        const response = await fetch("/db.json");
-        const data = await response.json();
+        const [membersRes, teamsRes, statsRes] = await Promise.all([
+          fetch("http://localhost:3000/teamMembers"),
+          fetch("http://localhost:3000/teams"),
+          fetch("http://localhost:3000/faceit_stats"),
+        ]);
 
-        const membersData = (data.teamMembers || []).map((member) => ({
+        if (!membersRes.ok || !teamsRes.ok || !statsRes.ok) {
+          throw new Error("Erreur lors du chargement des données de l'équipe");
+        }
+
+        const [membersData, teamsData, statsData] = await Promise.all([
+          membersRes.json(),
+          teamsRes.json(),
+          statsRes.json(),
+        ]);
+
+        let recentResults = "W L W W L";
+        let currentTeam = null;
+
+        try {
+          const dbRes = await fetch("http://localhost:3000/");
+          if (dbRes.ok) {
+            const dbData = await dbRes.json();
+            recentResults = dbData.teamRecentResults || "W L W W L";
+            currentTeam = dbData.currentTeam || null;
+          }
+        } catch (e) {
+          console.warn("Impossible de charger db.json, utilisation des valeurs par défaut");
+        }
+
+        const membersArray = Array.isArray(membersData)
+          ? membersData
+          : [membersData];
+        const membersWithAvatars = membersArray.map((member) => ({
           ...member,
           avatar: getAvatar(member.avatar),
         }));
 
-        setTeamMembers(membersData);
-        setRecentResults(data.teamRecentResults || "W L W W L");
+        setTeamMembers(membersWithAvatars);
+        setRecentResults(recentResults);
 
-        if (data.currentTeam) {
-          const team = (data.teams || []).find(
-            (t) => t.id === data.currentTeam.id
+        if (currentTeam && currentTeam.id) {
+          const team = (teamsData || []).find(
+            (t) => t.id == currentTeam.id || t.id === currentTeam.id
           );
-          setTeamName(team ? team.name : data.currentTeam.name);
-        } else if (data.teams && data.teams.length > 0) {
-          setTeamName(data.teams[0].name);
+          setTeamName(team ? team.name : currentTeam.name);
+        } else if (teamsData && teamsData.length > 0) {
+          setTeamName(teamsData[0].name);
         }
 
-        if (data.faceit_stats && data.faceit_stats.length > 0) {
-          const stats = data.faceit_stats;
+        if (statsData && statsData.length > 0) {
+          const stats = Array.isArray(statsData) ? statsData : [statsData];
           const totalElo = stats.reduce(
-            (sum, stat) => sum + parseInt(stat.elo),
+            (sum, stat) => sum + parseInt(stat.elo || 0),
             0
           );
           const totalWins = stats.reduce(
-            (sum, stat) => sum + parseInt(stat.wins),
+            (sum, stat) => sum + parseInt(stat.wins || 0),
             0
           );
           const totalMatches = stats.reduce(
-            (sum, stat) => sum + parseInt(stat.matches_played),
+            (sum, stat) => sum + parseInt(stat.matches_played || 0),
             0
           );
 
@@ -54,7 +84,7 @@ const Team = () => {
             totalMatches > 0 ? (totalWins / totalMatches) * 100 : 0;
 
           setTeamStats({
-            averageElo: Math.round(totalElo / stats.length),
+            averageElo: stats.length > 0 ? Math.round(totalElo / stats.length) : 0,
             winRate: teamWinRate.toFixed(1),
             totalMatches: totalMatches,
           });

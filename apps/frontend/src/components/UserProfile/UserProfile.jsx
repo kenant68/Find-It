@@ -9,11 +9,11 @@ const UserProfile = ({ isCollapsed }) => {
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const response = await fetch("/db.json");
-        const data = await response.json();
-        const currentUser = (data.users || []).find(
-          (u) => u.id === 1 || u.id === "1"
-        );
+        const response = await fetch("http://localhost:3000/users/1");
+        if (!response.ok) {
+          throw new Error("Erreur lors du chargement de l'utilisateur");
+        }
+        const currentUser = await response.json();
         if (currentUser) {
           setUser(currentUser);
         }
