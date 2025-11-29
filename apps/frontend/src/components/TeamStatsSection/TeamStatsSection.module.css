@@ -1,0 +1,91 @@
+.bottomSections {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+  margin-top: 40px;
+}
+
+.sectionCard {
+  position: relative;
+  background-color: rgba(16, 22, 51, 0.87);
+  border-radius: 12px;
+  padding: 24px;
+  min-width: 250px;
+  flex: 1;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.resultsContainer {
+  display: flex;
+  gap: 8px;
+  margin-top: 40px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.resultBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 8px;
+}
+
+.resultBadge.win {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+.resultBadge.loss {
+  background-color: #f44336;
+  color: #ffffff;
+}
+
+.sectionTitle {
+  margin: 0;
+  margin-top: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statLabel {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.statValue {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .bottomSections {
+    flex-direction: column;
+  }
+
+  .sectionCard {
+    max-width: 100%;
+  }
+}

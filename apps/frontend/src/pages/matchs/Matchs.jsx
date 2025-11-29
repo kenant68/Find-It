@@ -9,9 +9,12 @@ const Matchs = () => {
   useEffect(() => {
     const loadMatches = async () => {
       try {
-        const response = await fetch("/db.json");
+        const response = await fetch("http://localhost:3000/matches");
+        if (!response.ok) {
+          throw new Error("Erreur lors du chargement des matchs");
+        }
         const data = await response.json();
-        setMatches(data.matches || []);
+        setMatches(data || []);
       } catch (error) {
         console.error("Erreur lors du chargement des matchs:", error);
       }

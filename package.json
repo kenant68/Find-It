@@ -4,27 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "json-server": "json-server --watch db.json --port 3000"
-  },
-  "dependencies": {
-    "json-server": "^1.0.0-beta.3",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.4"
+    "dev": "pnpm --filter @find-it/frontend dev",
+    "build": "pnpm --filter @find-it/frontend build",
+    "preview": "pnpm --filter @find-it/frontend preview",
+    "lint": "pnpm --filter @find-it/frontend lint",
+    "json-server": "pnpm --filter @find-it/backend json-server",
+    "dev:all": "pnpm --parallel --filter \"./apps/*\" dev"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
-    "@types/react": "^19.1.16",
-    "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^5.0.4",
-    "eslint": "^9.36.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.22",
-    "globals": "^16.4.0",
-    "vite": "^7.1.7"
+    "pnpm": "^10.18.1"
   }
 }

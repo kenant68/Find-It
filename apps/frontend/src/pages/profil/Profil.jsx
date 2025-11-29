@@ -13,17 +13,28 @@ const Profil = () => {
   useEffect(() => {
     const loadProfileData = async () => {
       try {
-        const response = await fetch("/db.json");
-        const data = await response.json();
+        const [usersRes, statsRes] = await Promise.all([
+          fetch("http://localhost:3000/users"),
+          fetch("http://localhost:3000/faceit_stats"),
+        ]);
 
-        const currentUser = (data.users || []).find(
+        if (!usersRes.ok || !statsRes.ok) {
+          throw new Error("Erreur lors du chargement du profil");
+        }
+
+        const [usersData, statsData] = await Promise.all([
+          usersRes.json(),
+          statsRes.json(),
+        ]);
+
+        const currentUser = (usersData || []).find(
           (u) => u.id === 1 || u.id === "1"
         );
         if (currentUser) {
           setUser(currentUser);
         }
 
-        const userStats = (data.faceit_stats || []).find(
+        const userStats = (statsData || []).find(
           (stat) => stat.user_id === 1 || stat.user_id === "1"
         );
         if (userStats) {
