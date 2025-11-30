@@ -28,7 +28,7 @@ Ce document décrit en détail toutes les entités, attributs et relations de la
 
 **Relations :**
 
-- Un utilisateur peut être membre de plusieurs équipes (via `TEAM_MEMBERS`)
+- Un utilisateur peut être membre d'une seule équipe (via `TEAM_MEMBERS`)
 - Un utilisateur a une seule statistique FACEIT (via `FACEIT_STATS`)
 - Un utilisateur peut recevoir plusieurs notifications (via `NOTIFICATIONS`)
 - Un utilisateur peut être capitaine d'une équipe (via `TEAMS.captain_id`)
@@ -267,9 +267,7 @@ Ce document décrit en détail toutes les entités, attributs et relations de la
 | `related_team_id`  | INTEGER      | FK → TEAMS.id, NULL          | Identifiant de l'équipe concernée (si applicable)               |
 | `related_user_id`  | INTEGER      | FK → USERS.id, NULL          | Identifiant de l'utilisateur concerné (si applicable)           |
 | `related_scrim_id` | INTEGER      | FK → SCRIMS.id, NULL         | Identifiant du scrim concerné (si applicable)                   |
-| `is_read`          | BOOLEAN      | NOT NULL, DEFAULT FALSE      | Indique si la notification a été lue                            |
 | `created_at`       | TIMESTAMP    | NOT NULL, DEFAULT NOW()      | Date et heure de création de la notification                    |
-| `read_at`          | TIMESTAMP    | NULL                         | Date et heure de lecture de la notification                     |
 
 **Relations :**
 
