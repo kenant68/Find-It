@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant User as Utilisateur
+    participant Frontend as Frontend React
+    participant API as API Backend
+    participant DB as Base de données
+
+    User->>Frontend: Accède à "Autres équipes"
+    Frontend->>API: GET /teams
+    API->>DB: Requête toutes les équipes
+    DB-->>API: Liste des équipes
+    API-->>Frontend: JSON (teams)
+    Frontend-->>User: Affiche toutes les équipes
+    
+    User->>Frontend: Saisit terme de recherche
+    Frontend->>Frontend: Filtre les équipes (côté client)
+    Frontend-->>User: Affiche résultats filtrés
+    
+    User->>Frontend: Sélectionne une région
+    Frontend->>Frontend: Filtre par région
+    Frontend-->>User: Affiche équipes de la région

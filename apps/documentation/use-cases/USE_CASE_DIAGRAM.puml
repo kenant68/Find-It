@@ -1,0 +1,109 @@
+@startuml
+
+left to right direction
+
+skinparam usecaseBackgroundColor #f9f9f9
+skinparam usecaseBorderColor #666666
+skinparam actorBorderColor #333333
+skinparam noteBackgroundColor #ffffe0
+skinparam noteBorderColor #bfb24d
+
+' === Actors ===
+package "Actors" as ACT {
+  actor "Anonymous" as Anon
+  actor "User" as User
+  actor "Team Captain" as Captain
+  actor "Admin" as Admin
+
+  Captain -|> User
+  Admin -|> User
+}
+
+' === System ===
+rectangle FindIt {
+  package "Auth & Account" as A {
+    (Manage Authentication and Account) as UC_AUTH
+  }
+
+  package "Team Management" as B {
+    (Manage Teams) as UC_TEAMS
+  }
+
+  package "Scrim Management" as C {
+    (Manage Scrims) as UC_SCRIMS
+  }
+
+  package "Match Management" as D {
+    (Manage Matches) as UC_MATCHES
+  }
+
+  package "Notifications" as E {
+    (Manage Notifications) as UC_NOTIFICATIONS
+  }
+
+  package "Statistics & Analytics" as F {
+    (View Statistics and Dashboard) as UC_STATS
+  }
+
+  package "Admin Functions" as G {
+    (Manage System Data) as UC_ADMIN
+  }
+
+  note right of UC_TEAMS
+  Includes:
+  - View my team
+  - Search teams
+  - Manage team members
+  - Assign team leader
+  end note
+
+  note right of UC_SCRIMS
+  Includes:
+  - View upcoming scrims
+  - Create scrim announcements
+  - Accept scrim announcements
+  - Schedule scrims (select teams, map, date, ELO range)
+  end note
+
+  note right of UC_STATS
+  Includes:
+  - View FACEIT statistics (ELO, win rate, K/D, headshots)
+  - View team statistics
+  - View dashboard (scrims overview, recent results)
+  - View favorite map and side preferences
+  end note
+}
+
+' === External Services ===
+package "External Services" as EXT {
+  actor "FACEIT API" as Faceit
+  actor "Steam" as Steam
+  actor "Discord" as Discord
+}
+
+ACT -[hidden]-> FindIt
+FindIt -[hidden]-> EXT
+
+' === Actor links ===
+Anon --> UC_AUTH
+
+User --> UC_AUTH
+User --> UC_TEAMS
+User --> UC_SCRIMS
+User --> UC_MATCHES
+User --> UC_NOTIFICATIONS
+User --> UC_STATS
+
+Captain --> UC_TEAMS
+Captain --> UC_SCRIMS
+Captain --> UC_MATCHES
+
+Admin --> UC_ADMIN
+
+' === Integrations ===
+UC_STATS -right- Faceit
+UC_AUTH -right- Steam
+UC_AUTH -right- Discord
+
+@enduml
+

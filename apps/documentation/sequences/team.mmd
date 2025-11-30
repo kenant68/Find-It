@@ -1,0 +1,26 @@
+sequenceDiagram
+    participant User as Utilisateur
+    participant Frontend as Frontend React
+    participant API as API Backend
+    participant DB as Base de données
+
+    User->>Frontend: Accède à "Mon équipe"
+    Frontend->>API: GET /team-members?team_id=:id
+    API->>DB: Requête membres de l'équipe
+    DB-->>API: Liste des membres
+    API-->>Frontend: JSON (team_members)
+    
+    Frontend->>API: GET /teams/:id
+    API->>DB: Requête équipe
+    DB-->>API: Données équipe
+    API-->>Frontend: JSON (team)
+    
+    Frontend->>API: GET /faceit-stats?user_id=:id (pour chaque membre)
+    loop Pour chaque membre
+        API->>DB: Requête statistiques
+        DB-->>API: Statistiques membre
+        API-->>Frontend: JSON (stats)
+    end
+    
+    Frontend->>Frontend: Calcul statistiques équipe<br/>(ELO moyen, taux de victoire)
+    Frontend-->>User: Affiche l'équipe avec statistiques
