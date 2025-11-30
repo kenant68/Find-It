@@ -1,16 +1,27 @@
 .logoContainer {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
 }
 
 .logo {
-    height: 100px;
-    width: auto;
-    cursor: pointer;
-    transition: transform 0.2s ease;
+  height: 100px;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .logo:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .logoContainer {
+    top: 16px;
+    left: 16px;
+  }
+
+  .logo {
+    height: 60px;
+  }
 }

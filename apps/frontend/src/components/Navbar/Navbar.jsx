@@ -5,6 +5,7 @@ import UserProfile from "../UserProfile/UserProfile.jsx";
 
 import sidebarOpenIcon from "../../assets/sidebar-open.png";
 import sidebarClosedIcon from "../../assets/sidebar-closed.png";
+import castleIcon from "../../assets/navbar/castle.svg";
 import teamsIcon from "../../assets/teams.png";
 import matchsIcon from "../../assets/matchs.png";
 import announceIcon from "../../assets/announce.png";
@@ -53,7 +54,7 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
                 isActive ? `${styles.link} ${styles.active}` : styles.link
               }
             >
-              <img src={teamsIcon} className={styles.icon} alt="teams" />
+              <img src={castleIcon} className={styles.iconSvg} alt="teams" />
               {!collapsed && <span>Mon Equipe</span>}
             </NavLink>
           </li>

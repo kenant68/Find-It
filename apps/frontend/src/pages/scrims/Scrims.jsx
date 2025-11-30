@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Scrims.module.css";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardLong from "../../components/CardLong/CardLong.jsx";
 import CreateScrimModal from "../../components/CreateScrimModal/CreateScrimModal.jsx";
 import scrimIcon from "../../assets/scrims/scrim-swords.svg";
@@ -13,7 +14,9 @@ const Scrims = () => {
   useEffect(() => {
     const loadScrims = async () => {
       try {
-        const response = await fetch("http://localhost:3000/scrimAnnouncements");
+        const response = await fetch(
+          "http://localhost:3000/scrimAnnouncements"
+        );
         if (!response.ok) {
           throw new Error("Erreur lors du chargement des annonces de scrims");
         }
@@ -114,6 +117,7 @@ const Scrims = () => {
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
       />
+      <NavbarMobile />
     </div>
   );
 };

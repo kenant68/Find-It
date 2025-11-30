@@ -1,43 +1,84 @@
 .card {
-    width: 497px;
-    height: 550px;
-    border-radius: 34px;
-    opacity: 100%;
-    background-color: rgb(255 255 255 / 5%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 497px;
+  max-width: 90%;
+  height: 550px;
+  min-height: 550px;
+  border-radius: 34px;
+  opacity: 100%;
+  background-color: rgb(255 255 255 / 5%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 80%;
-    margin-top: 3%;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin-top: 3%;
+  gap: 15px;
 }
 
 .container-button {
-    margin-top: 20%;
+  margin-top: 20%;
 }
 
 section h1 {
-    color: white;
-    font-size: 40px;
-    margin-bottom: 20px;
+  color: white;
+  font-size: 40px;
+  margin-bottom: 20px;
 }
 
-
 .linkToLogin {
-    color: white;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-    transition: color 0.2s ease;
+  color: white;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+  transition: color 0.2s ease;
 }
 
 .linkToLogin:hover {
-    color: #60D9FB;
-    cursor: pointer;
+  color: #60d9fb;
+  cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+  .card {
+    width: 450px;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100% !important;
+    max-width: 100%;
+    height: auto !important;
+    min-height: 500px;
+    max-height: 90vh;
+    padding: 24px;
+    box-sizing: border-box;
+  }
+
+  .container {
+    width: 100%;
+    margin-top: 0;
+    gap: 16px;
+  }
+
+  section h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  .container-button {
+    margin-top: 8%;
+  }
+
+  .linkToLogin {
+    font-size: 13px;
+    margin-top: 16px;
+  }
 }

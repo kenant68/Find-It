@@ -118,3 +118,36 @@
   object-fit: contain;
   image-rendering: crisp-edges;
 }
+
+@media (max-width: 768px) {
+  .memberCard {
+    min-width: 120px;
+    min-height: 160px;
+    padding: 16px;
+  }
+
+  .leaderCard {
+    min-width: 140px;
+    min-height: 180px;
+  }
+
+  .avatarContainer {
+    width: 60px;
+    height: 60px;
+  }
+
+  .leaderCard .avatarContainer {
+    width: 80px;
+    height: 80px;
+  }
+
+  .username {
+    font-size: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .leaderCard .username {
+    font-size: 14px;
+  }
+}

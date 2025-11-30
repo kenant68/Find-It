@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./TeamSearch.module.css";
 import Navbar from "../Navbar/Navbar.jsx";
+import NavbarMobile from "../NavbarMobile/NavbarMobile.jsx";
 import CardLong from "../CardLong/CardLong.jsx";
 import teamsIcon from "../../assets/teams.png";
 import arrowDownIcon from "../../assets/other-teams/arrow-down.svg";
@@ -97,6 +98,7 @@ const TeamSearch = () => {
             <p className={styles.loading}>Chargement des équipes...</p>
           </div>
         </div>
+        <NavbarMobile />
       </div>
     );
   }
@@ -112,6 +114,7 @@ const TeamSearch = () => {
             <p className={styles.error}>Erreur: {error}</p>
           </div>
         </div>
+        <NavbarMobile />
       </div>
     );
   }
@@ -180,6 +183,7 @@ const TeamSearch = () => {
           </div>
         </div>
       </div>
+      <NavbarMobile />
     </div>
   );
 };

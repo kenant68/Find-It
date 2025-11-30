@@ -169,11 +169,16 @@
 }
 
 @media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
   .content,
   .contentCollapsed {
     margin-left: 0;
     width: 100%;
     padding: 20px;
+    padding-bottom: 100px;
   }
 
   .pageTitle {

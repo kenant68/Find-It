@@ -10,6 +10,7 @@
   align-items: center;
   box-sizing: border-box;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .container {
@@ -29,4 +30,27 @@ section h1 {
   color: white;
   font-size: 40px;
   margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 300px;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  section h1 {
+    font-size: 28px;
+  }
+
+  .container {
+    width: 90%;
+    overflow: visible;
+    max-width: 100%;
+  }
 }

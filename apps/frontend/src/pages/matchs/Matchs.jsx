@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Matchs.module.css";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 
 const Matchs = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -59,6 +60,7 @@ const Matchs = () => {
           </div>
         </div>
       </div>
+      <NavbarMobile />
     </div>
   );
 };

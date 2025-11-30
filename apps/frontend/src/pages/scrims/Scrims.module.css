@@ -133,11 +133,16 @@
 }
 
 @media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
   .content,
   .contentCollapsed {
     margin-left: 0;
     width: 100%;
     padding: 20px;
+    padding-bottom: 100px;
   }
 
   .pageTitle {
@@ -145,9 +150,13 @@
   }
 
   .createButton {
-    bottom: 20px;
+    bottom: 100px;
     right: 20px;
     padding: 12px 24px;
     font-size: 14px;
+  }
+
+  .cardsContainer {
+    padding-bottom: 20px;
   }
 }

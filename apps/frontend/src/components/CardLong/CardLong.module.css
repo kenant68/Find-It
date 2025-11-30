@@ -96,3 +96,36 @@
 .deleteButton:active {
   transform: scale(0.95);
 }
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .content {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .title {
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .timestamp {
+    font-size: 11px;
+  }
+
+  .rightSection {
+    flex-shrink: 0;
+  }
+}

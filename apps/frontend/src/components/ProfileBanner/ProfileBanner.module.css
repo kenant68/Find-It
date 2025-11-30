@@ -5,6 +5,7 @@
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 32px;
+  box-sizing: border-box;
 }
 
 .bannerEditButton {
@@ -115,3 +116,64 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
+@media (max-width: 768px) {
+  .bannerContainer {
+    height: 180px;
+    margin-bottom: 20px;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 12px;
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+  }
+
+  .bannerContent {
+    padding: 16px;
+  }
+
+  .avatarSection {
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .avatar {
+    width: 70px;
+    height: 70px;
+    border-width: 3px;
+    flex-shrink: 0;
+  }
+
+  .username {
+    font-size: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .editButton {
+    width: 28px;
+    height: 28px;
+    top: -4px;
+    right: -4px;
+  }
+
+  .editButton img {
+    width: 14px;
+    height: 14px;
+  }
+
+  .bannerEditButton {
+    width: 32px;
+    height: 32px;
+    top: 12px;
+    right: 12px;
+  }
+
+  .bannerEditButton img {
+    width: 16px;
+    height: 16px;
+  }
+}

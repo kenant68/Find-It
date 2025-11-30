@@ -33,3 +33,23 @@
   flex-direction: column;
   gap: 16px;
 }
+
+.contentCollapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+  padding-left: 60px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content,
+  .contentCollapsed {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 100px;
+  }
+}

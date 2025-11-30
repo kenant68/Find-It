@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Notifications.module.css";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardLong from "../../components/CardLong/CardLong.jsx";
 import nouveauMembre from "../../assets/notifs/nv-membre.svg";
 import quitterEquipe from "../../assets/notifs/member-quit.svg";
@@ -62,6 +63,7 @@ const Notifications = () => {
           )}
         </div>
       </div>
+      <NavbarMobile />
     </div>
   );
 };

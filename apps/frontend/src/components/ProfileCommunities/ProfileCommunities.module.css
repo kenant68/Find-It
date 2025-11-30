@@ -65,3 +65,18 @@
   font-weight: 500;
 }
 
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .communities {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .sectionTitle {
+    font-size: 14px;
+  }
+}
