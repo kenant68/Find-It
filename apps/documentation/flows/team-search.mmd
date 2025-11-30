@@ -1,0 +1,28 @@
+flowchart TD
+    Start([Utilisateur accède à Autres équipes]) --> LoadTeams[Chargement toutes les équipes]
+    
+    LoadTeams --> DisplayTeams[Affichage équipes]
+    DisplayTeams --> UserAction{Action utilisateur?}
+    
+    UserAction -->|Recherche texte| SearchInput[Saisie terme recherche]
+    UserAction -->|Filtre région| RegionSelect[Sélection région]
+    UserAction -->|Aucune| DisplayTeams
+    
+    SearchInput --> FilterByName[Filtrage par nom]
+    FilterByName --> DisplayFiltered[Affichage résultats]
+    
+    RegionSelect --> FilterByRegion[Filtrage par région]
+    FilterByRegion --> DisplayFiltered
+    
+    DisplayFiltered --> UserAction
+    
+    DisplayTeams --> TeamDetail[Voir détails équipe]
+    DisplayFiltered --> TeamDetail
+    
+    TeamDetail --> BackToList[Retour à la liste]
+    BackToList --> DisplayTeams
+    
+    style Start fill:#e1f5ff
+    style DisplayTeams fill:#c8e6c9
+    style DisplayFiltered fill:#c8e6c9
+    style TeamDetail fill:#fff9c4

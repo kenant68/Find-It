@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant User as Utilisateur
+    participant Frontend as Frontend React
+    participant API as API Backend
+    participant DB as Base de données
+    participant Faceit as FACEIT API (futur)
+
+    User->>Frontend: Accède à la page Profil
+    Frontend->>API: GET /users/:id
+    API->>DB: Requête utilisateur
+    DB-->>API: Données utilisateur
+    API-->>Frontend: JSON (user)
+    
+    Frontend->>API: GET /faceit-stats?user_id=:id
+    API->>DB: Requête statistiques FACEIT
+    DB-->>API: Statistiques FACEIT
+    API-->>Frontend: JSON (faceit_stats)
+    
+    Note over Frontend,Faceit: Intégration future avec API FACEIT
+    Frontend->>Faceit: GET /players/:faceit_id (futur)
+    Faceit-->>Frontend: Statistiques en temps réel (futur)
+    
+    Frontend->>Frontend: Calcul des statistiques dérivées<br/>(taux de victoire, etc.)
+    Frontend-->>User: Affichage des statistiques
