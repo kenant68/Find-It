@@ -104,7 +104,7 @@ Ce document décrit en détail toutes les entités, attributs et relations de la
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`team_id`) REFERENCES `TEAMS(id)` ON DELETE CASCADE
 - FOREIGN KEY (`user_id`) REFERENCES `USERS(id)` ON DELETE CASCADE
-- UNIQUE (`team_id`, `user_id`)
+- UNIQUE (`user_id`)
 - INDEX (`team_id`)
 - INDEX (`user_id`)
 
