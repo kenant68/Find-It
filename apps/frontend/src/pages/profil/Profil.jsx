@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Profil.module.css";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import ProfileBanner from "../../components/ProfileBanner/ProfileBanner.jsx";
 import ProfileGameStats from "../../components/ProfileGameStats/ProfileGameStats.jsx";
 import ProfileCommunities from "../../components/ProfileCommunities/ProfileCommunities.jsx";
@@ -85,6 +86,7 @@ const Profil = () => {
           </div>
         </div>
       </div>
+      <NavbarMobile />
     </div>
   );
 };

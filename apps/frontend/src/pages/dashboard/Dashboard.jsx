@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import styles from "./Dashboard.module.css";
 import Card from "../../components/Card/Card.jsx";
 import CardScrims from "../../components/CardScrims/CardScrims.jsx";
@@ -45,6 +46,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <NavbarMobile />
     </div>
   );
 };

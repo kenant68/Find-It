@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Team.module.css";
 import Navbar from "../../components/Navbar/Navbar.jsx";
+import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardJoueur from "../../components/CardJoueur/CardJoueur.jsx";
 import TeamStatsSection from "../../components/TeamStatsSection/TeamStatsSection.jsx";
 import { getAvatar } from "../../utils/avatarUtils.js";
@@ -42,7 +43,9 @@ const Team = () => {
             currentTeam = dbData.currentTeam || null;
           }
         } catch (e) {
-          console.warn("Impossible de charger db.json, utilisation des valeurs par défaut");
+          console.warn(
+            "Impossible de charger db.json, utilisation des valeurs par défaut"
+          );
         }
 
         const membersArray = Array.isArray(membersData)
@@ -84,7 +87,8 @@ const Team = () => {
             totalMatches > 0 ? (totalWins / totalMatches) * 100 : 0;
 
           setTeamStats({
-            averageElo: stats.length > 0 ? Math.round(totalElo / stats.length) : 0,
+            averageElo:
+              stats.length > 0 ? Math.round(totalElo / stats.length) : 0,
             winRate: teamWinRate.toFixed(1),
             totalMatches: totalMatches,
           });
@@ -132,6 +136,7 @@ const Team = () => {
           />
         </div>
       </div>
+      <NavbarMobile />
     </div>
   );
 };

@@ -4,11 +4,26 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .pageWrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+}
+
 .layout {
   display: flex;
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .layout {
+    overflow: visible;
+    min-height: auto;
+  }
 }
 
 .sidebar {
@@ -75,15 +90,39 @@
 }
 
 @media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
   .content,
   .contentCollapsed {
     margin-left: 0;
     width: 100%;
     padding: 20px;
+    padding-bottom: 100px;
+    overflow-y: visible;
+    overflow-x: hidden;
+    min-height: auto;
+    height: auto;
   }
 
   .pageTitle {
     font-size: 28px;
   }
-}
 
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .header {
+    margin-bottom: 0;
+  }
+
+  .content > * {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}

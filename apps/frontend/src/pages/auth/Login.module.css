@@ -12,3 +12,21 @@
   padding: 20px;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  .pageWrapper {
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100vh;
+    height: auto;
+  }
+
+  .cardContainer {
+    padding: 20px;
+    padding-top: 80px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+    height: auto;
+    align-items: flex-start;
+  }
+}
