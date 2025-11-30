@@ -1,0 +1,35 @@
+flowchart TD
+    Start([Utilisateur accède au dashboard]) --> LoadData[Chargement données]
+    
+    LoadData --> FetchScrims[GET /scrims]
+    LoadData --> FetchTeams[GET /teams]
+    LoadData --> FetchMaps[GET /maps]
+    LoadData --> FetchStats[GET /faceit-stats]
+    
+    FetchScrims --> ProcessScrims[Traitement scrims]
+    FetchTeams --> ProcessTeams[Traitement équipes]
+    FetchMaps --> ProcessMaps[Traitement maps]
+    FetchStats --> ProcessStats[Traitement statistiques]
+    
+    ProcessScrims --> MergeData[Agrégation données]
+    ProcessTeams --> MergeData
+    ProcessMaps --> MergeData
+    ProcessStats --> MergeData
+    
+    MergeData --> CheckData{Données valides?}
+    
+    CheckData -->|Erreur| ErrorState[Affichage erreur]
+    ErrorState --> Retry{Réessayer?}
+    Retry -->|Oui| LoadData
+    Retry -->|Non| ErrorState
+    
+    CheckData -->|Succès| DisplayDashboard[Affichage dashboard]
+    
+    DisplayDashboard --> DisplayScrims[Affiche scrims à venir]
+    DisplayDashboard --> DisplayStats[Affiche statistiques]
+    DisplayDashboard --> DisplayTeam[Affiche membres équipe]
+    DisplayDashboard --> DisplayFav[Affiche statistiques favorites]
+    
+    style Start fill:#e1f5ff
+    style DisplayDashboard fill:#c8e6c9
+    style ErrorState fill:#ffcdd2
