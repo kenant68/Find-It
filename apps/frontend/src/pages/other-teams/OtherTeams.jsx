@@ -6,7 +6,6 @@ const OtherTeams = () => {
   return (
     <div>
       <TeamSearch />
-      <NavbarMobile />
     </div>
   );
 };
