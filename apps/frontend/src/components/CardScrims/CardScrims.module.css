@@ -96,18 +96,16 @@
   margin: 0;
   color: white;
   font-family: Orbitron, sans-serif;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .info p {
   font-size: 14px;
   margin: 0;
   color: rgba(255, 255, 255, 0.8);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .horaire {
@@ -126,4 +124,52 @@
 
 .separator {
   margin: 0 5px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    overflow: visible;
+    padding: 10px;
+  }
+
+  .image {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    flex-shrink: 0;
+  }
+
+  .info {
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .info h2 {
+    font-size: 14px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .info p {
+    font-size: 11px;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .scrimCard {
+    padding: 10px;
+    gap: 10px;
+    min-height: auto;
+  }
+
+  .list {
+    overflow-y: auto;
+    overflow-x: visible;
+  }
 }

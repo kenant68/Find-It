@@ -78,6 +78,14 @@
   object-fit: contain;
 }
 
+.iconSvg {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(89%) saturate(5000%)
+    hue-rotate(310deg) brightness(0.9) contrast(1.1);
+}
+
 .title {
   font-family: Silkscreen, cursive;
 }
@@ -86,4 +94,10 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
 }
