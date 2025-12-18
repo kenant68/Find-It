@@ -9,11 +9,14 @@ export function getUser(id) {
 }
 
 export function createUser(userData) {
-  const { username, email, region } = userData;
+  let { username, email, region } = userData;
 
   if (!username || !email || !region) {
     throw new Error("INVALID_PAYLOAD");
   }
+
+  username = username.trim().toLowerCase();
+  email = email.trim().toLowerCase();
 
   const emailPattern = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
   if (!emailPattern.test(email)) {
