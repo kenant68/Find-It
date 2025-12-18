@@ -23,11 +23,32 @@ export function createUserHandler(req, res) {
     const newUser = createUser(req.body);
     res.status(201).json(newUser);
   } catch (err) {
+    if (err.message === "INVALID_PAYLOAD") {
+      return res
+        .status(400)
+        .json({ error: { message: "Missing or invalid fields", code: "INVALID_PAYLOAD" } });
+    }
+
+    if (err.message === "INVALID_EMAIL") {
+      return res
+        .status(400)
+        .json({ error: { message: "Invalid email format", code: "INVALID_EMAIL" } });
+    }
+
     if (err.message === "USERNAME_ALREADY_EXISTS") {
       return res
         .status(409)
         .json({ error: { message: "Username already exists", code: "USERNAME_ALREADY_EXISTS" } });
     }
-    res.status(500).json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
+
+    if (err.message === "EMAIL_ALREADY_EXISTS") {
+      return res
+        .status(409)
+        .json({ error: { message: "Email already exists", code: "EMAIL_ALREADY_EXISTS" } });
+    }
+
+    res
+      .status(500)
+      .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
   }
 }

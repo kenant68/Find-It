@@ -1,4 +1,4 @@
-import { findAll, findById, findByUsername, addUser } from "./users.repository.js";
+import { findAll, findById, findByUsername, findByEmail, addUser } from "./users.repository.js";
 
 export function getAllUsers() {
   return findAll();
@@ -9,9 +9,26 @@ export function getUser(id) {
 }
 
 export function createUser(userData) {
-  const existing = findByUsername(userData.username);
-  if (existing) {
+  const { username, email, region } = userData;
+
+  if (!username || !email || !region) {
+    throw new Error("INVALID_PAYLOAD");
+  }
+
+  const emailPattern = /^\S+@\S+\.\S+$/;
+  if (!emailPattern.test(email)) {
+    throw new Error("INVALID_EMAIL");
+  }
+
+  const existingByUsername = findByUsername(username);
+  if (existingByUsername) {
     throw new Error("USERNAME_ALREADY_EXISTS");
   }
-  return addUser(userData);
+
+  const existingByEmail = findByEmail(email);
+  if (existingByEmail) {
+    throw new Error("EMAIL_ALREADY_EXISTS");
+  }
+
+  return addUser({ username, email, region });
 }
