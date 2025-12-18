@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "echo 'Backend not implemented yet'",
+    "dev": "nodemon src/server.js",
     "json-server": "json-server --watch ../../db.json --port 3000"
   },
   "dependencies": {
