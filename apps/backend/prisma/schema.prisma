@@ -12,3 +12,34 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id              Int      @id @default(autoincrement())
+  username        String
+  email           String   @unique
+  passwordHash    String
+  avatarUrl       String?
+  faceitId        String?
+  faceitLevel     String?
+  steamUrl        String?
+  discordUsername String?
+  region          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  teamsCaptain Team[] @relation("TeamCaptain")
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  logoUrl   String?
+  bannerUrl String?
+  eloAvg    Int?
+  region    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  captainId Int?
+  captain   User? @relation("TeamCaptain", fields: [captainId], references: [id])
+}
