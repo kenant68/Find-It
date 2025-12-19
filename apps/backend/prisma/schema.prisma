@@ -20,7 +20,7 @@ model User {
   passwordHash    String
   avatarUrl       String?
   faceitId        String?
-  faceitLevel     String?
+  faceitLevel     Int?
   steamUrl        String?
   discordUsername String?
   region          String?
