@@ -1,10 +1,19 @@
-const users = [
-  { id: 1, username: "musashiii_", email: "musashiii@example.com", region: "Europe" },
-  { id: 2, username: "tekbas", email: "tekbas@example.com", region: "Europe" },
-  { id: 3, username: "w0xic", email: "w0xic@example.com", region: "Europe" },
-  { id: 4, username: "r0pz", email: "r0pz@example.com", region: "Europe" },
-  { id: 5, username: "f0rsaken", email: "f0rsaken@example.com", region: "Europe" }
-];
+import { dbData } from "../utils/db.js";
+
+const users = dbData.users
+  .filter(
+    (user) =>
+      user &&
+      typeof user.id !== "undefined" &&
+      typeof user.username === "string" &&
+      typeof user.email === "string"
+  )
+  .map((user) => ({
+    id: Number(user.id),
+    username: user.username.toLowerCase(),
+    email: user.email.toLowerCase(),
+    region: typeof user.region === "string" ? user.region : null
+  }));
 
 let nextId = users.length > 0 ? Math.max(...users.map((user) => user.id)) + 1 : 1;
 
@@ -17,7 +26,7 @@ export function findById(id) {
 }
 
 export function findByUsername(username) {
-  const normalized = username.trim().toLowerCase();
+  const normalized = username.trim().toLowerCase()
   return users.find((user) => user.username === normalized) || null;
 }
 

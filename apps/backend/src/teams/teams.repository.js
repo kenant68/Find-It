@@ -1,8 +1,13 @@
-const teams = [
-  { id: 1, name: "team_xantares", region: "Europe", eloAvg: 1500 },
-  { id: 2, name: "team_s1mple", region: "Europe", eloAvg: 1600 },
-  { id: 3, name: "team_ropz", region: "Europe", eloAvg: 1550 }
-];
+import { dbData } from "../utils/db.js";
+
+const teams = dbData.teams
+  .filter((team) => team && typeof team.id !== "undefined" && typeof team.name === "string")
+  .map((team) => ({
+    id: Number(team.id) || 0,
+    name: team.name?.toLowerCase() || "unknown",
+    region: typeof team.region === "string" ? team.region : null,
+    eloAvg: null
+  }));
 
 let nextId = teams.length > 0 ? Math.max(...teams.map((team) => team.id)) + 1 : 1;
 
