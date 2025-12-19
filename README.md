@@ -121,13 +121,13 @@ pnpm json-server
 
 The API server will be accessible at `http://localhost:3000`
 
-**6. Start development server** (in another terminal)
+**5. Start development server** (in another terminal)
 
 ```bash
 pnpm dev
 ```
 
-**7. Access the application**
+**6. Access the application**
 
 - Frontend: http://localhost:5173
 - API: http://localhost:3000
