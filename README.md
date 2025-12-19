@@ -113,7 +113,32 @@ cd Find-It
 pnpm install
 ```
 
-**3. Start JSON Server** (in a separate terminal)
+**3. Configure environment variables**
+
+Create a `.env` file in the root directory by copying `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set your PostgreSQL credentials:
+
+- `POSTGRES_DB`: Database name (default: Find-It)
+- `POSTGRES_USER`: Database user (default: keno68)
+- `POSTGRES_PASSWORD`: **Set a secure password** (required)
+
+**4. Start PostgreSQL with Docker Compose**
+
+```bash
+docker compose up -d
+```
+
+This will start PostgreSQL and Adminer (database management UI):
+
+- PostgreSQL: `localhost:5432`
+- Adminer: `http://localhost:8080`
+
+**5. Start JSON Server** (in a separate terminal)
 
 ```bash
 pnpm json-server
@@ -121,13 +146,13 @@ pnpm json-server
 
 The API server will be accessible at `http://localhost:3000`
 
-**4. Start development server** (in another terminal)
+**6. Start development server** (in another terminal)
 
 ```bash
 pnpm dev
 ```
 
-**5. Access the application**
+**7. Access the application**
 
 - Frontend: http://localhost:5173
 - API: http://localhost:3000
