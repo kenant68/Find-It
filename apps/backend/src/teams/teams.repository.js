@@ -1,11 +1,13 @@
 import { dbData } from "../utils/db.js";
 
-const teams = dbData.teams.map((team) => ({
-  id: Number(team.id),
-  name: team.name.toLowerCase(),
-  region: team.region || null,
-  eloAvg: null
-}));
+const teams = dbData.teams
+  .filter((team) => team && typeof team.id !== "undefined" && typeof team.name === "string")
+  .map((team) => ({
+    id: Number(team.id) || 0,
+    name: team.name?.toLowerCase() || "unknown",
+    region: typeof team.region === "string" ? team.region : null,
+    eloAvg: null
+  }));
 
 let nextId = teams.length > 0 ? Math.max(...teams.map((team) => team.id)) + 1 : 1;
 
