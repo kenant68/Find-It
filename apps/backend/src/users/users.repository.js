@@ -1,10 +1,11 @@
-const users = [
-  { id: 1, username: "musashiii_", email: "musashiii@example.com", region: "Europe" },
-  { id: 2, username: "tekbas", email: "tekbas@example.com", region: "Europe" },
-  { id: 3, username: "w0xic", email: "w0xic@example.com", region: "Europe" },
-  { id: 4, username: "r0pz", email: "r0pz@example.com", region: "Europe" },
-  { id: 5, username: "f0rsaken", email: "f0rsaken@example.com", region: "Europe" }
-];
+import { dbData } from "../utils/db.js";
+
+const users = dbData.users.map((user) => ({
+  id: Number(user.id),
+  username: user.username.toLowerCase(),
+  email: user.email.toLowerCase(),
+  region: user.region || null
+}));
 
 let nextId = users.length > 0 ? Math.max(...users.map((user) => user.id)) + 1 : 1;
 
