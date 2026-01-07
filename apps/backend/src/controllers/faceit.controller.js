@@ -1,6 +1,5 @@
 import { getFaceitStatsByPlayerId, getFaceitStatsByUserId } from "../services/faceit.service.js";
 import { findById } from "../repositories/users.repository.js";
-import { dbData } from "../utils/db.js";
 
 function handleFaceitError(err, res) {
   if (err.message === "FACEIT_PLAYER_NOT_FOUND") {
@@ -56,33 +55,24 @@ function handleFaceitError(err, res) {
     .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
 }
 
-function getUserFaceitId(userId) {
-  const rawUser = dbData.users.find((u) => Number(u.id) === userId);
-  console.log('getUserFaceitId - userId:', userId);
-  console.log('getUserFaceitId - rawUser found:', rawUser);
-  
-  if (!rawUser) {
-    console.log('getUserFaceitId - no rawUser found');
+function getUserFaceitId(user) {
+  if (!user) {
     return null;
   }
-  
-  if (rawUser.faceit_id) {
-    console.log('getUserFaceitId - returning faceit_id:', rawUser.faceit_id);
-    return rawUser.faceit_id;
+
+  if (user.faceit_id) {
+    return user.faceit_id;
   }
-  
-  if (rawUser.faceitId) {
-    console.log('getUserFaceitId - returning faceitId:', rawUser.faceitId);
-    return rawUser.faceitId;
+
+  if (user.faceitId) {
+    return user.faceitId;
   }
-  
-  if (rawUser.username) {
-    const username = typeof rawUser.username === 'string' ? rawUser.username.trim() : String(rawUser.username);
-    console.log('getUserFaceitId - returning username as fallback:', username);
+
+  if (user.username) {
+    const username = typeof user.username === 'string' ? user.username.trim() : String(user.username);
     return username;
   }
-  
-  console.log('getUserFaceitId - no faceit id found, returning null');
+
   return null;
 }
 
@@ -110,7 +100,7 @@ export async function getFaceitStatsHandler(req, res) {
         .json({ error: { message: "User not found", code: "USER_NOT_FOUND" } });
     }
 
-    const faceitId = getUserFaceitId(userId);
+    const faceitId = getUserFaceitId(user);
     if (!faceitId) {
       return res
         .status(400)
@@ -158,7 +148,7 @@ export async function getUserFaceitStatsHandler(req, res) {
         .json({ error: { message: "User not found", code: "USER_NOT_FOUND" } });
     }
 
-    const faceitId = getUserFaceitId(userId);
+    const faceitId = getUserFaceitId(user);
     if (!faceitId) {
       return res
         .status(400)
