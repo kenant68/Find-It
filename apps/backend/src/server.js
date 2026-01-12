@@ -1,4 +1,9 @@
+import dotenv from "dotenv";
 import express from "express";
+
+
+dotenv.config({ path: "../../.env" });
+
 import apiRouter from "./routes/index.js";
 
 const app = express();
