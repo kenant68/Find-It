@@ -1,36 +1,62 @@
-import { dbData } from "../utils/db.js";
+import { prisma } from "../lib/prisma.js";
 
-const teams = dbData.teams
-  .filter((team) => team && typeof team.id !== "undefined" && typeof team.name === "string")
-  .map((team) => ({
-    id: Number(team.id) || 0,
-    name: team.name?.toLowerCase() || "unknown",
-    region: typeof team.region === "string" ? team.region : null,
-    eloAvg: null
-  }));
-
-let nextId = teams.length > 0 ? Math.max(...teams.map((team) => team.id)) + 1 : 1;
-
-export function findAll() {
-  return teams;
+export async function findAll() {
+  return await prisma.team.findMany();
 }
 
-export function findById(id) {
-  return teams.find((team) => team.id === id) || null;
+export async function findById(id) {
+  return await prisma.team.findUnique({
+    where: { id: Number(id) },
+  });
 }
 
-export function findByName(name) {
-  const normalized = name.trim().toLowerCase();
-  return teams.find((team) => team.name === normalized) || null;
+export async function findByIdWithMembers(id) {
+  return await prisma.team.findUnique({
+    where: { id: Number(id) },
+    include: {
+      captain: true,
+      members: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
 }
 
-export function addTeam({ name, region, eloAvg }) {
-  const newTeam = {
-    id: nextId++,
-    name,
-    region,
-    eloAvg
-  };
-  teams.push(newTeam);
-  return newTeam;
+export async function findByName(name) {
+  return await prisma.team.findUnique({
+    where: { name: name.trim().toLowerCase() },
+  });
+}
+
+export async function create(data) {
+  const teamData = { ...data };
+
+  if (teamData.name) {
+    teamData.name = teamData.name.trim().toLowerCase();
+  }
+
+  return await prisma.team.create({
+    data: teamData,
+  });
+}
+
+export async function update(id, data) {
+  const updateData = { ...data };
+
+  if (updateData.name) {
+    updateData.name = updateData.name.trim().toLowerCase();
+  }
+
+  return await prisma.team.update({
+    where: { id: Number(id) },
+    data: updateData,
+  });
+}
+
+export async function remove(id) {
+  return await prisma.team.delete({
+    where: { id: Number(id) },
+  });
 }
