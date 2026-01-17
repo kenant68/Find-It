@@ -1,47 +1,60 @@
-import { dbData } from "../utils/db.js";
+import { prisma } from "../lib/prisma.ts";
 
-const users = dbData.users
-  .filter(
-    (user) =>
-      user &&
-      typeof user.id !== "undefined" &&
-      typeof user.username === "string" &&
-      typeof user.email === "string"
-  )
-  .map((user) => ({
-    id: Number(user.id),
-    username: user.username.toLowerCase(),
-    email: user.email.toLowerCase(),
-    region: typeof user.region === "string" ? user.region : null
-  }));
-
-let nextId = users.length > 0 ? Math.max(...users.map((user) => user.id)) + 1 : 1;
-
-export function findAll() {
-  return users;
+export async function findAll() {
+  return await prisma.user.findMany();
 }
 
-export function findById(id) {
-  return users.find((user) => user.id === id) || null;
+export async function findById(id) {
+  return await prisma.user.findUnique({
+    where: { id: Number(id) },
+  });
 }
 
-export function findByUsername(username) {
-  const normalized = username.trim().toLowerCase()
-  return users.find((user) => user.username === normalized) || null;
+export async function findByUsername(username) {
+  return await prisma.user.findUnique({
+    where: { username: username.trim().toLowerCase() },
+  });
 }
 
-export function findByEmail(email) {
-  const normalized = email.trim().toLowerCase();
-  return users.find((user) => user.email === normalized) || null;
+export async function findByEmail(email) {
+  return await prisma.user.findUnique({
+    where: { email: email.trim().toLowerCase() },
+  });
 }
 
-export function addUser({ username, email, region }) {
-  const newUser = {
-    id: nextId++,
-    username,
-    email,
-    region
-  };
-  users.push(newUser);
-  return newUser;
+export async function create(data) {
+  const userData = { ...data };
+
+  if (userData.username) {
+    userData.username = userData.username.trim().toLowerCase();
+  }
+  if (userData.email) {
+    userData.email = userData.email.trim().toLowerCase();
+  }
+
+  return await prisma.user.create({
+    data: userData,
+  });
+}
+
+export async function update(id, data) {
+  const updateData = { ...data };
+
+  if (updateData.username) {
+    updateData.username = updateData.username.trim().toLowerCase();
+  }
+  if (updateData.email) {
+    updateData.email = updateData.email.trim().toLowerCase(); 
+  }
+
+  return await prisma.user.update({
+    where: { id: Number(id) },
+    data: updateData,
+  });
+}
+
+export async function remove(id) {
+  return await prisma.user.delete({
+    where: { id: Number(id) },
+  });
 }

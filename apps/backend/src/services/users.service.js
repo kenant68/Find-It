@@ -1,17 +1,25 @@
-import { findAll, findById, findByUsername, findByEmail, addUser } from "../repositories/users.repository.js";
+import { findAll, findById, findByUsername, findByEmail, create, update, remove } from "../repositories/users.repository.js";
 
-export function getAllUsers() {
-  return findAll();
+export async function getAllUsers() {
+  return await findAll();
 }
 
-export function getUser(id) {
-  return findById(id);
+export async function getUser(id) {
+  return await findById(id);
 }
 
-export function createUser(userData) {
-  let { username, email, region } = userData;
+export async function getUserByUsername(username) {
+  return await findByUsername(username);
+}
 
-  if (!username || !email || !region) {
+export async function getUserByEmail(email) {
+  return await findByEmail(email);
+}
+
+export async function createUser(userData) {
+  let { username, email, passwordHash, region, avatarUrl, faceitId, faceitLevel, steamUrl, discordUsername } = userData;
+
+  if (!username || !email || !passwordHash) {
     throw new Error("INVALID_PAYLOAD");
   }
 
@@ -23,15 +31,62 @@ export function createUser(userData) {
     throw new Error("INVALID_EMAIL");
   }
 
-  const existingByUsername = findByUsername(username);
+  const existingByUsername = await findByUsername(username);
   if (existingByUsername) {
     throw new Error("USERNAME_ALREADY_EXISTS");
   }
 
-  const existingByEmail = findByEmail(email);
+  const existingByEmail = await findByEmail(email);
   if (existingByEmail) {
     throw new Error("EMAIL_ALREADY_EXISTS");
   }
 
-  return addUser({ username, email, region });
+  return await create({
+    username,
+    email,
+    passwordHash,
+    region,
+    avatarUrl,
+    faceitId,
+    faceitLevel,
+    steamUrl,
+    discordUsername,
+  });
+}
+
+export async function updateUser(id, userData) {
+  const existingUser = await findById(id);
+  if (!existingUser) {
+    throw new Error("USER_NOT_FOUND");
+  }
+
+  if (userData.email) {
+    const emailPattern = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+    if (!emailPattern.test(userData.email)) {
+      throw new Error("INVALID_EMAIL");
+    }
+
+    const existingByEmail = await findByEmail(userData.email);
+    if (existingByEmail && existingByEmail.id !== Number(id)) {
+      throw new Error("EMAIL_ALREADY_EXISTS");
+    }
+  }
+
+  if (userData.username) {
+    const existingByUsername = await findByUsername(userData.username);
+    if (existingByUsername && existingByUsername.id !== Number(id)) {
+      throw new Error("USERNAME_ALREADY_EXISTS");
+    }
+  }
+
+  return await update(id, userData);
+}
+
+export async function deleteUser(id) {
+  const existingUser = await findById(id);
+  if (!existingUser) {
+    throw new Error("USER_NOT_FOUND");
+  }
+
+  return await remove(id);
 }
