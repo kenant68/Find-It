@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma.js";
+import { prisma } from "../lib/prisma.ts";
 
 export async function findAll() {
   return await prisma.scrim.findMany({
