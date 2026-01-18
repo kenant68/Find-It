@@ -27,12 +27,10 @@ const CardScrims = () => {
       setError(null);
 
       try {
-        // Charger l'équipe de l'utilisateur d'abord
         const userTeamData = await getUserTeam();
         setUserTeam(userTeamData);
 
         if (userTeamData) {
-          // Charger les scrims de l'équipe seulement
           const [scrimsData, mapsData, teamsData] = await Promise.all([
             getTeamScrims(userTeamData.id),
             getMaps(),
@@ -43,7 +41,6 @@ const CardScrims = () => {
           setMaps(mapsData || []);
           setTeams(teamsData || []);
         } else {
-          // Pas d'équipe, charger quand même maps et teams pour éviter les erreurs
           const [mapsData, teamsData] = await Promise.all([
             getMaps(),
             getTeams(),

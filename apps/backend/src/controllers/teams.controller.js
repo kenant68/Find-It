@@ -130,21 +130,9 @@ export async function createTeamHandler(req, res) {
 export async function getUserTeamHandler(req, res) {
   try {
     const userId = req.user.id;
-    console.log(`[TEAMS CONTROLLER] Getting team for user: ${userId}`);
-
     const team = await getUserTeam(userId);
-    console.log(`[TEAMS CONTROLLER] Team result:`, team);
-
-    if (team) {
-      res.json(team);
-    } else {
-      console.log(`[TEAMS CONTROLLER] No team found for user ${userId}, returning null`);
-      res.json(null);
-    }
+    res.json(team);
   } catch (err) {
-    console.error("[TEAMS CONTROLLER] Error getting user team:", err);
-    console.error("[TEAMS CONTROLLER] Error details:", err.message);
-    console.error("[TEAMS CONTROLLER] Error stack:", err.stack);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
