@@ -13,7 +13,6 @@ export async function getScrims(req, res) {
     const scrims = await getAllScrims();
     res.json(scrims);
   } catch (err) {
-    console.error("Error fetching scrims:", err);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
@@ -33,7 +32,6 @@ export async function getScrimById(req, res) {
 
     res.json(scrim);
   } catch (err) {
-    console.error("Error fetching scrim by ID:", err);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
@@ -46,7 +44,6 @@ export async function getScrimsByTeamHandler(req, res) {
     const scrims = await getScrimsByTeam(teamId);
     res.json(scrims);
   } catch (err) {
-    console.error("Error fetching scrims by team:", err);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
@@ -59,7 +56,6 @@ export async function getScrimsByStatusHandler(req, res) {
     const scrims = await getScrimsByStatus(status);
     res.json(scrims);
   } catch (err) {
-    console.error("Error fetching scrims by status:", err);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
@@ -119,7 +115,6 @@ export async function createScrimHandler(req, res) {
     const newScrim = await createScrim(req.body);
     res.status(201).json(newScrim);
   } catch (err) {
-    console.error("Error creating scrim:", err);
     handleScrimError(err, res);
   }
 }
@@ -131,7 +126,6 @@ export async function updateScrimHandler(req, res) {
 
     res.json(updatedScrim);
   } catch (err) {
-    console.error("Error updating scrim:", err);
     handleScrimError(err, res);
   }
 }
@@ -143,7 +137,6 @@ export async function deleteScrimHandler(req, res) {
 
     res.status(204).send();
   } catch (err) {
-    console.error("Error deleting scrim:", err);
     handleScrimError(err, res);
   }
 }

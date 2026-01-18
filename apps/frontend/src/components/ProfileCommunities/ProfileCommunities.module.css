@@ -105,6 +105,23 @@
   font-weight: 500;
 }
 
+.faceitText {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.faceitConfigured {
+  background: linear-gradient(135deg, #ff5500, #ff8c00) !important;
+}
+
+.faceitNotConfigured {
+  background: rgba(255, 255, 255, 0.05) !important;
+  opacity: 0.6;
+}
+
 @media (max-width: 768px) {
   .card {
     padding: 16px;

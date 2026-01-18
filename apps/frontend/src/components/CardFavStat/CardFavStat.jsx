@@ -4,6 +4,7 @@ import styles from "./CardFavStat.module.css";
 const CardFavStat = () => {
   const [stats, setStats] = useState(null);
   const [map, setMap] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/faceit_stats?user_id=1")
@@ -18,10 +19,29 @@ const CardFavStat = () => {
               if (favoriteMap) {
                 setMap(favoriteMap);
               }
+            })
+            .catch((err) => {
+              console.error("Erreur chargement maps:", err);
+              setError("Erreur de chargement des cartes");
             });
         }
+      })
+      .catch((err) => {
+        console.error("Erreur chargement stats FACEIT:", err);
+        setError("Statistiques FACEIT non disponibles");
       });
   }, []);
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <h1 className={styles.title}>Statistiques favorites</h1>
+        <p style={{ color: "rgba(255, 255, 255, 0.6)", textAlign: "center", marginTop: "20px" }}>
+          {error}
+        </p>
+      </div>
+    );
+  }
 
   if (!stats || !map) {
     return (

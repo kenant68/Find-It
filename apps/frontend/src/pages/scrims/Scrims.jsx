@@ -32,10 +32,6 @@ const Scrims = () => {
           getMaps()
         ]);
 
-        console.log("Scrims data:", scrimsData);
-        console.log("Teams data:", teamsData);
-        console.log("Maps data:", mapsData);
-
         setScrims(scrimsData || []);
         setTeams(teamsData || []);
         setMaps(mapsData || []);
@@ -43,23 +39,17 @@ const Scrims = () => {
         if (user?.id) {
           try {
             const userTeamData = await getUserTeam();
-            console.log("User team from API:", userTeamData);
             setUserTeam(userTeamData);
           } catch (err) {
-            console.warn("Could not get user team, trying captain check:", err);
-
             const userAsCaptain = teamsData?.find(team => team.captainId === user.id);
             if (userAsCaptain) {
-              console.log("User is captain of team:", userAsCaptain.name);
               setUserTeam(userAsCaptain);
             } else {
-              console.log("User is not in any team");
               setUserTeam(null);
             }
           }
         }
       } catch (error) {
-        console.error("Erreur lors du chargement des données:", error);
         setError("Erreur lors du chargement des données");
       } finally {
         setLoading(false);
@@ -89,8 +79,6 @@ const Scrims = () => {
       await deleteScrim(scrimId);
       setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== scrimId));
     } catch (error) {
-      console.error("Erreur lors de l'annulation du scrim:", error);
-   
       if (error.message?.includes('404') || error.message?.includes('Scrim not found')) {
         setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== scrimId));
       } else {
@@ -100,7 +88,6 @@ const Scrims = () => {
   };
 
   const handleCreate = () => {
-    console.log("handleCreate called, userTeam:", userTeam, "user:", user);
     if (!userTeam) {
       setError("Vous devez être dans une équipe pour créer un scrim");
       return;
@@ -114,26 +101,21 @@ const Scrims = () => {
 
   const handleSubmit = async (formData) => {
     try {
-      console.log("Creating scrim with data:", formData);
-
       const scrimData = {
-        teamAId: userTeam.id, 
+        teamAId: userTeam.id,
         teamBId: formData.opponentTeamId,
         mapId: formData.mapId,
         horaire: formData.time,
         status: "scheduled"
       };
 
-      console.log("Sending scrim data:", scrimData);
       const newScrim = await createScrim(scrimData);
-      console.log("Created scrim:", newScrim);
 
       const updatedScrims = await getScrims();
       setScrims(updatedScrims || []);
 
       setIsModalOpen(false);
     } catch (error) {
-      console.error("Erreur lors de la création du scrim:", error);
       setError(error.message || "Erreur lors de la création du scrim");
     }
   };

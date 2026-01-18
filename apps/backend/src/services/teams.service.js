@@ -166,19 +166,51 @@ export async function joinTeam(teamId, userId) {
 }
 
 export async function getUserTeam(userId) {
+  console.log(`[TEAMS SERVICE] Getting user team for userId: ${userId}`);
+
   const allTeams = await findAll();
+  console.log(`[TEAMS SERVICE] Found ${allTeams.length} teams in database`);
+
+  // Log all teams with their ids
+  allTeams.forEach(team => {
+    console.log(`[TEAMS SERVICE] Team in DB: id=${team.id}, name=${team.name}, captainId=${team.captainId}`);
+  });
+
   const captainTeam = allTeams.find(team => team.captainId === userId);
+  console.log(`[TEAMS SERVICE] Captain team found:`, captainTeam);
+
   if (captainTeam) {
-    return captainTeam;
+    console.log(`[TEAMS SERVICE] Loading captain team with members: ${captainTeam.id}`);
+    if (!captainTeam.id) {
+      console.error(`[TEAMS SERVICE] ERROR: captainTeam.id is falsy:`, captainTeam);
+      return null;
+    }
+    const teamWithMembers = await findByIdWithMembers(captainTeam.id);
+    console.log(`[TEAMS SERVICE] Captain team loaded:`, teamWithMembers);
+    return teamWithMembers;
   }
 
+  console.log(`[TEAMS SERVICE] Not captain, checking membership...`);
+
   for (const team of allTeams) {
+    console.log(`[TEAMS SERVICE] Checking team ${team.id} (${team.name})`);
+    if (!team.id) {
+      console.error(`[TEAMS SERVICE] ERROR: team.id is falsy for team:`, team);
+      continue;
+    }
     const teamWithMembers = await findByIdWithMembers(team.id);
-    const member = teamWithMembers.members.find(m => m.userId === userId);
+    console.log(`[TEAMS SERVICE] Team ${team.id} has ${teamWithMembers?.members?.length || 0} members`);
+
+    const member = teamWithMembers?.members?.find(m => m.userId === userId);
+    console.log(`[TEAMS SERVICE] Member found in team ${team.id}:`, member);
+
     if (member) {
-      return team;
+      console.log(`[TEAMS SERVICE] User ${userId} is member of team ${team.id}`);
+      return teamWithMembers;
     }
   }
+
+  console.log(`[TEAMS SERVICE] User ${userId} not found in any team`);
   return null;
 }
 

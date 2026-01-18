@@ -45,6 +45,7 @@ export async function createUser(userData) {
 }
 
 export async function updateUser(id, userData) {
+  console.log(`[USERS SERVICE] Updating user ${id} with data:`, userData);
   const existingUser = await findById(id);
   if (!existingUser) throw new Error("USER_NOT_FOUND");
 

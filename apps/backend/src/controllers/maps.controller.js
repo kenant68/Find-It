@@ -9,10 +9,13 @@ import {
 
 export async function getMaps(req, res) {
   try {
+    console.log("[MAPS CONTROLLER] Getting all maps...");
     const maps = await getAllMaps();
+    console.log(`[MAPS CONTROLLER] Found ${maps.length} maps`);
     res.json(maps);
   } catch (err) {
-    console.error("Error fetching maps:", err);
+    console.error("[MAPS CONTROLLER] Error fetching maps:", err);
+    console.error("[MAPS CONTROLLER] Stack:", err.stack);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });

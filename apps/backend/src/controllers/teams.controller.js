@@ -16,10 +16,13 @@ import {
 
 export async function getTeams(req, res) {
   try {
+    console.log("[TEAMS CONTROLLER] Getting all teams...");
     const teams = await getAllTeams();
+    console.log(`[TEAMS CONTROLLER] Found ${teams.length} teams`);
     res.json(teams);
   } catch (err) {
-    console.error("Error fetching teams:", err);
+    console.error("[TEAMS CONTROLLER] Error fetching teams:", err);
+    console.error("[TEAMS CONTROLLER] Stack:", err.stack);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
@@ -127,15 +130,21 @@ export async function createTeamHandler(req, res) {
 export async function getUserTeamHandler(req, res) {
   try {
     const userId = req.user.id;
+    console.log(`[TEAMS CONTROLLER] Getting team for user: ${userId}`);
+
     const team = await getUserTeam(userId);
+    console.log(`[TEAMS CONTROLLER] Team result:`, team);
 
     if (team) {
       res.json(team);
     } else {
+      console.log(`[TEAMS CONTROLLER] No team found for user ${userId}, returning null`);
       res.json(null);
     }
   } catch (err) {
-    console.error("Error getting user team:", err);
+    console.error("[TEAMS CONTROLLER] Error getting user team:", err);
+    console.error("[TEAMS CONTROLLER] Error details:", err.message);
+    console.error("[TEAMS CONTROLLER] Error stack:", err.stack);
     res
       .status(500)
       .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });

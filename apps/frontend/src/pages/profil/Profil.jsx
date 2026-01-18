@@ -7,6 +7,7 @@ import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import ProfileBanner from "../../components/ProfileBanner/ProfileBanner.jsx";
 import ProfileGameStats from "../../components/ProfileGameStats/ProfileGameStats.jsx";
 import ProfileCommunities from "../../components/ProfileCommunities/ProfileCommunities.jsx";
+import ImageUpload from "../../components/ImageUpload/ImageUpload.jsx";
 import Modal from "../../components/Modal/Modal.jsx";
 import Input from "../../components/Input/Input.jsx";
 import Button from "../../components/button/Button.jsx";
@@ -40,11 +41,9 @@ const Profil = () => {
           const stats = await getFaceitStats(user.id);
           setFaceitStats(stats);
         } catch (statsError) {
-          console.warn("Stats FACEIT non disponibles:", statsError.message);
         }
 
       } catch (error) {
-        console.error("Erreur lors du chargement du profil:", error);
         setError("Erreur lors du chargement du profil");
       } finally {
         setLoading(false);
@@ -55,14 +54,12 @@ const Profil = () => {
   }, [user?.id]);
 
 
-  const handleEditAvatar = () => {
-    setEditValue(userDetails?.avatarUrl || "");
-    setActiveModal("avatar");
+  const handleAvatarUpdate = (newAvatarUrl) => {
+    setUserDetails(prev => prev ? { ...prev, avatarUrl: newAvatarUrl } : null);
   };
 
-  const handleEditBanner = () => {
-    setEditValue(userDetails?.bannerUrl || "");
-    setActiveModal("banner");
+  const handleBannerUpdate = (newBannerUrl) => {
+    setUserDetails(prev => prev ? { ...prev, bannerUrl: newBannerUrl } : null);
   };
 
   const handleEditUsername = () => {
@@ -85,27 +82,33 @@ const Profil = () => {
     setActiveModal("region");
   };
 
+  const handleEditFaceit = () => {
+    setEditValue(userDetails?.faceitId || "");
+    setActiveModal("username");
+  };
+
   const handleSaveEdit = async () => {
     if (!activeModal) return;
 
-    try {
-      setLoading(true);
-      const fieldMapping = {
-        username: "username",
-        steam: "steamUrl",
-        discord: "discordUsername",
-        region: "region"
-      };
+      try {
+        setLoading(true);
+        const fieldMapping = {
+          username: "faceitId",
+          steam: "steamUrl",
+          discord: "discordUsername",
+          region: "region"
+        };
 
-      await updateUser(user.id, { [fieldMapping[activeModal]]: editValue });
+        const updateData = { [fieldMapping[activeModal]]: editValue };
 
-      const updatedUser = await getUserById(user.id);
-      setUserDetails(updatedUser);
+        await updateUser(user.id, updateData);
+
+        const updatedUser = await getUserById(user.id);
+        setUserDetails(updatedUser);
 
       setActiveModal(null);
       setEditValue("");
     } catch (error) {
-      console.error("Erreur lors de la sauvegarde:", error);
       setError("Erreur lors de la sauvegarde");
     } finally {
       setLoading(false);
@@ -122,7 +125,6 @@ const Profil = () => {
       const updatedUser = await getUserById(user.id);
       setUserDetails(updatedUser);
     } catch (error) {
-      console.error("Erreur lors du rechargement du profil:", error);
     }
   };
 
@@ -180,16 +182,16 @@ const Profil = () => {
 
           <div className={styles.profileContent}>
             {userDetails && (
-              <ProfileBanner
+            <ProfileBanner
                 user={userDetails}
                 bannerUrl={userDetails.bannerUrl}
-                onEditBanner={handleEditBanner}
+                onBannerUpdate={handleBannerUpdate}
                 onEditUsername={handleEditUsername}
-                onEditAvatar={handleEditAvatar}
-              />
-            )}
+                onAvatarUpdate={handleAvatarUpdate}
+            />
+          )}
 
-            <div className={styles.cardsGrid}>
+          <div className={styles.cardsGrid}>
               {faceitStats && <ProfileGameStats stats={faceitStats} />}
               {userDetails && (
                 <ProfileCommunities
@@ -197,6 +199,7 @@ const Profil = () => {
                   onEditSteam={handleEditSteam}
                   onEditDiscord={handleEditDiscord}
                   onEditRegion={handleEditRegion}
+                  onEditFaceit={handleEditFaceit}
                 />
               )}
             </div>
@@ -221,7 +224,6 @@ const Profil = () => {
               />
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
                 <Button onClick={() => {
-                  console.log("Avatar URL:", editValue);
                   handleCloseModal();
                 }} disabled={loading}>
                   Sauvegarder
@@ -257,15 +259,15 @@ const Profil = () => {
           <Modal
             isOpen={activeModal === "username"}
             onClose={handleCloseModal}
-            title="Modifier le nom d'utilisateur FACEIT"
+            title="Modifier l'ID FACEIT"
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <Input
-                name="Nom d'utilisateur FACEIT"
+                name="ID FACEIT"
                 type="text"
                 value={editValue}
                 onChange={(e) => setEditValue(e.target.value)}
-                placeholder="Votre pseudo FACEIT"
+                placeholder="Votre ID ou pseudo FACEIT"
               />
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
                 <Button onClick={handleSaveEdit} disabled={loading}>
@@ -334,7 +336,7 @@ const Profil = () => {
                 <Button onClick={handleSaveEdit} disabled={loading}>
                   {loading ? "Sauvegarde..." : "Sauvegarder"}
                 </Button>
-              </div>
+          </div>
             </div>
           </Modal>
         </div>

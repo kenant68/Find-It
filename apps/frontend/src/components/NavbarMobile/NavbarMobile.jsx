@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../utils/auth.jsx";
-import { getUserById } from "../../utils/api.js";
+import { getUserById, getImageUrl } from "../../utils/api.js";
 import styles from "./NavbarMobile.module.css";
 
 import homeIcon from "../../assets/navbar/Home.svg";
@@ -80,7 +80,7 @@ export default function NavbarMobile() {
             }
           >
             <img
-              src={userDetails?.avatarUrl || "https://via.placeholder.com/24x24?text=U"}
+              src={getImageUrl(userDetails?.avatarUrl) || "https://via.placeholder.com/24x24?text=U"}
               className={styles.avatarIcon}
               alt="profil"
             />
