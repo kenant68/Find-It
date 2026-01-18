@@ -24,29 +24,15 @@ export async function findByEmail(email) {
 
 export async function create(data) {
   const userData = { ...data };
-
-  if (userData.username) {
-    userData.username = userData.username.trim().toLowerCase();
-  }
-  if (userData.email) {
-    userData.email = userData.email.trim().toLowerCase();
-  }
-
-  return await prisma.user.create({
-    data: userData,
-  });
+  if (userData.username) userData.username = userData.username.trim().toLowerCase();
+  if (userData.email) userData.email = userData.email.trim().toLowerCase();
+  return await prisma.user.create({ data: userData });
 }
 
 export async function update(id, data) {
   const updateData = { ...data };
-
-  if (updateData.username) {
-    updateData.username = updateData.username.trim().toLowerCase();
-  }
-  if (updateData.email) {
-    updateData.email = updateData.email.trim().toLowerCase(); 
-  }
-
+  if (updateData.username) updateData.username = updateData.username.trim().toLowerCase();
+  if (updateData.email) updateData.email = updateData.email.trim().toLowerCase();
   return await prisma.user.update({
     where: { id: Number(id) },
     data: updateData,
@@ -56,5 +42,12 @@ export async function update(id, data) {
 export async function remove(id) {
   return await prisma.user.delete({
     where: { id: Number(id) },
+  });
+}
+
+export async function updatePassword(id, passwordHash) {
+  return await prisma.user.update({
+    where: { id: Number(id) },
+    data: { passwordHash },
   });
 }
