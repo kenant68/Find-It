@@ -40,7 +40,7 @@ export async function getScrimById(req, res) {
 
 export async function getScrimsByTeamHandler(req, res) {
   try {
-    const teamId = Number(req.params.teamId);
+    const teamId = Number(req.params.id);
     const scrims = await getScrimsByTeam(teamId);
     res.json(scrims);
   } catch (err) {
