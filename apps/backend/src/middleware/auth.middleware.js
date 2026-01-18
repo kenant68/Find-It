@@ -7,7 +7,7 @@ export const authMiddleware = (req, res, next) => {
   try {
     const token = header.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+    req.user = { id: decoded.id };
     next();
   } catch {
     res.sendStatus(403);

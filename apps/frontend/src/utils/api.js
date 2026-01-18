@@ -187,3 +187,16 @@ export const markNotificationAsRead = async (id) => {
         method: 'PUT',
     });
 };
+
+
+export const getTeamWithMembers = async (id) => {
+    return apiRequest(`/teams/${id}/members`);
+};
+
+export const getTeamByName = async (name) => {
+    return apiRequest(`/teams/name/${name}`);
+};
+
+export const getScrimsByTeam = async (teamId) => {
+    return apiRequest(`/teams/${teamId}/scrims`);
+};

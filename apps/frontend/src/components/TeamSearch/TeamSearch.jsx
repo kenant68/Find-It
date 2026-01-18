@@ -3,11 +3,17 @@ import styles from "./TeamSearch.module.css";
 import Navbar from "../Navbar/Navbar.jsx";
 import NavbarMobile from "../NavbarMobile/NavbarMobile.jsx";
 import CardLong from "../CardLong/CardLong.jsx";
+import Button from "../button/Button.jsx";
+import Modal from "../Modal/Modal.jsx";
+import Input from "../Input/Input.jsx";
+import { getTeams, createTeam, deleteTeam } from "../../utils/api.js";
+import { useAuth } from "../../utils/auth.jsx";
 import teamsIcon from "../../assets/teams.png";
 import arrowDownIcon from "../../assets/other-teams/arrow-down.svg";
 import deleteIcon from "../../assets/other-teams/corbeille.svg";
 
 const TeamSearch = () => {
+  const { user } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [teams, setTeams] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,19 +22,21 @@ const TeamSearch = () => {
   const [availableRegions, setAvailableRegions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createFormData, setCreateFormData] = useState({
+    name: "",
+    region: "",
+    eloAvg: "",
+  });
+  const [isCreating, setIsCreating] = useState(false);
+  const [canCreateTeam, setCanCreateTeam] = useState(false);
 
   useEffect(() => {
     const fetchTeams = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await fetch("http://localhost:3000/teams");
-
-        if (!response.ok) {
-          throw new Error("Erreur lors du chargement des équipes");
-        }
-
-        const data = await response.json();
+        const data = await getTeams();
         setTeams(data);
         setFilteredTeams(data);
 
@@ -36,6 +44,13 @@ const TeamSearch = () => {
           ...new Set(data.map((team) => team.region).filter(Boolean)),
         ].sort();
         setAvailableRegions(regions);
+
+        if (user?.id) {
+          const isAlreadyCaptain = data.some(team => team.captainId === user.id);
+          setCanCreateTeam(!isAlreadyCaptain);
+        } else {
+          setCanCreateTeam(false);
+        }
       } catch (err) {
         setError(err.message);
         console.error("Erreur lors du chargement des équipes:", err);
@@ -73,8 +88,47 @@ const TeamSearch = () => {
     setSelectedRegion(e.target.value);
   };
 
-  const handleDeleteTeam = (teamId) => {
-    setTeams((prevTeams) => prevTeams.filter((team) => team.id !== teamId));
+  const handleDeleteTeam = async (teamId) => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette équipe ?")) {
+      try {
+        await deleteTeam(teamId);
+        setTeams((prevTeams) => prevTeams.filter((team) => team.id !== teamId));
+      } catch (err) {
+        setError("Impossible de supprimer l'équipe: " + err.message);
+      }
+    }
+  };
+
+  const handleCreateTeam = async () => {
+    try {
+      setIsCreating(true);
+      const newTeam = await createTeam({
+        name: createFormData.name,
+        region: createFormData.region || null,
+        eloAvg: createFormData.eloAvg ? Number(createFormData.eloAvg) : null,
+      });
+
+      setTeams((prev) => [...prev, newTeam]);
+      setCanCreateTeam(false); 
+      setIsCreateModalOpen(false);
+      setCreateFormData({ name: "", region: "", eloAvg: "" });
+    } catch (err) {
+      if (err.message?.includes("USER_ALREADY_CAPTAIN")) {
+        setError("Vous êtes déjà capitaine d'une équipe");
+        setCanCreateTeam(false);
+      } else {
+        setError(err.message);
+      }
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleCreateFormChange = (field, value) => {
+    setCreateFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
   const getRegionDisplay = (region) => {
@@ -132,6 +186,16 @@ const TeamSearch = () => {
         >
           <header className={styles.header}>
             <h1 className={styles.pageTitle}>Equipes</h1>
+            {canCreateTeam ? (
+              <Button
+                text="Créer une équipe"
+                onClick={() => setIsCreateModalOpen(true)}
+              />
+            ) : (
+              <div className={styles.cannotCreate}>
+                <span>Vous êtes déjà capitaine d'une équipe</span>
+              </div>
+            )}
           </header>
 
           <div className={styles.searchBar}>
@@ -172,7 +236,7 @@ const TeamSearch = () => {
                   key={team.id}
                   icon={teamsIcon}
                   title={team.name}
-                  subtitle={`Rang moyen : FACEIT 10`}
+                  subtitle={`ELO moyen : ${team.eloAvg ? team.eloAvg : 'N/A'}`}
                   timestamp={getRegionDisplay(team.region)}
                   onDelete={() => handleDeleteTeam(team.id)}
                   deleteIcon={deleteIcon}
@@ -183,6 +247,69 @@ const TeamSearch = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Créer une nouvelle équipe"
+      >
+        <div className={styles.createForm}>
+          <div className={styles.formGroup}>
+            <label htmlFor="teamName">Nom de l'équipe *</label>
+            <Input
+              type="text"
+              id="teamName"
+              value={createFormData.name}
+              onChange={(e) => handleCreateFormChange("name", e.target.value)}
+              placeholder="Entrez le nom de l'équipe"
+              required
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="teamRegion">Région</label>
+            <select
+              id="teamRegion"
+              value={createFormData.region}
+              onChange={(e) => handleCreateFormChange("region", e.target.value)}
+              className={styles.regionSelect}
+            >
+              <option value="">Sélectionner une région</option>
+              <option value="Europe">Europe</option>
+              <option value="Asie">Asie</option>
+              <option value="Amérique">Amérique</option>
+              <option value="Afrique">Afrique</option>
+              <option value="Océanie">Océanie</option>
+            </select>
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="teamElo">ELO moyen</label>
+            <Input
+              type="number"
+              id="teamElo"
+              value={createFormData.eloAvg}
+              onChange={(e) => handleCreateFormChange("eloAvg", e.target.value)}
+              placeholder="Entrez l'ELO moyen (optionnel)"
+              min="0"
+            />
+          </div>
+
+          <div className={styles.modalActions}>
+            <Button
+              text="Annuler"
+              onClick={() => setIsCreateModalOpen(false)}
+              variant="secondary"
+            />
+            <Button
+              text={isCreating ? "Création..." : "Créer"}
+              onClick={handleCreateTeam}
+              disabled={isCreating || !createFormData.name.trim()}
+            />
+          </div>
+        </div>
+      </Modal>
+
       <NavbarMobile />
     </div>
   );

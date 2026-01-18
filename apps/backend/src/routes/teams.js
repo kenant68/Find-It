@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 import {
   getTeams,
   getTeamById,
@@ -7,6 +8,9 @@ import {
   createTeamHandler,
   updateTeamHandler,
   deleteTeamHandler,
+  addTeamMemberHandler,
+  removeTeamMemberHandler,
+  leaveTeamHandler,
 } from "../controllers/teams.controller.js";
 import { getScrimsByTeamHandler } from "../controllers/scrims.controller.js";
 
@@ -17,8 +21,12 @@ router.get("/name/:name", getTeamByNameHandler);
 router.get("/:id/scrims", getScrimsByTeamHandler);
 router.get("/:id/members", getTeamByIdWithMembersHandler);
 router.get("/:id", getTeamById);
-router.post("/", createTeamHandler);
-router.put("/:id", updateTeamHandler);
-router.delete("/:id", deleteTeamHandler);
+router.post("/", authMiddleware, createTeamHandler);
+router.put("/:id", authMiddleware, updateTeamHandler);
+router.delete("/:id", authMiddleware, deleteTeamHandler);
+
+router.post("/:id/members", authMiddleware, addTeamMemberHandler);
+router.delete("/:id/members/:userId", authMiddleware, removeTeamMemberHandler);
+router.post("/leave", authMiddleware, leaveTeamHandler);
 
 export default router;
