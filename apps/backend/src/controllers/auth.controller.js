@@ -16,6 +16,12 @@ export const forgotPassword = async (req, res) => {
   const user = await findByEmail(req.body.email);
   if (!user) return res.sendStatus(200);
 
+
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
+    console.error('JWT_SECRET non configuré - impossible de générer le token de reset');
+    return res.status(500).json({ message: "Erreur de configuration serveur" });
+  }
+
   const token = jwt.sign(
     { id: user.id },
     process.env.JWT_SECRET,

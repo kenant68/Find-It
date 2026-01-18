@@ -24,6 +24,11 @@ export const loginService = async (email, password) => {
 };
 
 export const resetPasswordService = async (token, newPassword) => {
+
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
+    throw new Error("JWT_SECRET non configuré - contactez l'administrateur");
+  }
+
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
   const hashed = await bcrypt.hash(newPassword, 10);
   await updatePassword(decoded.id, hashed);
