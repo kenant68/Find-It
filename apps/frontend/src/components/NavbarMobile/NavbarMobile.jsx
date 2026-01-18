@@ -9,7 +9,6 @@ import castleIcon from "../../assets/navbar/castle.svg";
 import teamsIcon from "../../assets/teams.png";
 import matchsIcon from "../../assets/matchs.png";
 import announceIcon from "../../assets/announce.png";
-import notificationIcon from "../../assets/notifications.png";
 
 export default function NavbarMobile() {
   const { user, logout } = useAuth();
@@ -98,22 +97,6 @@ export default function NavbarMobile() {
           >
             <img src={announceIcon} className={styles.icon} alt="announces" />
             <span>Annonces</span>
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/notifications"
-            className={({ isActive }) =>
-              isActive ? `${styles.link} ${styles.active}` : styles.link
-            }
-          >
-            <img
-              src={notificationIcon}
-              className={styles.icon}
-              alt="notifications"
-            />
-            <span>Notifications</span>
           </NavLink>
         </li>
 

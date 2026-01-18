@@ -182,17 +182,6 @@ export const getRecentFaceitMatches = async (userId) => {
     return apiRequest(`/faceit-matches/${userId}/recent-matches`);
 };
 
-export const getNotifications = async () => {
-    return apiRequest('/notifications');
-};
-
-export const markNotificationAsRead = async (id) => {
-    return apiRequest(`/notifications/${id}/read`, {
-        method: 'PUT',
-    });
-};
-
-
 export const getTeamWithMembers = async (id) => {
     return apiRequest(`/teams/${id}/members`);
 };
