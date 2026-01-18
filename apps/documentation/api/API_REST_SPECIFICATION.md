@@ -1,8 +1,8 @@
 # Spécification API REST - Find-It
 
-**Version :** 1.0.0  
-**Date :** 30 novembre 2025  
-**Base URL :** `http://localhost:3000` (development)
+**Version :** 2.0.0  
+**Date :** 18 janvier 2026  
+**Base URL :** `http://localhost:4000/api` (development)
 
 ## Format des données
 
@@ -18,9 +18,21 @@
 | 201  | Created               | Ressource créée avec succès      |
 | 204  | No Content            | Ressource supprimée avec succès  |
 | 400  | Bad Request           | Données invalides ou malformées  |
+| 401  | Unauthorized          | Authentification requise         |
+| 403  | Forbidden             | Accès refusé                     |
 | 404  | Not Found             | Ressource introuvable            |
 | 409  | Conflict              | Conflit (ex: email déjà utilisé) |
 | 500  | Internal Server Error | Erreur serveur interne           |
+
+## Authentification
+
+L'API utilise l'authentification JWT (JSON Web Token). Les endpoints protégés nécessitent un header `Authorization` :
+
+```
+Authorization: Bearer <token>
+```
+
+Le token est obtenu via l'endpoint `/auth/login`.
 
 ## Format d'erreur
 
@@ -51,15 +63,52 @@
 
 ## Routes API
 
+### Auth
+
+| Méthode | Endpoint               | Description                          | Body                          | Réponse                  | Codes     |
+| ------- | ---------------------- | ------------------------------------ | ----------------------------- | ------------------------ | --------- |
+| POST    | `/auth/login`          | Connexion utilisateur                | `LoginRequest`                | `{ token, user }`        | 200, 401  |
+| POST    | `/auth/forgot-password`| Demande de réinitialisation          | `{ email }`                   | `{ message }`            | 200, 404  |
+| POST    | `/auth/reset-password` | Réinitialisation du mot de passe     | `{ token, password }`         | `{ message }`            | 200, 400  |
+
+**Exemple de requête POST /auth/login :**
+
+```json
+{
+  "email": "musashi@gmail.com",
+  "password": "motdepasse123"
+}
+```
+
+**Exemple de réponse POST /auth/login :**
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "username": "Musashiii_",
+    "email": "musashi@gmail.com"
+  }
+}
+```
+
 ### Users
 
-| Méthode | Endpoint     | Description              | Body                | Réponse        | Codes              |
-| ------- | ------------ | ------------------------ | ------------------- | -------------- | ------------------ |
-| GET     | `/users`     | Liste des utilisateurs   | -                   | `PublicUser[]` | 200                |
-| GET     | `/users/:id` | Détails d'un utilisateur | -                   | `PublicUser`   | 200, 404           |
-| POST    | `/users`     | Créer un utilisateur     | `CreateUserRequest` | `PublicUser`   | 201, 400, 409      |
-| PATCH   | `/users/:id` | Modifier un utilisateur  | `UpdateUserRequest` | `PublicUser`   | 200, 400, 404, 409 |
-| DELETE  | `/users/:id` | Supprimer un utilisateur | -                   | -              | 204, 404           |
+| Méthode | Endpoint                   | Description                  | Body                | Réponse        | Codes              | Auth |
+| ------- | -------------------------- | ---------------------------- | ------------------- | -------------- | ------------------ | ---- |
+| GET     | `/users`                   | Liste des utilisateurs       | -                   | `PublicUser[]` | 200                | Non  |
+| GET     | `/users/:id`               | Détails d'un utilisateur     | -                   | `PublicUser`   | 200, 404           | Non  |
+| GET     | `/users/username/:username`| Recherche par username       | -                   | `PublicUser`   | 200, 404           | Oui  |
+| GET     | `/users/email/:email`      | Recherche par email          | -                   | `PublicUser`   | 200, 404           | Oui  |
+| POST    | `/users`                   | Créer un utilisateur         | `CreateUserRequest` | `PublicUser`   | 201, 400, 409      | Non  |
+| PUT     | `/users/:id`               | Modifier un utilisateur      | `UpdateUserRequest` | `PublicUser`   | 200, 400, 404, 409 | Oui  |
+| PUT     | `/users/:id/password`      | Modifier le mot de passe     | `{ password }`      | `PublicUser`   | 200, 400, 404      | Oui  |
+| DELETE  | `/users/:id`               | Supprimer un utilisateur     | -                   | -              | 204, 404           | Oui  |
+| POST    | `/users/avatar`            | Upload avatar                | `FormData (avatar)` | `{ url }`      | 200, 400           | Oui  |
+| POST    | `/users/banner`            | Upload bannière              | `FormData (banner)` | `{ url }`      | 200, 400           | Oui  |
+| DELETE  | `/users/avatar`            | Supprimer avatar             | -                   | -              | 204                | Oui  |
+| DELETE  | `/users/banner`            | Supprimer bannière           | -                   | -              | 204                | Oui  |
 
 **Exemple de requête POST /users :**
 
@@ -69,6 +118,7 @@
   "email": "musashi@gmail.com",
   "password": "motdepasse123",
   "avatar_url": "https://example.com/avatar.jpg",
+  "faceit_id": "Musashiii_",
   "faceit_level": "7",
   "region": "Europe",
   "steam_url": "https://steamcommunity.com/profiles/76561199091182456/",
@@ -84,6 +134,7 @@
   "username": "Musashiii_",
   "email": "musashi@gmail.com",
   "avatar_url": "https://example.com/avatar.jpg",
+  "faceit_id": "Musashiii_",
   "faceit_level": "7",
   "region": "Europe",
   "steam_url": "https://steamcommunity.com/profiles/76561199091182456/",
@@ -95,14 +146,22 @@
 
 ### Teams
 
-| Méthode | Endpoint             | Description          | Body                | Réponse        | Codes         |
-| ------- | -------------------- | -------------------- | ------------------- | -------------- | ------------- |
-| GET     | `/teams`             | Liste des équipes    | -                   | `Team[]`       | 200           |
-| GET     | `/teams/:id`         | Détails d'une équipe | -                   | `Team`         | 200, 404      |
-| GET     | `/teams/:id/members` | Membres d'une équipe | -                   | `TeamMember[]` | 200, 404      |
-| POST    | `/teams`             | Créer une équipe     | `CreateTeamRequest` | `Team`         | 201, 400      |
-| PATCH   | `/teams/:id`         | Modifier une équipe  | `UpdateTeamRequest` | `Team`         | 200, 400, 404 |
-| DELETE  | `/teams/:id`         | Supprimer une équipe | -                   | -              | 204, 404      |
+| Méthode | Endpoint                    | Description                    | Body                | Réponse              | Codes         | Auth |
+| ------- | --------------------------- | ------------------------------ | ------------------- | -------------------- | ------------- | ---- |
+| GET     | `/teams`                    | Liste des équipes              | -                   | `Team[]`             | 200           | Non  |
+| GET     | `/teams/my-team`            | Mon équipe actuelle            | -                   | `TeamWithMembers`    | 200, 404      | Oui  |
+| GET     | `/teams/name/:name`         | Recherche par nom              | -                   | `Team`               | 200, 404      | Non  |
+| GET     | `/teams/:id`                | Détails d'une équipe           | -                   | `Team`               | 200, 404      | Non  |
+| GET     | `/teams/:id/members`        | Équipe avec ses membres        | -                   | `TeamWithMembers`    | 200, 404      | Non  |
+| GET     | `/teams/:id/scrims`         | Scrims d'une équipe            | -                   | `Scrim[]`            | 200, 404      | Non  |
+| POST    | `/teams`                    | Créer une équipe               | `CreateTeamRequest` | `Team`               | 201, 400      | Oui  |
+| POST    | `/teams/:id/claim`          | Revendiquer une équipe         | -                   | `Team`               | 200, 400, 409 | Oui  |
+| POST    | `/teams/:id/join`           | Rejoindre une équipe           | -                   | `TeamMember`         | 200, 400, 409 | Oui  |
+| POST    | `/teams/leave`              | Quitter son équipe             | -                   | -                    | 204, 400      | Oui  |
+| PUT     | `/teams/:id`                | Modifier une équipe            | `UpdateTeamRequest` | `Team`               | 200, 400, 404 | Oui  |
+| DELETE  | `/teams/:id`                | Supprimer une équipe           | -                   | -                    | 204, 404      | Oui  |
+| POST    | `/teams/:id/members`        | Ajouter un membre              | `{ userId, role }`  | `TeamMember`         | 201, 400      | Oui  |
+| DELETE  | `/teams/:id/members/:userId`| Retirer un membre              | -                   | -                    | 204, 404      | Oui  |
 
 **Exemple de requête POST /teams :**
 
@@ -111,9 +170,7 @@
   "name": "team_XANTARES",
   "region": "Asie",
   "logo_url": "https://example.com/logo.png",
-  "banner_url": "https://example.com/banner.png",
-  "captain_id": 1,
-  "elo_avg": 1500
+  "banner_url": "https://example.com/banner.png"
 }
 ```
 
@@ -135,36 +192,40 @@
 ]
 ```
 
-### Team Members
-
-| Méthode | Endpoint            | Description         | Body                      | Réponse        | Codes         |
-| ------- | ------------------- | ------------------- | ------------------------- | -------------- | ------------- |
-| GET     | `/team-members`     | Liste des membres   | -                         | `TeamMember[]` | 200           |
-| GET     | `/team-members/:id` | Détails d'un membre | -                         | `TeamMember`   | 200, 404      |
-| POST    | `/team-members`     | Ajouter un membre   | `CreateTeamMemberRequest` | `TeamMember`   | 201, 400      |
-| PATCH   | `/team-members/:id` | Modifier un membre  | `UpdateTeamMemberRequest` | `TeamMember`   | 200, 400, 404 |
-| DELETE  | `/team-members/:id` | Retirer un membre   | -                         | -              | 204, 404      |
-
-**Exemple de requête POST /team-members :**
+**Exemple de réponse GET /teams/:id/members :**
 
 ```json
 {
-  "team_id": 1,
-  "user_id": 2,
-  "role": "Rifler",
-  "is_leader": false
+  "id": 1,
+  "name": "team_XANTARES",
+  "region": "Asie",
+  "logo_url": "https://example.com/logo.png",
+  "captain_id": 1,
+  "members": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "username": "Musashiii_",
+      "avatar_url": "https://example.com/avatar.jpg",
+      "faceit_level": "10",
+      "role": "IGL",
+      "is_leader": true,
+      "joined_at": "2025-01-01T00:00:00.000Z"
+    }
+  ]
 }
 ```
 
 ### Maps
 
-| Méthode | Endpoint    | Description       | Body               | Réponse | Codes         |
-| ------- | ----------- | ----------------- | ------------------ | ------- | ------------- |
-| GET     | `/maps`     | Liste des maps    | -                  | `Map[]` | 200           |
-| GET     | `/maps/:id` | Détails d'une map | -                  | `Map`   | 200, 404      |
-| POST    | `/maps`     | Créer une map     | `CreateMapRequest` | `Map`   | 201, 400      |
-| PATCH   | `/maps/:id` | Modifier une map  | `UpdateMapRequest` | `Map`   | 200, 400, 404 |
-| DELETE  | `/maps/:id` | Supprimer une map | -                  | -       | 204, 404      |
+| Méthode | Endpoint            | Description            | Body               | Réponse | Codes         |
+| ------- | ------------------- | ---------------------- | ------------------ | ------- | ------------- |
+| GET     | `/maps`             | Liste des maps         | -                  | `Map[]` | 200           |
+| GET     | `/maps/:id`         | Détails d'une map      | -                  | `Map`   | 200, 404      |
+| GET     | `/maps/title/:title`| Recherche par titre    | -                  | `Map`   | 200, 404      |
+| POST    | `/maps`             | Créer une map          | `CreateMapRequest` | `Map`   | 201, 400      |
+| PUT     | `/maps/:id`         | Modifier une map       | `UpdateMapRequest` | `Map`   | 200, 400, 404 |
+| DELETE  | `/maps/:id`         | Supprimer une map      | -                  | -       | 204, 404      |
 
 **Exemple de réponse GET /maps :**
 
@@ -172,38 +233,36 @@
 [
   {
     "id": 1,
-    "name": "Mirage",
-    "image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Mirage_%28Counter-Strike_2%29.jpg/375px-Mirage_%28Counter-Strike_2%29.jpg"
+    "title": "Mirage",
+    "img": "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/Mirage_%28Counter-Strike_2%29.jpg/375px-Mirage_%28Counter-Strike_2%29.jpg"
   },
   {
     "id": 2,
-    "name": "Nuke",
-    "image_url": "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Nuke_%28CSGO%29.png/375px-Nuke_%28CSGO%29.png"
+    "title": "Nuke",
+    "img": "https://upload.wikimedia.org/wikipedia/en/thumb/7/72/Nuke_%28CSGO%29.png/375px-Nuke_%28CSGO%29.png"
   }
 ]
 ```
 
 ### Scrims
 
-| Méthode | Endpoint            | Description         | Body                 | Réponse   | Codes         |
-| ------- | ------------------- | ------------------- | -------------------- | --------- | ------------- |
-| GET     | `/scrims`           | Liste des scrims    | -                    | `Scrim[]` | 200           |
-| GET     | `/scrims/:id`       | Détails d'un scrim  | -                    | `Scrim`   | 200, 404      |
-| GET     | `/teams/:id/scrims` | Scrims d'une équipe | -                    | `Scrim[]` | 200, 404      |
-| POST    | `/scrims`           | Créer un scrim      | `CreateScrimRequest` | `Scrim`   | 201, 400      |
-| PATCH   | `/scrims/:id`       | Modifier un scrim   | `UpdateScrimRequest` | `Scrim`   | 200, 400, 404 |
-| DELETE  | `/scrims/:id`       | Supprimer un scrim  | -                    | -         | 204, 404      |
+| Méthode | Endpoint                 | Description               | Body                 | Réponse   | Codes         |
+| ------- | ------------------------ | ------------------------- | -------------------- | --------- | ------------- |
+| GET     | `/scrims`                | Liste des scrims          | -                    | `Scrim[]` | 200           |
+| GET     | `/scrims/:id`            | Détails d'un scrim        | -                    | `Scrim`   | 200, 404      |
+| GET     | `/scrims/team/:teamId`   | Scrims d'une équipe       | -                    | `Scrim[]` | 200, 404      |
+| GET     | `/scrims/status/:status` | Scrims par statut         | -                    | `Scrim[]` | 200           |
+| POST    | `/scrims`                | Créer un scrim            | `CreateScrimRequest` | `Scrim`   | 201, 400      |
+| PUT     | `/scrims/:id`            | Modifier un scrim         | `UpdateScrimRequest` | `Scrim`   | 200, 400, 404 |
+| DELETE  | `/scrims/:id`            | Supprimer un scrim        | -                    | -         | 204, 404      |
 
 **Exemple de requête POST /scrims :**
 
 ```json
 {
-  "team_a_id": 1,
-  "team_b_id": 2,
-  "map_id": 1,
-  "elo_min": 1200,
-  "elo_max": 1800,
-  "date": "2025-01-15T21:00:00.000Z",
+  "teamA": 1,
+  "teamB": 2,
+  "mapId": 1,
   "horaire": "21:00"
 }
 ```
@@ -214,12 +273,9 @@
 [
   {
     "id": 1,
-    "team_a_id": 1,
-    "team_b_id": 2,
-    "map_id": 1,
-    "elo_min": null,
-    "elo_max": null,
-    "date": "2025-01-15T21:00:00.000Z",
+    "teamA": 1,
+    "teamB": 2,
+    "mapId": 1,
     "horaire": "21:00",
     "created_at": "2025-01-01T00:00:00.000Z",
     "updated_at": "2025-01-01T00:00:00.000Z"
@@ -229,25 +285,21 @@
 
 ### Matches
 
-| Méthode | Endpoint             | Description         | Body                 | Réponse   | Codes         |
-| ------- | -------------------- | ------------------- | -------------------- | --------- | ------------- |
-| GET     | `/matches`           | Liste des matchs    | -                    | `Match[]` | 200           |
-| GET     | `/matches/:id`       | Détails d'un match  | -                    | `Match`   | 200, 404      |
-| GET     | `/teams/:id/matches` | Matchs d'une équipe | -                    | `Match[]` | 200, 404      |
-| POST    | `/matches`           | Créer un match      | `CreateMatchRequest` | `Match`   | 201, 400      |
-| PATCH   | `/matches/:id`       | Modifier un match   | `UpdateMatchRequest` | `Match`   | 200, 400, 404 |
-| DELETE  | `/matches/:id`       | Supprimer un match  | -                    | -         | 204, 404      |
+| Méthode | Endpoint                  | Description              | Body                 | Réponse   | Codes         |
+| ------- | ------------------------- | ------------------------ | -------------------- | --------- | ------------- |
+| GET     | `/matches`                | Liste des matchs         | -                    | `Match[]` | 200           |
+| GET     | `/matches/:id`            | Détails d'un match       | -                    | `Match`   | 200, 404      |
+| GET     | `/matches/team/:teamName` | Matchs d'une équipe      | -                    | `Match[]` | 200, 404      |
+| POST    | `/matches`                | Créer un match           | `CreateMatchRequest` | `Match`   | 201, 400      |
 
 **Exemple de requête POST /matches :**
 
 ```json
 {
-  "team_a_id": 1,
-  "team_b_id": 2,
-  "score_a": 13,
-  "score_b": 11,
-  "map_id": 1,
-  "played_at": "2025-01-10T20:00:00.000Z"
+  "teamA": "team_XANTARES",
+  "teamB": "team_r0pz",
+  "scoreA": 13,
+  "scoreB": 11
 }
 ```
 
@@ -256,143 +308,140 @@
 ```json
 [
   {
-    "id": 1,
-    "team_a_id": 1,
-    "team_b_id": 2,
-    "score_a": 13,
-    "score_b": 11,
-    "map_id": 1,
-    "played_at": "2025-01-10T20:00:00.000Z",
-    "created_at": "2025-01-10T20:00:00.000Z",
-    "updated_at": "2025-01-10T20:00:00.000Z"
+    "id": "1",
+    "teamA": "team_XANTARES",
+    "teamB": "team_r0pz",
+    "scoreA": 13,
+    "scoreB": 11
   }
 ]
 ```
 
-### FACEIT Stats
+### FACEIT Stats (Lecture seule - API externe)
 
-| Méthode | Endpoint                  | Description            | Body                       | Réponse         | Codes         |
-| ------- | ------------------------- | ---------------------- | -------------------------- | --------------- | ------------- |
-| GET     | `/faceit-stats`           | Liste des stats        | -                          | `FaceitStats[]` | 200           |
-| GET     | `/faceit-stats/:id`       | Détails des stats      | -                          | `FaceitStats`   | 200, 404      |
-| GET     | `/users/:id/faceit-stats` | Stats d'un utilisateur | -                          | `FaceitStats`   | 200, 404      |
-| POST    | `/faceit-stats`           | Créer des stats        | `CreateFaceitStatsRequest` | `FaceitStats`   | 201, 400      |
-| PATCH   | `/faceit-stats/:id`       | Modifier des stats     | `UpdateFaceitStatsRequest` | `FaceitStats`   | 200, 400, 404 |
-| DELETE  | `/faceit-stats/:id`       | Supprimer des stats    | -                          | -               | 204, 404      |
+> **Note importante :** Les statistiques FACEIT ne sont **pas stockées** en base de données. Elles sont récupérées en temps réel via l'API FACEIT externe à chaque requête.
 
-**Exemple de requête POST /faceit-stats :**
-
-```json
-{
-  "user_id": 1,
-  "elo": 1350,
-  "matches_played": 150,
-  "wins": 50,
-  "win_rate": "33.33%",
-  "winstreak": 0,
-  "recent_matches": "W L W W L",
-  "average_headshots": "65.2%",
-  "average_K_D": "0.9",
-  "fav_map": "Mirage",
-  "fav_map_win_rate": "50%",
-  "fav_side": "CT"
-}
-```
+| Méthode | Endpoint                  | Description                       | Réponse         | Codes              |
+| ------- | ------------------------- | --------------------------------- | --------------- | ------------------ |
+| GET     | `/faceit-stats`           | Liste des stats (cache)           | `FaceitStats[]` | 200                |
+| GET     | `/faceit-stats/:id`       | Stats par ID FACEIT/Nickname      | `FaceitStats`   | 200, 404           |
+| GET     | `/users/:id/faceit-stats` | Stats d'un utilisateur            | `FaceitStats`   | 200, 404           |
 
 **Exemple de réponse GET /users/:id/faceit-stats :**
 
 ```json
 {
-  "id": 1,
   "user_id": 1,
   "elo": 1350,
   "matches_played": 150,
   "wins": 50,
   "win_rate": "33.33%",
   "winstreak": 0,
-  "recent_matches": "W L W W L",
+  "recent_matches": [...],
   "average_headshots": "65.2%",
   "average_K_D": "0.9",
   "fav_map": "Mirage",
   "fav_map_win_rate": "50%",
-  "fav_side": "CT",
-  "last_update": "2025-01-01T00:00:00.000Z"
+  "last_update": "2025-01-18T12:00:00.000Z"
 }
 ```
 
-### Notifications
+### FACEIT Matches (Lecture seule - API externe)
 
-| Méthode | Endpoint                   | Description                    | Body                        | Réponse          | Codes         |
-| ------- | -------------------------- | ------------------------------ | --------------------------- | ---------------- | ------------- |
-| GET     | `/notifications`           | Liste des notifications        | -                           | `Notification[]` | 200           |
-| GET     | `/notifications/:id`       | Détails d'une notification     | -                           | `Notification`   | 200, 404      |
-| GET     | `/users/:id/notifications` | Notifications d'un utilisateur | -                           | `Notification[]` | 200, 404      |
-| POST    | `/notifications`           | Créer une notification         | `CreateNotificationRequest` | `Notification`   | 201, 400      |
-| PATCH   | `/notifications/:id`       | Modifier une notification      | `UpdateNotificationRequest` | `Notification`   | 200, 400, 404 |
-| PATCH   | `/notifications/:id/read`  | Marquer comme lue              | -                           | `Notification`   | 200, 404      |
-| DELETE  | `/notifications/:id`       | Supprimer une notification     | -                           | -                | 204, 404      |
+> **Note importante :** Les matchs FACEIT sont récupérés en temps réel via l'API FACEIT externe. Ces données ne sont pas stockées localement.
 
-**Exemple de requête POST /notifications :**
+| Méthode | Endpoint                            | Description                    | Réponse           | Codes    |
+| ------- | ----------------------------------- | ------------------------------ | ----------------- | -------- |
+| GET     | `/faceit-matches/:userId`           | Stats FACEIT d'un utilisateur  | `FaceitStats`     | 200, 404 |
+| GET     | `/faceit-matches/:userId/recent-matches` | 5 derniers matchs FACEIT  | `FaceitMatch[]`   | 200, 404 |
 
-```json
-{
-  "user_id": 1,
-  "type": "new_member",
-  "title": "Nouveau membre de l'équipe",
-  "subtitle": "Musashiii_",
-  "related_team_id": 9,
-  "related_user_id": 1
-}
-```
-
-**Exemple de réponse GET /users/:id/notifications :**
+**Exemple de réponse GET /faceit-matches/:userId/recent-matches :**
 
 ```json
 [
   {
-    "id": 1,
-    "user_id": 1,
+    "matchId": "1-abc123-def456",
+    "playedAt": "2025-01-18T20:30:00.000Z",
+    "map": "Mirage",
+    "result": "win",
+    "score": "13-10",
+    "playerScore": 13,
+    "opponentScore": 10,
+    "playerTeam": {
+      "name": "team_Musashiii_",
+      "score": 13
+    },
+    "opponentTeam": {
+      "name": "team_Enemy",
+      "score": 10
+    },
+    "eloChange": "+25",
+    "matchUrl": "https://www.faceit.com/en/cs2/room/1-abc123-def456"
+  }
+]
+```
+
+**Codes d'erreur FACEIT :**
+
+| Code d'erreur               | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| `FACEIT_API_KEY_NOT_SET`    | Clé API FACEIT non configurée                  |
+| `FACEIT_API_KEY_INVALID`    | Clé API FACEIT invalide                        |
+| `FACEIT_PLAYER_NOT_FOUND`   | Joueur FACEIT non trouvé                       |
+| `FACEIT_API_FORBIDDEN`      | Accès refusé par l'API FACEIT                  |
+| `FACEIT_API_RATE_LIMIT`     | Limite de requêtes API FACEIT atteinte         |
+| `FACEIT_API_UNAVAILABLE`    | API FACEIT indisponible                        |
+
+### Notifications
+
+> **Note :** Les notifications sont actuellement gérées via le fichier `db.json` pour le développement.
+
+| Méthode | Endpoint           | Description                 | Réponse          | Codes    |
+| ------- | ------------------ | --------------------------- | ---------------- | -------- |
+| GET     | `/notifications`   | Liste des notifications     | `Notification[]` | 200      |
+
+**Exemple de réponse GET /notifications :**
+
+```json
+[
+  {
+    "id": "1",
     "type": "new_member",
     "title": "Nouveau membre de l'équipe",
     "subtitle": "Musashiii_",
-    "related_team_id": 9,
-    "related_user_id": 1,
-    "related_scrim_id": null,
-    "is_read": false,
-    "created_at": "2025-01-15T10:00:00.000Z",
-    "read_at": null
+    "timestamp": "il y a 5 minutes"
+  },
+  {
+    "id": "2",
+    "type": "new_scrim",
+    "title": "Nouveau scrim en approche",
+    "subtitle": "team_w0xic",
+    "timestamp": "il y a 1 heure"
   }
 ]
 ```
 
 ### Scrim Announcements
 
-| Méthode | Endpoint                         | Description           | Body                             | Réponse               | Codes    |
-| ------- | -------------------------------- | --------------------- | -------------------------------- | --------------------- | -------- |
-| GET     | `/scrim-announcements`           | Liste des annonces    | -                                | `ScrimAnnouncement[]` | 200      |
-| GET     | `/scrim-announcements/:id`       | Détails d'une annonce | -                                | `ScrimAnnouncement`   | 200, 404 |
-| GET     | `/teams/:id/scrim-announcements` | Annonces d'une équipe | -                                | `ScrimAnnouncement[]` | 200, 404 |
-| POST    | `/scrim-announcements`           | Créer une annonce     | `CreateScrimAnnouncementRequest` | `ScrimAnnouncement`   | 201, 400 |
-| DELETE  | `/scrim-announcements/:id`       | Supprimer une annonce | -                                | -                     | 204, 404 |
+> **Note :** Les annonces de scrim sont actuellement gérées via le fichier `db.json` pour le développement.
 
-**Exemple de requête POST /scrim-announcements :**
+| Méthode | Endpoint              | Description           | Réponse               | Codes    |
+| ------- | --------------------- | --------------------- | --------------------- | -------- |
+| GET     | `/scrimAnnouncements` | Liste des annonces    | `ScrimAnnouncement[]` | 200      |
 
-```json
-{
-  "team_id": 1,
-  "team_name": "team_APEX"
-}
-```
-
-**Exemple de réponse GET /scrim-announcements :**
+**Exemple de réponse GET /scrimAnnouncements :**
 
 ```json
 [
   {
-    "id": 1,
-    "team_id": 1,
-    "team_name": "team_APEX",
-    "created_at": "2025-01-15T10:00:00.000Z"
+    "id": "1",
+    "teamName": "team_APEX",
+    "timestamp": "30 min"
+  },
+  {
+    "id": "2",
+    "teamName": "team_donk666",
+    "timestamp": "il y a 1 heure"
   }
 ]
 ```
@@ -403,11 +452,12 @@
 
 ```typescript
 {
-  id: number;
+  id: string;
   username: string;
   email: string;
-  password_hash: string;
+  password: string;
   avatar_url?: string;
+  banner_url?: string;
   faceit_id?: string;
   faceit_level?: string;
   steam_url?: string;
@@ -438,12 +488,24 @@
 
 ```typescript
 {
+  id: string;
+  username: string;
+  avatar: string;
+  faceitLevel: number;
+  isLeader: boolean;
+}
+```
+
+### TeamWithMembers
+
+```typescript
+{
   id: number;
-  team_id: number;
-  user_id: number;
-  joined_at: string;
-  role?: string;
-  is_leader: boolean;
+  name: string;
+  region?: string;
+  logo_url?: string;
+  captain_id?: number;
+  members: TeamMember[];
 }
 ```
 
@@ -452,8 +514,8 @@
 ```typescript
 {
   id: number;
-  name: string;
-  image_url?: string;
+  title: string;
+  img?: string;
 }
 ```
 
@@ -462,12 +524,9 @@
 ```typescript
 {
   id: number;
-  team_a_id: number;
-  team_b_id: number;
-  map_id: number;
-  elo_min?: number;
-  elo_max?: number;
-  date: string;
+  teamA: number;
+  teamB: number;
+  mapId: number;
   horaire?: string;
   created_at: string;
   updated_at: string;
@@ -478,36 +537,56 @@
 
 ```typescript
 {
-  id: number;
-  team_a_id: number;
-  team_b_id: number;
-  score_a: number;
-  score_b: number;
-  map_id?: number;
-  played_at?: string;
-  created_at: string;
-  updated_at: string;
+  id: string;
+  teamA: string;
+  teamB: string;
+  scoreA: number;
+  scoreB: number;
 }
 ```
 
-### FaceitStats
+### FaceitStats (données externes - non stockées)
+
+> **Important :** Ces données proviennent de l'API FACEIT externe et ne sont pas stockées en base de données.
 
 ```typescript
 {
-  id: number;
-  user_id: number;
+  user_id?: string;
   elo: number;
   matches_played: number;
   wins: number;
   win_rate?: string;
   winstreak?: number;
-  recent_matches?: string;        // Format "W L W W L"
+  recent_matches?: FaceitMatch[];
   average_headshots?: string;
   average_K_D?: string;
   fav_map?: string;
   fav_map_win_rate?: string;
-  fav_side?: string;              // "CT" ou "T"
   last_update: string;
+}
+```
+
+### FaceitMatch (données externes - non stockées)
+
+```typescript
+{
+  matchId: string;
+  playedAt: string;
+  map?: string;
+  result: 'win' | 'loss';
+  score: string;
+  playerScore: number;
+  opponentScore: number;
+  playerTeam: {
+    name: string;
+    score: number;
+  };
+  opponentTeam: {
+    name: string;
+    score: number;
+  };
+  eloChange?: string;
+  matchUrl: string;
 }
 ```
 
@@ -515,17 +594,11 @@
 
 ```typescript
 {
-  id: number;
-  user_id: number;
+  id: string;
   type: 'new_member' | 'member_quit' | 'new_scrim';
   title: string;
   subtitle?: string;
-  related_team_id?: number;
-  related_user_id?: number;
-  related_scrim_id?: number;
-  is_read: boolean;
-  created_at: string;
-  read_at?: string;
+  timestamp: string;
 }
 ```
 
@@ -533,10 +606,9 @@
 
 ```typescript
 {
-  id: number;
-  team_id: number;
-  team_name?: string;
-  created_at: string;
+  id: string;
+  teamName: string;
+  timestamp: string;
 }
 ```
 
@@ -544,10 +616,26 @@
 
 ### Authentification
 
-L'authentification n'est pas implémentée dans cette version. Elle sera ajoutée ultérieurement avec JWT.
+L'API utilise JWT (JSON Web Token) pour l'authentification. Le token est retourné lors de la connexion via `/auth/login` et doit être inclus dans le header `Authorization` pour les endpoints protégés.
+
+### Intégration FACEIT
+
+Les statistiques FACEIT sont récupérées en temps réel via l'API FACEIT Data v4. Cette approche garantit des données toujours à jour sans nécessiter de synchronisation.
+
+**Configuration requise :**
+- Variable d'environnement `FACEIT_API_KEY` contenant une clé API FACEIT valide
+
+**Endpoints FACEIT utilisés :**
+- `/players/:nickname` - Recherche de joueur
+- `/players/:playerId/stats/cs2` - Statistiques du joueur
+- `/players/:playerId/history` - Historique des matchs
+
+### Upload de fichiers
+
+Les avatars et bannières utilisateurs sont uploadés via `FormData` et stockés dans le dossier `/uploads` du serveur.
 
 ### Performance
 
 - Utiliser la pagination pour les listes importantes
-- Indexer les champs fréquemment utilisés dans les requêtes (user_id, team_id, etc.)
-- Mettre en cache les données statiques (maps, etc.)
+- Les statistiques FACEIT sont récupérées à la demande (pas de cache persistant)
+- Les données statiques (maps) peuvent être mises en cache côté client
