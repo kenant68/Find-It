@@ -6,9 +6,7 @@ flowchart TD
     LoadData --> FetchMaps[GET /maps]
     LoadData --> FetchStats[GET /faceit-matches/:userId<br/>via FACEIT API externe]
 
-    Note right of FetchStats
-        ⚠️ Stats FACEIT récupérées<br/>en temps réel via API externe<br/>NON stockées en base
-    end note
+
 
     FetchScrims --> ProcessScrims[Traitement scrims]
     FetchTeams --> ProcessTeams[Traitement équipes]

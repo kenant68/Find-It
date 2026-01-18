@@ -24,7 +24,6 @@ sequenceDiagram
         API-->>Frontend: JSON (stats)
     end
 
-    Note over API,Faceit: ⚠️ Stats FACEIT récupérées<br/>en temps réel via API externe<br/>NON stockées en base
     
     Frontend->>Frontend: Calcul statistiques équipe<br/>(ELO moyen, taux de victoire)
     Frontend-->>User: Affiche l'équipe avec statistiques
