@@ -3,12 +3,16 @@ import styles from "./ProfileBanner.module.css";
 import banniereImg from "../../assets/profil/banniere.png";
 import editIcon from "../../assets/profil/edit.svg";
 
-const ProfileBanner = ({ user, onEdit, onEditBanner }) => {
+const ProfileBanner = ({ user, onEditBanner, onEditUsername, onEditAvatar, bannerUrl }) => {
   if (!user) return null;
 
   return (
     <div className={styles.bannerContainer}>
-      <img src={banniereImg} alt="Bannière" className={styles.bannerImage} />
+      <img
+        src={bannerUrl || banniereImg}
+        alt="Bannière"
+        className={styles.bannerImage}
+      />
       <button
         className={styles.bannerEditButton}
         onClick={onEditBanner}
@@ -22,20 +26,30 @@ const ProfileBanner = ({ user, onEdit, onEditBanner }) => {
           <div className={styles.avatarSection}>
             <div className={styles.avatarWrapper}>
               <img
-                src={user.avatar_url}
+                src={user.avatarUrl || "https://via.placeholder.com/100x100?text=U"}
                 alt={user.username}
                 className={styles.avatar}
               />
               <button
-                className={styles.editButton}
-                onClick={onEdit}
+                className={styles.editAvatarButton}
+                onClick={onEditAvatar}
                 type="button"
-                aria-label="Modifier le profil"
+                aria-label="Modifier l'avatar"
               >
-                <img src={editIcon} alt="Modifier" />
+                <img src={editIcon} alt="Modifier l'avatar" />
               </button>
             </div>
-            <h1 className={styles.username}>{user.username}</h1>
+            <div className={styles.usernameSection}>
+              <h1 className={styles.username}>{user.username}</h1>
+              <button
+                className={styles.editUsernameButton}
+                onClick={onEditUsername}
+                type="button"
+                aria-label="Modifier le pseudo"
+              >
+                <img src={editIcon} alt="Modifier le pseudo" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

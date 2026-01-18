@@ -108,6 +108,64 @@
   height: 18px;
 }
 
+.editAvatarButton {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editAvatarButton:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.editAvatarButton img {
+  width: 18px;
+  height: 18px;
+}
+
+.usernameSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.editUsernameButton {
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.editUsernameButton:hover {
+  background: rgba(0, 0, 0, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.editUsernameButton img {
+  width: 18px;
+  height: 18px;
+}
+
 .username {
   margin: 0;
   color: #ffffff;
@@ -145,12 +203,29 @@
     flex-shrink: 0;
   }
 
+  .usernameSection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
   .username {
     font-size: 20px;
     word-wrap: break-word;
     overflow-wrap: break-word;
     flex: 1;
     min-width: 0;
+  }
+
+  .editUsernameButton {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .editUsernameButton img {
+    width: 14px;
+    height: 14px;
   }
 
   .editButton {

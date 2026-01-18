@@ -19,6 +19,7 @@ model User {
   email           String   @unique
   passwordHash    String
   avatarUrl       String?
+  bannerUrl       String?
   faceitId        String?
   faceitLevel     Int?
   steamUrl        String?
