@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id              Int      @id @default(autoincrement())
-  username        String
+  username        String   @unique
   email           String   @unique
   passwordHash    String
   avatarUrl       String?
@@ -27,7 +27,11 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  teamsCaptain Team[] @relation("TeamCaptain")
+  teamsCaptain    Team[]         @relation("TeamCaptain")
+  teamMemberships TeamMember[]
+  notifications   Notification[]
+
+  @@map("users")
 }
 
 model Team {
@@ -41,5 +45,87 @@ model Team {
   updatedAt DateTime @updatedAt
 
   captainId Int?
-  captain   User? @relation("TeamCaptain", fields: [captainId], references: [id])
+  captain   User? @relation("TeamCaptain", fields: [captainId], references: [id], onDelete: SetNull)
+
+  members        TeamMember[]
+  scrimsAsTeamA  Scrim[]      @relation("ScrimTeamA")
+  scrimsAsTeamB  Scrim[]      @relation("ScrimTeamB")
+  matchesAsTeamA Match[]      @relation("MatchTeamA")
+  matchesAsTeamB Match[]      @relation("MatchTeamB")
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  teamId   Int
+  isLeader Boolean  @default(false)
+  joinedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+  @@map("team_members")
+}
+
+model Map {
+  id        Int      @id @default(autoincrement())
+  title     String   @unique
+  img       String?
+  createdAt DateTime @default(now())
+
+  scrims  Scrim[]
+  matches Match[]
+
+  @@map("maps")
+}
+
+model Scrim {
+  id        Int      @id @default(autoincrement())
+  horaire   String
+  teamAId   Int
+  teamBId   Int
+  mapId     Int
+  status    String   @default("scheduled")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teamA Team @relation("ScrimTeamA", fields: [teamAId], references: [id], onDelete: Cascade)
+  teamB Team @relation("ScrimTeamB", fields: [teamBId], references: [id], onDelete: Cascade)
+  map   Map  @relation(fields: [mapId], references: [id])
+
+  @@map("scrims")
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  teamAId   Int
+  teamBId   Int
+  scoreA    Int
+  scoreB    Int
+  mapId     Int?
+  playedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  teamA Team @relation("MatchTeamA", fields: [teamAId], references: [id], onDelete: Cascade)
+  teamB Team @relation("MatchTeamB", fields: [teamBId], references: [id], onDelete: Cascade)
+  map   Map? @relation(fields: [mapId], references: [id])
+
+  @@map("matches")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String
+  title     String
+  subtitle  String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
 }

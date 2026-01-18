@@ -1,37 +1,41 @@
-import { findAll, findById, findByTeamId, addScrim } from "../repositories/scrims.repository.js";
+import { findAll, findById, findByTeamId, findByStatus, create, update, remove } from "../repositories/scrims.repository.js";
 
-export function getAllScrims() {
-  return findAll();
+export async function getAllScrims() {
+  return await findAll();
 }
 
-export function getScrim(id) {
-  return findById(id);
+export async function getScrim(id) {
+  return await findById(id);
 }
 
-export function getScrimsByTeam(teamId) {
-  return findByTeamId(teamId);
+export async function getScrimsByTeam(teamId) {
+  return await findByTeamId(teamId);
 }
 
-export function createScrim(scrimData) {
-  let { teamA, teamB, mapId, horaire } = scrimData;
+export async function getScrimsByStatus(status) {
+  return await findByStatus(status);
+}
 
-  if (!teamA || !teamB || !mapId) {
+export async function createScrim(scrimData) {
+  let { teamAId, teamBId, mapId, horaire, status } = scrimData;
+
+  if (!teamAId || !teamBId || !mapId || !horaire) {
     throw new Error("INVALID_PAYLOAD");
   }
 
-  teamA = Number(teamA);
-  teamB = Number(teamB);
+  teamAId = Number(teamAId);
+  teamBId = Number(teamBId);
   mapId = Number(mapId);
 
-  if (Number.isNaN(teamA) || teamA <= 0) {
+  if (Number.isNaN(teamAId) || teamAId <= 0) {
     throw new Error("INVALID_TEAM_A");
   }
 
-  if (Number.isNaN(teamB) || teamB <= 0) {
+  if (Number.isNaN(teamBId) || teamBId <= 0) {
     throw new Error("INVALID_TEAM_B");
   }
 
-  if (teamA === teamB) {
+  if (teamAId === teamBId) {
     throw new Error("TEAMS_MUST_BE_DIFFERENT");
   }
 
@@ -47,5 +51,65 @@ export function createScrim(scrimData) {
     }
   }
 
-  return addScrim({ horaire: horaire || null, teamA, teamB, mapId });
+  return await create({
+    horaire,
+    teamAId,
+    teamBId,
+    mapId,
+    status,
+  });
+}
+
+export async function updateScrim(id, scrimData) {
+  const existingScrim = await findById(id);
+  if (!existingScrim) {
+    throw new Error("SCRIM_NOT_FOUND");
+  }
+
+  if (scrimData.teamAId !== undefined) {
+    scrimData.teamAId = Number(scrimData.teamAId);
+    if (Number.isNaN(scrimData.teamAId) || scrimData.teamAId <= 0) {
+      throw new Error("INVALID_TEAM_A");
+    }
+  }
+
+  if (scrimData.teamBId !== undefined) {
+    scrimData.teamBId = Number(scrimData.teamBId);
+    if (Number.isNaN(scrimData.teamBId) || scrimData.teamBId <= 0) {
+      throw new Error("INVALID_TEAM_B");
+    }
+  }
+
+  const finalTeamAId = scrimData.teamAId ?? existingScrim.teamAId;
+  const finalTeamBId = scrimData.teamBId ?? existingScrim.teamBId;
+
+  if (finalTeamAId === finalTeamBId) {
+    throw new Error("TEAMS_MUST_BE_DIFFERENT");
+  }
+
+  if (scrimData.mapId !== undefined) {
+    scrimData.mapId = Number(scrimData.mapId);
+    if (Number.isNaN(scrimData.mapId) || scrimData.mapId <= 0) {
+      throw new Error("INVALID_MAP_ID");
+    }
+  }
+
+  if (scrimData.horaire && typeof scrimData.horaire === "string") {
+    scrimData.horaire = scrimData.horaire.trim();
+    const timePattern = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timePattern.test(scrimData.horaire)) {
+      throw new Error("INVALID_HORAIRE");
+    }
+  }
+
+  return await update(id, scrimData);
+}
+
+export async function deleteScrim(id) {
+  const existingScrim = await findById(id);
+  if (!existingScrim) {
+    throw new Error("SCRIM_NOT_FOUND");
+  }
+
+  return await remove(id);
 }

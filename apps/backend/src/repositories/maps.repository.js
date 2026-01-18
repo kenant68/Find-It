@@ -1,39 +1,48 @@
-import { dbData } from "../utils/db.js";
+import { prisma } from "../lib/prisma.ts";
 
-const maps = dbData.maps
-  .filter(
-    (map) =>
-      map &&
-      typeof map.id !== "undefined" &&
-      typeof map.title === "string"
-  )
-  .map((map) => ({
-    id: Number(map.id) || 0,
-    title: map.title?.trim() || "",
-    img: typeof map.img === "string" ? map.img : null
-  }));
-
-let nextId = maps.length > 0 ? Math.max(...maps.map((map) => map.id)) + 1 : 1;
-
-export function findAll() {
-  return maps;
+export async function findAll() {
+  return await prisma.map.findMany();
 }
 
-export function findById(id) {
-  return maps.find((map) => map.id === id) || null;
+export async function findById(id) {
+  return await prisma.map.findUnique({
+    where: { id: Number(id) },
+  });
 }
 
-export function findByTitle(title) {
-  const normalized = title.trim().toLowerCase();
-  return maps.find((map) => map.title.toLowerCase() === normalized) || null;
+export async function findByTitle(title) {
+  return await prisma.map.findUnique({
+    where: { title: title.trim() },
+  });
 }
 
-export function addMap({ title, img }) {
-  const newMap = {
-    id: nextId++,
-    title: title.trim(),
-    img: img || null
-  };
-  maps.push(newMap);
-  return newMap;
+export async function create(data) {
+  const mapData = { ...data };
+
+  if (mapData.title) {
+    mapData.title = mapData.title.trim();
+  }
+
+  return await prisma.map.create({
+    data: mapData,
+  });
+}
+
+export async function update(id, data) {
+  const updateData = { ...data };
+
+  if (updateData.title) {
+    updateData.title = updateData.title.trim();
+  }
+
+  return await prisma.map.update({
+    where: { id: Number(id) },
+    data: updateData,
+  });
+}
+
+export async function remove(id) {
+  return await prisma.map.delete({
+    where: { id: Number(id) },
+  });
 }

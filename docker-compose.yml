@@ -3,27 +3,20 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16
-    container_name: find-it-postgres
+    container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-Find-It}
-      POSTGRES_USER: ${POSTGRES_USER:-keno68}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
-    volumes:
-      - find_it_db_data:/var/lib/postgresql/data
+      - "${POSTGRES_PORT}:5432"
 
   adminer:
     image: adminer
-    container_name: find-it-adminer
+    container_name: adminer
     restart: unless-stopped
-    environment:
-      ADMINER_DEFAULT_SERVER: postgres
     ports:
       - "8080:8080"
     depends_on:
       - postgres
-
-volumes:
-  find_it_db_data:
