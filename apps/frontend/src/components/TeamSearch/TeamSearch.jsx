@@ -49,44 +49,32 @@ const TeamSearch = () => {
         setAvailableRegions(regions);
 
         if (user?.id) {
-          console.log("User ID:", user.id, "Type:", typeof user.id);
-          console.log("Teams data:", data.map(t => ({ id: t.id, captainId: t.captainId, name: t.name })));
-
-          const userAsCaptain = data.find(team => team.captainId === user.id);
-          console.log("User as captain:", userAsCaptain);
-
- 
-          const userTeams = data.filter(team =>
-            !team.captainId && team.name.toLowerCase().includes('musashiii')
-          );
-          console.log("Claimable teams:", userTeams);
-          setClaimableTeams(userTeams);
-
-          if (userAsCaptain) {
-            console.log("User is captain of team:", userAsCaptain.name);
-            setUserTeamId(userAsCaptain.id);
+          const userTeam = await getUserTeam();
+          
+          if (userTeam) {
+            setUserTeamId(userTeam.id);
             setCanCreateTeam(false);
+            setClaimableTeams([]);
           } else {
-            console.log("User is not captain, can create/join teams");
             setUserTeamId(null);
             setCanCreateTeam(true);
+            const teamsWithoutCaptain = data.filter(team => !team.captainId);
+            setClaimableTeams(teamsWithoutCaptain);
           }
         } else {
-          console.log("No user logged in");
           setUserTeamId(null);
           setCanCreateTeam(false);
           setClaimableTeams([]);
         }
       } catch (err) {
         setError(err.message);
-        console.error("Erreur lors du chargement des équipes:", err);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchTeams();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     let filtered = [...teams];
@@ -264,15 +252,11 @@ const TeamSearch = () => {
         >
           <header className={styles.header}>
             <h1 className={styles.pageTitle}>Equipes</h1>
-            {canCreateTeam ? (
+            {canCreateTeam && (
               <Button
                 text="Créer une équipe"
                 onClick={() => setIsCreateModalOpen(true)}
               />
-            ) : (
-              <div className={styles.cannotCreate}>
-                <span>Vous êtes déjà capitaine d'une équipe</span>
-              </div>
             )}
           </header>
 
@@ -313,8 +297,7 @@ const TeamSearch = () => {
                 const isUserTeam = team.id === userTeamId;
                 const isCaptain = team.captainId === user?.id;
                 const canJoin = !isUserTeam && !userTeamId && !!user?.id;
-                const canClaim = claimableTeams.some(ct => ct.id === team.id);
-                console.log(`Team ${team.name}: isUserTeam=${isUserTeam}, userTeamId=${userTeamId}, isCaptain=${isCaptain}, canJoin=${canJoin}, canClaim=${canClaim}`);
+                const canClaim = !userTeamId && claimableTeams.some(ct => ct.id === team.id);
 
                 return (
                   <CardLong
