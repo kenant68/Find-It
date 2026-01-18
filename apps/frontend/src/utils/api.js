@@ -23,6 +23,10 @@ const apiRequest = async (endpoint, options = {}) => {
             throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
         }
 
+        if (response.status === 204) {
+            return null;
+        }
+
         return await response.json();
     } catch (error) {
         console.error(`API Error [${options.method || 'GET'} ${endpoint}]:`, error);

@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardLong from "../../components/CardLong/CardLong.jsx";
 import CreateScrimModal from "../../components/CreateScrimModal/CreateScrimModal.jsx";
-import { getScrims, getTeams, getMaps, createScrim, getUserTeam } from "../../utils/api.js";
+import { getScrims, getTeams, getMaps, createScrim, getUserTeam, deleteScrim } from "../../utils/api.js";
 import { useAuth } from "../../utils/auth.jsx";
 import scrimIcon from "../../assets/scrims/scrim-swords.svg";
 
@@ -79,9 +79,24 @@ const Scrims = () => {
     return map ? map.title : `Carte ${mapId}`;
   };
 
-  const handleAccept = (scrimId) => {
+  const handleJoinScrim = async (scrimId) => {
 
     setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== scrimId));
+  };
+
+  const handleCancelScrim = async (scrimId) => {
+    try {
+      await deleteScrim(scrimId);
+      setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== scrimId));
+    } catch (error) {
+      console.error("Erreur lors de l'annulation du scrim:", error);
+   
+      if (error.message?.includes('404') || error.message?.includes('Scrim not found')) {
+        setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== scrimId));
+      } else {
+        setError("Erreur lors de l'annulation du scrim: " + error.message);
+      }
+    }
   };
 
   const handleCreate = () => {
@@ -102,7 +117,7 @@ const Scrims = () => {
       console.log("Creating scrim with data:", formData);
 
       const scrimData = {
-        teamAId: userTeam.id, // L'équipe de l'utilisateur qui crée
+        teamAId: userTeam.id, 
         teamBId: formData.opponentTeamId,
         mapId: formData.mapId,
         horaire: formData.time,
@@ -113,7 +128,6 @@ const Scrims = () => {
       const newScrim = await createScrim(scrimData);
       console.log("Created scrim:", newScrim);
 
-      // Recharger la liste des scrims
       const updatedScrims = await getScrims();
       setScrims(updatedScrims || []);
 
@@ -162,11 +176,25 @@ const Scrims = () => {
                     timestamp={`Status: ${scrim.status}`}
                     actionButton={
                       userTeam && (scrim.teamAId === userTeam.id || scrim.teamBId === userTeam.id) ? (
-                        <span className={styles.myScrim}>Mon scrim</span>
+                        <button
+                          className={`${styles.cancelButton} ${styles.dangerButton}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (window.confirm("Êtes-vous sûr de vouloir annuler ce scrim ?")) {
+                              handleCancelScrim(scrim.id);
+                            }
+                          }}
+                          type="button"
+                        >
+                          ANNULER
+                        </button>
                       ) : (
                         <button
                           className={styles.acceptButton}
-                          onClick={() => handleAccept(scrim.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleJoinScrim(scrim.id);
+                          }}
                           type="button"
                         >
                           REJOINDRE
