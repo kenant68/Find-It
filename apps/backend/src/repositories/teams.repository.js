@@ -60,3 +60,36 @@ export async function remove(id) {
     where: { id: Number(id) },
   });
 }
+
+
+export async function addMember(teamId, userId, isLeader = false) {
+  return await prisma.teamMember.create({
+    data: {
+      teamId: Number(teamId),
+      userId: Number(userId),
+      isLeader: isLeader,
+    },
+  });
+}
+
+export async function removeMember(teamId, userId) {
+  return await prisma.teamMember.delete({
+    where: {
+      userId_teamId: {
+        userId: Number(userId),
+        teamId: Number(teamId),
+      },
+    },
+  });
+}
+
+export async function findMember(teamId, userId) {
+  return await prisma.teamMember.findUnique({
+    where: {
+      userId_teamId: {
+        userId: Number(userId),
+        teamId: Number(teamId),
+      },
+    },
+  });
+}
