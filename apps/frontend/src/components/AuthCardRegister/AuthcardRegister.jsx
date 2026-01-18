@@ -8,9 +8,10 @@ import { useAuth } from "../../utils/auth.jsx";
 
 const AuthcardRegister = ({ title }) => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: ""
+    "Nom d'utilisateur FACEIT": "",
+    "Email": "",
+    "Mot de passe": "",
+    "Confirmez le mot de passe": ""
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,30 +20,37 @@ const AuthcardRegister = ({ title }) => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
   const validateForm = () => {
-    if (!formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData["Nom d'utilisateur FACEIT"] || !formData["Email"] || !formData["Mot de passe"] || !formData["Confirmez le mot de passe"]) {
       setError("Veuillez remplir tous les champs");
       return false;
     }
 
-    if (formData.password !== formData.confirmPassword) {
+    if (formData["Mot de passe"] !== formData["Confirmez le mot de passe"]) {
       setError("Les mots de passe ne correspondent pas");
       return false;
     }
 
-    if (formData.password.length < 6) {
+    if (formData["Nom d'utilisateur FACEIT"].length < 3) {
+      setError("Le nom d'utilisateur doit contenir au moins 3 caractères");
+      return false;
+    }
+
+    if (formData["Mot de passe"].length < 6) {
       setError("Le mot de passe doit contenir au moins 6 caractères");
       return false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData["Email"])) {
       setError("Veuillez entrer une adresse email valide");
       return false;
     }
@@ -62,8 +70,9 @@ const AuthcardRegister = ({ title }) => {
 
     try {
       const result = await register({
-        email: formData.email,
-        password: formData.password
+        username: formData["Nom d'utilisateur FACEIT"],
+        email: formData["Email"],
+        password: formData["Mot de passe"]
       });
 
       if (result.success) {
@@ -86,23 +95,30 @@ const AuthcardRegister = ({ title }) => {
 
           <form onSubmit={handleSubmit}>
             <Input
+              name="Nom d'utilisateur FACEIT"
+              type="text"
+              value={formData["Nom d'utilisateur FACEIT"]}
+              onChange={handleChange}
+              required
+            />
+            <Input
               name="Email"
               type="email"
-              value={formData.email}
+              value={formData["Email"]}
               onChange={handleChange}
               required
             />
             <Input
               name="Mot de passe"
               type="password"
-              value={formData.password}
+              value={formData["Mot de passe"]}
               onChange={handleChange}
               required
             />
             <Input
               name="Confirmez le mot de passe"
               type="password"
-              value={formData.confirmPassword}
+              value={formData["Confirmez le mot de passe"]}
               onChange={handleChange}
               required
             />

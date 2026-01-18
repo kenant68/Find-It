@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../utils/auth.jsx";
+import { getUserById } from "../../utils/api.js";
 import styles from "./NavbarMobile.module.css";
 
 import homeIcon from "../../assets/navbar/Home.svg";
@@ -8,29 +10,29 @@ import teamsIcon from "../../assets/teams.png";
 import matchsIcon from "../../assets/matchs.png";
 import announceIcon from "../../assets/announce.png";
 import notificationIcon from "../../assets/notifications.png";
-import logo from "../../assets/logo.png";
 
 export default function NavbarMobile() {
-  const [user, setUser] = useState(null);
+  const { user, logout } = useAuth();
+  const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/users/1");
-        if (!response.ok) {
-          throw new Error("Erreur lors du chargement de l'utilisateur");
+    const loadUserDetails = async () => {
+      if (user?.id) {
+        try {
+          const details = await getUserById(user.id);
+          setUserDetails(details);
+        } catch (error) {
+          console.error("Erreur lors du chargement des détails utilisateur:", error);
         }
-        const currentUser = await response.json();
-        if (currentUser) {
-          setUser(currentUser);
-        }
-      } catch (error) {
-        console.error("Erreur lors du chargement de l'utilisateur:", error);
       }
     };
 
-    loadUser();
-  }, []);
+    loadUserDetails();
+  }, [user?.id]);
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <nav className={styles.navbarMobile}>
@@ -78,16 +80,12 @@ export default function NavbarMobile() {
               isActive ? `${styles.link} ${styles.active}` : styles.link
             }
           >
-            {user && user.avatar_url ? (
-              <img
-                src={user.avatar_url}
-                className={styles.avatarIcon}
-                alt="profil"
-              />
-            ) : (
-              <img src={logo} className={styles.icon} alt="profil" />
-            )}
-            <span>Profil</span>
+            <img
+              src={userDetails?.avatarUrl || "https://via.placeholder.com/24x24?text=U"}
+              className={styles.avatarIcon}
+              alt="profil"
+            />
+            <span>{userDetails?.username || "Profil"}</span>
           </NavLink>
         </li>
 
@@ -117,6 +115,16 @@ export default function NavbarMobile() {
             />
             <span>Notifications</span>
           </NavLink>
+        </li>
+
+        <li>
+          <button
+            onClick={handleLogout}
+            className={`${styles.link} ${styles.logoutBtn}`}
+          >
+            <span>🚪</span>
+            <span>Déconnexion</span>
+          </button>
         </li>
       </ul>
     </nav>

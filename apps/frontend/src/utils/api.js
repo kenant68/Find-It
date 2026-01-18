@@ -16,23 +16,14 @@ const apiRequest = async (endpoint, options = {}) => {
     }
 
     try {
-        console.log(`API Call: ${options.method || 'GET'} ${url}`);
-        console.log('Headers:', config.headers);
-
         const response = await fetch(url, config);
 
-        console.log(`Response status: ${response.status}`);
-
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`API Error response:`, errorText);
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
         }
 
-        const result = await response.json();
-        console.log('API Success:', result);
-        return result;
+        return await response.json();
     } catch (error) {
         console.error(`API Error [${options.method || 'GET'} ${endpoint}]:`, error);
         throw error;

@@ -9,6 +9,7 @@ const Input = ({ name, id, type = "text", value, onChange, placeholder, required
                 <input
                     type={type}
                     id={inputId}
+                    name={name}
                     className={styles.input}
                     value={value}
                     onChange={onChange}
