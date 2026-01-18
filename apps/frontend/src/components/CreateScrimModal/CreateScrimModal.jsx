@@ -35,7 +35,6 @@ const CreateScrimModal = ({ isOpen, onClose, onSubmit, userTeam }) => {
       setTeams(availableTeams);
       setMaps(mapsData);
     } catch (error) {
-      console.error("Erreur lors du chargement des données:", error);
     } finally {
       setLoading(false);
     }

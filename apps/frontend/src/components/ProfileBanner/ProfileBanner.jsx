@@ -2,42 +2,37 @@ import React from "react";
 import styles from "./ProfileBanner.module.css";
 import banniereImg from "../../assets/profil/banniere.png";
 import editIcon from "../../assets/profil/edit.svg";
+import ImageUpload from "../ImageUpload/ImageUpload.jsx";
+import { getImageUrl } from "../../utils/api.js";
 
-const ProfileBanner = ({ user, onEditBanner, onEditUsername, onEditAvatar, bannerUrl }) => {
+const ProfileBanner = ({ user, onEditUsername, onAvatarUpdate, onBannerUpdate, bannerUrl }) => {
   if (!user) return null;
+
+  const avatarSrc = getImageUrl(user.avatarUrl) || "https://via.placeholder.com/100x100?text=U";
+  const bannerSrc = getImageUrl(bannerUrl) || banniereImg;
 
   return (
     <div className={styles.bannerContainer}>
-      <img
-        src={bannerUrl || banniereImg}
-        alt="Bannière"
-        className={styles.bannerImage}
+      <ImageUpload
+        type="banner"
+        currentImageUrl={bannerSrc}
+        onImageUpdate={onBannerUpdate}
+        maxSize={10}
+        aspectRatio="3/1"
+        className={styles.bannerUpload}
       />
-      <button
-        className={styles.bannerEditButton}
-        onClick={onEditBanner}
-        type="button"
-        aria-label="Modifier la bannière"
-      >
-        <img src={editIcon} alt="Modifier la bannière" />
-      </button>
       <div className={styles.bannerOverlay}>
         <div className={styles.bannerContent}>
           <div className={styles.avatarSection}>
             <div className={styles.avatarWrapper}>
-              <img
-                src={user.avatarUrl || "https://via.placeholder.com/100x100?text=U"}
-                alt={user.username}
-                className={styles.avatar}
+              <ImageUpload
+                type="avatar"
+                currentImageUrl={avatarSrc}
+                onImageUpdate={onAvatarUpdate}
+                maxSize={5}
+                circular={true}
+                className={styles.avatarUpload}
               />
-              <button
-                className={styles.editAvatarButton}
-                onClick={onEditAvatar}
-                type="button"
-                aria-label="Modifier l'avatar"
-              >
-                <img src={editIcon} alt="Modifier l'avatar" />
-              </button>
             </div>
             <div className={styles.usernameSection}>
               <h1 className={styles.username}>{user.username}</h1>

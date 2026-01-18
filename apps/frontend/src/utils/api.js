@@ -1,4 +1,16 @@
 const API_BASE = 'http://localhost:4000/api';
+const BACKEND_URL = 'http://localhost:4000';
+
+export const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    if (url.startsWith('/uploads/')) {
+        return `${BACKEND_URL}${url}`;
+    }
+    return url;
+};
 
 const apiRequest = async (endpoint, options = {}) => {
     const url = `${API_BASE}${endpoint}`;
@@ -182,17 +194,6 @@ export const getRecentFaceitMatches = async (userId) => {
     return apiRequest(`/faceit-matches/${userId}/recent-matches`);
 };
 
-export const getNotifications = async () => {
-    return apiRequest('/notifications');
-};
-
-export const markNotificationAsRead = async (id) => {
-    return apiRequest(`/notifications/${id}/read`, {
-        method: 'PUT',
-    });
-};
-
-
 export const getTeamWithMembers = async (id) => {
     return apiRequest(`/teams/${id}/members`);
 };
@@ -215,4 +216,56 @@ export const joinTeam = async (teamId) => {
 
 export const getUserTeam = async () => {
     return apiRequest('/teams/my-team');
+};
+
+const uploadFile = async (endpoint, file, fieldName) => {
+    const url = `${API_BASE}${endpoint}`;
+    const formData = new FormData();
+    formData.append(fieldName, file);
+
+    const token = localStorage.getItem('token');
+    const config = {
+        method: 'POST',
+        body: formData,
+    };
+
+    if (token) {
+        config.headers = {
+            Authorization: `Bearer ${token}`,
+        };
+    }
+
+    try {
+        const response = await fetch(url, config);
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error?.message || `Erreur HTTP ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error(`Upload Error [POST ${endpoint}]:`, error);
+        throw error;
+    }
+};
+
+export const uploadAvatar = async (file) => {
+    return uploadFile('/users/avatar', file, 'avatar');
+};
+
+export const uploadBanner = async (file) => {
+    return uploadFile('/users/banner', file, 'banner');
+};
+
+export const deleteAvatar = async () => {
+    return apiRequest('/users/avatar', {
+        method: 'DELETE',
+    });
+};
+
+export const deleteBanner = async () => {
+    return apiRequest('/users/banner', {
+        method: 'DELETE',
+    });
 };

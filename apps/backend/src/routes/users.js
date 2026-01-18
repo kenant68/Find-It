@@ -9,6 +9,10 @@ import {
   updateUserHandler,
   deleteUserHandler,
   updatePasswordHandler,
+  uploadAvatarHandler,
+  uploadBannerHandler,
+  deleteAvatarHandler,
+  deleteBannerHandler,
 } from "../controllers/users.controller.js";
 
 const router = Router();
@@ -28,5 +32,10 @@ router.put("/:id", authMiddleware, updateUserHandler);
 router.put("/:id/password", authMiddleware, updatePasswordHandler);
 
 router.delete("/:id", authMiddleware, deleteUserHandler);
+
+router.post("/avatar", authMiddleware, uploadAvatarHandler);
+router.post("/banner", authMiddleware, uploadBannerHandler);
+router.delete("/avatar", authMiddleware, deleteAvatarHandler);
+router.delete("/banner", authMiddleware, deleteBannerHandler);
 
 export default router;

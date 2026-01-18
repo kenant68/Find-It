@@ -5,7 +5,6 @@ import Home from "../../pages/home/Home.jsx";
 import Register from "../../pages/auth/Register.jsx";
 import Login from "../../pages/auth/Login.jsx";
 import Dashboard from "../../pages/dashboard/Dashboard.jsx";
-import Notifications from "../../pages/notifications/Notifications.jsx";
 import Matchs from "../../pages/matchs/Matchs.jsx";
 import Scrims from "../../pages/scrims/Scrims.jsx";
 import Team from "../../pages/team/Team.jsx";
@@ -66,14 +65,6 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Scrims />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "notifications",
-        element: (
-          <ProtectedRoute>
-            <Notifications />
           </ProtectedRoute>
         ),
       },

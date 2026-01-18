@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../utils/auth.jsx";
-import { getUserById } from "../../utils/api.js";
+import { getUserById, getImageUrl } from "../../utils/api.js";
 import styles from "./NavbarMobile.module.css";
 
 import homeIcon from "../../assets/navbar/Home.svg";
@@ -9,7 +9,6 @@ import castleIcon from "../../assets/navbar/castle.svg";
 import teamsIcon from "../../assets/teams.png";
 import matchsIcon from "../../assets/matchs.png";
 import announceIcon from "../../assets/announce.png";
-import notificationIcon from "../../assets/notifications.png";
 
 export default function NavbarMobile() {
   const { user, logout } = useAuth();
@@ -81,7 +80,7 @@ export default function NavbarMobile() {
             }
           >
             <img
-              src={userDetails?.avatarUrl || "https://via.placeholder.com/24x24?text=U"}
+              src={getImageUrl(userDetails?.avatarUrl) || "https://via.placeholder.com/24x24?text=U"}
               className={styles.avatarIcon}
               alt="profil"
             />
@@ -98,22 +97,6 @@ export default function NavbarMobile() {
           >
             <img src={announceIcon} className={styles.icon} alt="announces" />
             <span>Annonces</span>
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink
-            to="/notifications"
-            className={({ isActive }) =>
-              isActive ? `${styles.link} ${styles.active}` : styles.link
-            }
-          >
-            <img
-              src={notificationIcon}
-              className={styles.icon}
-              alt="notifications"
-            />
-            <span>Notifications</span>
           </NavLink>
         </li>
 

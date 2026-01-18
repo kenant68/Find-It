@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardJoueur from "../../components/CardJoueur/CardJoueur.jsx";
 import TeamStatsSection from "../../components/TeamStatsSection/TeamStatsSection.jsx";
-import { getTeams, getTeamWithMembers, getFaceitStats } from "../../utils/api.js";
+import { getTeams, getTeamWithMembers, getFaceitStats, getImageUrl } from "../../utils/api.js";
 import { useAuth } from "../../utils/auth.jsx";
 
 const Team = () => {
@@ -54,7 +54,7 @@ const Team = () => {
                 return {
                   ...member.user,
                   isLeader: member.isLeader,
-                  avatar: member.user.avatarUrl,
+                  avatar: getImageUrl(member.user.avatarUrl),
                   faceitLevel: faceitStats?.elo ? Math.floor(parseInt(faceitStats.elo) / 100) : 10,
                 };
               } catch (err) {
@@ -62,7 +62,7 @@ const Team = () => {
                 return {
                   ...member.user,
                   isLeader: member.isLeader,
-                  avatar: member.user.avatarUrl,
+                  avatar: getImageUrl(member.user.avatarUrl),
                   faceitLevel: 10, 
                 };
               }

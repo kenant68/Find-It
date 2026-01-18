@@ -4,7 +4,7 @@ import steamIcon from "../../assets/profil/steam.svg";
 import discordIcon from "../../assets/profil/discord.svg";
 import editIcon from "../../assets/profil/edit.svg";
 
-const ProfileCommunities = ({ user, onEditSteam, onEditDiscord, onEditRegion }) => {
+const ProfileCommunities = ({ user, onEditSteam, onEditDiscord, onEditRegion, onEditFaceit }) => {
   if (!user) return null;
 
   return (
@@ -68,6 +68,27 @@ const ProfileCommunities = ({ user, onEditSteam, onEditDiscord, onEditRegion }) 
               />
             </div>
           )}
+        </div>
+        <div className={styles.sectionHeader}>
+          <span className={styles.sectionSubtitle}>FACEIT</span>
+          <button
+            className={styles.editSectionButton}
+            onClick={onEditFaceit}
+            type="button"
+            aria-label="Modifier FACEIT"
+          >
+            <img src={editIcon} alt="Modifier FACEIT" />
+          </button>
+        </div>
+        <div className={styles.communities}>
+          <div
+            className={`${styles.communityLink} ${user.faceitId ? styles.faceitConfigured : styles.faceitNotConfigured}`}
+            title={user.faceitId ? `FACEIT: ${user.faceitId}` : "FACEIT non configuré"}
+          >
+            <span className={styles.faceitText}>
+              {user.faceitId ? "FACEIT" : "FACEIT"}
+            </span>
+          </div>
         </div>
       </div>
       <div className={styles.section}>

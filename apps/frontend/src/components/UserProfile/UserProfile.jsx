@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../utils/auth.jsx";
-import { getUserById } from "../../utils/api.js";
+import { getUserById, getImageUrl } from "../../utils/api.js";
 import styles from "./UserProfile.module.css";
 
 const UserProfile = ({ isCollapsed }) => {
@@ -38,7 +38,7 @@ const UserProfile = ({ isCollapsed }) => {
       <Link to="/profil" className={styles.userInfo}>
         <div className={styles.avatarContainer}>
           <img
-            src={userDetails?.avatarUrl || "https://via.placeholder.com/40x40?text=U"}
+            src={getImageUrl(userDetails?.avatarUrl) || "https://via.placeholder.com/40x40?text=U"}
             alt="User Avatar"
             className={styles.avatar}
           />

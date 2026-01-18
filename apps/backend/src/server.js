@@ -37,6 +37,8 @@ app.use(cors({
 app.use(express.json());
 app.use("/api", apiRouter);
 
+app.use('/uploads', express.static('uploads'));
+
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
