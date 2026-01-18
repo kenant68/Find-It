@@ -22,9 +22,7 @@ sequenceDiagram
     API->>DB: DELETE /scrim-announcements/:id
     DB-->>API: Annonce supprimée
     
-    API->>Notif: Créer notification "new_scrim"
-    Notif->>DB: Insert notifications pour les membres des équipes
-    DB-->>Notif: Notifications créées
+
     
     Frontend->>Frontend: Retire l'annonce de la liste
     Frontend-->>Captain: Confirme l'acceptation
