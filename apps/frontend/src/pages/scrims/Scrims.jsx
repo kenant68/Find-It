@@ -4,47 +4,92 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardLong from "../../components/CardLong/CardLong.jsx";
 import CreateScrimModal from "../../components/CreateScrimModal/CreateScrimModal.jsx";
+import { getScrims, getTeams, getMaps, createScrim, getUserTeam } from "../../utils/api.js";
+import { useAuth } from "../../utils/auth.jsx";
 import scrimIcon from "../../assets/scrims/scrim-swords.svg";
 
 const Scrims = () => {
+  const { user } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [scrims, setScrims] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [maps, setMaps] = useState([]);
+  const [userTeam, setUserTeam] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadScrims = async () => {
+    const loadData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/scrimAnnouncements"
-        );
-        if (!response.ok) {
-          throw new Error("Erreur lors du chargement des annonces de scrims");
+        setLoading(true);
+        setError(null);
+
+        // Charger scrims, équipes et maps en parallèle
+        const [scrimsData, teamsData, mapsData] = await Promise.all([
+          getScrims(),
+          getTeams(),
+          getMaps()
+        ]);
+
+        console.log("Scrims data:", scrimsData);
+        console.log("Teams data:", teamsData);
+        console.log("Maps data:", mapsData);
+
+        setScrims(scrimsData || []);
+        setTeams(teamsData || []);
+        setMaps(mapsData || []);
+
+        if (user?.id) {
+          try {
+            const userTeamData = await getUserTeam();
+            console.log("User team from API:", userTeamData);
+            setUserTeam(userTeamData);
+          } catch (err) {
+            console.warn("Could not get user team, trying captain check:", err);
+
+            const userAsCaptain = teamsData?.find(team => team.captainId === user.id);
+            if (userAsCaptain) {
+              console.log("User is captain of team:", userAsCaptain.name);
+              setUserTeam(userAsCaptain);
+            } else {
+              console.log("User is not in any team");
+              setUserTeam(null);
+            }
+          }
         }
-        const data = await response.json();
-
-        const scrimsData = (data || []).map((announcement) => ({
-          id: announcement.id,
-          title: `Annonce de ${announcement.teamName}`,
-          timestamp: announcement.timestamp,
-        }));
-
-        setScrims(scrimsData);
       } catch (error) {
-        console.error(
-          "Erreur lors du chargement des annonces de scrims:",
-          error
-        );
+        console.error("Erreur lors du chargement des données:", error);
+        setError("Erreur lors du chargement des données");
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadScrims();
-  }, []);
+    loadData();
+  }, [user]);
 
-  const handleAccept = (id) => {
-    setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== id));
+  const getTeamName = (teamId) => {
+    const team = teams.find(t => t.id === teamId);
+    return team ? team.name : `Équipe ${teamId}`;
+  };
+
+  const getMapName = (mapId) => {
+    const map = maps.find(m => m.id === mapId);
+    return map ? map.title : `Carte ${mapId}`;
+  };
+
+  const handleAccept = (scrimId) => {
+
+    setScrims((prevScrims) => prevScrims.filter((scrim) => scrim.id !== scrimId));
   };
 
   const handleCreate = () => {
+    console.log("handleCreate called, userTeam:", userTeam, "user:", user);
+    if (!userTeam) {
+      setError("Vous devez être dans une équipe pour créer un scrim");
+      return;
+    }
     setIsModalOpen(true);
   };
 
@@ -52,15 +97,31 @@ const Scrims = () => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = (formData) => {
-    const newScrim = {
-      id: String(Date.now()),
-      title: `Annonce de ${formData.teamName}`,
-      timestamp: "À l'instant",
-    };
+  const handleSubmit = async (formData) => {
+    try {
+      console.log("Creating scrim with data:", formData);
 
-    setScrims((prevScrims) => [newScrim, ...prevScrims]);
-    setIsModalOpen(false);
+      const scrimData = {
+        teamAId: userTeam.id, // L'équipe de l'utilisateur qui crée
+        teamBId: formData.opponentTeamId,
+        mapId: formData.mapId,
+        horaire: formData.time,
+        status: "scheduled"
+      };
+
+      console.log("Sending scrim data:", scrimData);
+      const newScrim = await createScrim(scrimData);
+      console.log("Created scrim:", newScrim);
+
+      // Recharger la liste des scrims
+      const updatedScrims = await getScrims();
+      setScrims(updatedScrims || []);
+
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Erreur lors de la création du scrim:", error);
+      setError(error.message || "Erreur lors de la création du scrim");
+    }
   };
 
   return (
@@ -77,31 +138,46 @@ const Scrims = () => {
           <header className={styles.header}>
             <h1 className={styles.pageTitle}>Annonces de scrims</h1>
           </header>
-          <div className={styles.cardsContainer}>
-            {scrims.length === 0 ? (
-              <p className={styles.emptyMessage}>
-                Aucune annonce de scrim disponible
-              </p>
-            ) : (
-              scrims.map((scrim) => (
-                <CardLong
-                  key={scrim.id}
-                  icon={scrimIcon}
-                  title={scrim.title}
-                  timestamp={scrim.timestamp}
-                  actionButton={
-                    <button
-                      className={styles.acceptButton}
-                      onClick={() => handleAccept(scrim.id)}
-                      type="button"
-                    >
-                      ACCEPTER
-                    </button>
-                  }
-                />
-              ))
-            )}
-          </div>
+          {loading ? (
+            <div className={styles.loading}>
+              <p>Chargement des scrims...</p>
+            </div>
+          ) : error ? (
+            <div className={styles.error}>
+              <p>Erreur: {error}</p>
+            </div>
+          ) : (
+            <div className={styles.cardsContainer}>
+              {scrims.length === 0 ? (
+                <p className={styles.emptyMessage}>
+                  Aucun scrim disponible
+                </p>
+              ) : (
+                scrims.map((scrim) => (
+                  <CardLong
+                    key={scrim.id}
+                    icon={scrimIcon}
+                    title={`${getTeamName(scrim.teamAId)} vs ${getTeamName(scrim.teamBId)}`}
+                    subtitle={`Map: ${getMapName(scrim.mapId)} | ${scrim.horaire}`}
+                    timestamp={`Status: ${scrim.status}`}
+                    actionButton={
+                      userTeam && (scrim.teamAId === userTeam.id || scrim.teamBId === userTeam.id) ? (
+                        <span className={styles.myScrim}>Mon scrim</span>
+                      ) : (
+                        <button
+                          className={styles.acceptButton}
+                          onClick={() => handleAccept(scrim.id)}
+                          type="button"
+                        >
+                          REJOINDRE
+                        </button>
+                      )
+                    }
+                  />
+                ))
+              )}
+            </div>
+          )}
           <button
             className={styles.createButton}
             onClick={handleCreate}

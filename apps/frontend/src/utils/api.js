@@ -212,7 +212,3 @@ export const joinTeam = async (teamId) => {
 export const getUserTeam = async () => {
     return apiRequest('/teams/my-team');
 };
-
-export const getScrimsByTeam = async (teamId) => {
-    return apiRequest(`/teams/${teamId}/scrims`);
-};
