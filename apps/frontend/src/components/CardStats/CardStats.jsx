@@ -95,7 +95,7 @@ const CardStats = () => {
 
         <div className={styles.statItem}>
           <span className={styles.statLabel}>K/D moyen</span>
-          <span className={styles.statValue}>{stats["average_K/D"]}</span>
+          <span className={styles.statValue}>{stats.average_K_D || "N/A"}</span>
         </div>
 
         <div className={styles.statItem}>
@@ -104,21 +104,6 @@ const CardStats = () => {
         </div>
       </div>
 
-      <div className={styles.recentMatches}>
-        <span className={styles.recentLabel}>Matchs récents:</span>
-        <div className={styles.matchesList}>
-          {stats.recent_matches.split(" ").map((match, index) => (
-            <span
-              key={index}
-              className={`${styles.matchBadge} ${
-                match === "W" ? styles.win : styles.loss
-              }`}
-            >
-              {match}
-            </span>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
