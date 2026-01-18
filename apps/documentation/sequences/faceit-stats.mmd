@@ -3,22 +3,21 @@ sequenceDiagram
     participant Frontend as Frontend React
     participant API as API Backend
     participant DB as Base de données
-    participant Faceit as FACEIT API (futur)
+    participant Faceit as FACEIT API (externe)
 
     User->>Frontend: Accède à la page Profil
     Frontend->>API: GET /users/:id
-    API->>DB: Requête utilisateur
+    API->>DB: Requête utilisateur (faceit_id)
     DB-->>API: Données utilisateur
     API-->>Frontend: JSON (user)
-    
-    Frontend->>API: GET /faceit-stats?user_id=:id
-    API->>DB: Requête statistiques FACEIT
-    DB-->>API: Statistiques FACEIT
+
+    Frontend->>API: GET /faceit-matches/:userId
+    API->>Faceit: GET /players/:faceit_id/stats/cs2
+    Faceit-->>API: Statistiques FACEIT en temps réel
+    API->>API: Calcul statistiques dérivées<br/>(win_rate, fav_map, etc.)
     API-->>Frontend: JSON (faceit_stats)
-    
-    Note over Frontend,Faceit: Intégration future avec API FACEIT
-    Frontend->>Faceit: GET /players/:faceit_id (futur)
-    Faceit-->>Frontend: Statistiques en temps réel (futur)
-    
-    Frontend->>Frontend: Calcul des statistiques dérivées<br/>(taux de victoire, etc.)
-    Frontend-->>User: Affichage des statistiques
+
+    Note over API,Faceit: ⚠️ Données NON stockées en base<br/>Récupérées en temps réel uniquement
+
+    Frontend->>Frontend: Formatage pour affichage
+    Frontend-->>User: Affichage des statistiques FACEIT

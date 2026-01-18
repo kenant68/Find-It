@@ -3,6 +3,7 @@ sequenceDiagram
     participant Frontend as Frontend React
     participant API as API Backend
     participant DB as Base de données
+    participant Faceit as FACEIT API (externe)
 
     User->>Frontend: Accède à "Mon équipe"
     Frontend->>API: GET /team-members?team_id=:id
@@ -15,12 +16,15 @@ sequenceDiagram
     DB-->>API: Données équipe
     API-->>Frontend: JSON (team)
     
-    Frontend->>API: GET /faceit-stats?user_id=:id (pour chaque membre)
+    Frontend->>API: GET /faceit-matches/:userId (pour chaque membre)
     loop Pour chaque membre
-        API->>DB: Requête statistiques
-        DB-->>API: Statistiques membre
+        API->>Faceit: GET /players/:faceit_id/stats/cs2
+        Faceit-->>API: Statistiques FACEIT en temps réel
+        API->>API: Calcul statistiques dérivées
         API-->>Frontend: JSON (stats)
     end
+
+    Note over API,Faceit: ⚠️ Stats FACEIT récupérées<br/>en temps réel via API externe<br/>NON stockées en base
     
     Frontend->>Frontend: Calcul statistiques équipe<br/>(ELO moyen, taux de victoire)
     Frontend-->>User: Affiche l'équipe avec statistiques

@@ -68,6 +68,7 @@ rectangle FindIt {
   note right of UC_STATS
   Includes:
   - View FACEIT statistics (ELO, win rate, K/D, headshots)
+    ⚠️ Données récupérées en temps réel via API FACEIT externe
   - View team statistics
   - View dashboard (scrims overview, recent results)
   - View favorite map and side preferences
@@ -80,6 +81,13 @@ package "External Services" as EXT {
   actor "Steam" as Steam
   actor "Discord" as Discord
 }
+
+note right of Faceit
+  FACEIT API v4:
+  - Statistiques récupérées en temps réel
+  - Données NON stockées en base
+  - Authentification via clé API
+end note
 
 ACT -[hidden]-> FindIt
 FindIt -[hidden]-> EXT

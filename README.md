@@ -6,11 +6,11 @@
 ![Vite](https://img.shields.io/badge/Vite-7.1-purple)
 ![pnpm](https://img.shields.io/badge/pnpm-10.18-orange)
 
-A modern web platform designed for Counter-Strike players to organize and manage their scrims (training matches). The platform enables teams to schedule matches, track FACEIT statistics, manage team members, and coordinate training sessions efficiently.
+A modern web platform designed for Counter-Strike players to organize and manage their scrims (training matches). The platform enables teams to schedule matches, access FACEIT statistics in real-time, manage team members, and coordinate training sessions efficiently.
 
 ## Overview
 
-FindIT is a comprehensive scrim management platform that enables Counter-Strike teams and players to organize training sessions, manage team rosters, track performance statistics, and coordinate matches. The platform provides an intuitive interface for scheduling scrims, viewing upcoming matches, managing team members, and accessing detailed FACEIT statistics.
+FindIT is a comprehensive scrim management platform that enables Counter-Strike teams and players to organize training sessions, manage team rosters, track performance statistics, and coordinate matches. The platform provides an intuitive interface for scheduling scrims, viewing upcoming matches, managing team members, and accessing FACEIT statistics in real-time.
 
 ## Key Features
 
@@ -20,7 +20,7 @@ FindIT is a comprehensive scrim management platform that enables Counter-Strike 
 
 **Team Discovery**: Search and filter teams by name and region with advanced filtering options
 
-**FACEIT Integration**: Comprehensive FACEIT statistics including ELO, win rate, K/D ratio, and favorite maps
+**FACEIT Integration**: Real-time FACEIT statistics access including ELO, win rate, K/D ratio, and favorite maps
 
 **Real-Time Notifications**: Get notified about new team members, upcoming scrims, and team changes
 
@@ -166,7 +166,7 @@ All scripts are run from the root directory and automatically target the correct
 
 - **My Team**: Manage your current team, view members and their statistics
 - **Team Search**: Search and filter teams by name and region
-- Display average FACEIT ranks
+- Display real-time FACEIT ranks
 - Team member management
 
 ### Scrims
@@ -177,7 +177,7 @@ All scripts are run from the root directory and automatically target the correct
 
 ### Statistics
 
-- Integrated FACEIT statistics (ELO, win rate, K/D, etc.)
+- Real-time FACEIT statistics access (ELO, win rate, K/D, etc.)
 - Statistics by favorite map
 - Recent results history
 
@@ -204,7 +204,7 @@ The `db.json` file at the root contains all application data:
 - Scrims
 - Maps
 - Matches
-- FACEIT Statistics
+- FACEIT Integration (real-time stats access)
 - Notifications
 
 To modify data, edit `db.json` directly. Changes will be automatically reflected thanks to the `--watch` option.

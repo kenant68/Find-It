@@ -5,6 +5,7 @@ erDiagram
         varchar email
         varchar password_hash
         varchar avatar_url
+        varchar banner_url
         varchar faceit_id
         varchar faceit_level
         varchar steam_url
@@ -27,69 +28,58 @@ erDiagram
     }
 
     TEAM_MEMBERS {
-        int id PK
-        int team_id FK
-        int user_id FK
-        timestamp joined_at
-        varchar role
-        boolean is_leader
+        varchar id PK
+        varchar username
+        varchar avatar
+        int faceitLevel
+        boolean isLeader
     }
 
     MAPS {
         int id PK
-        varchar name
-        varchar image_url
+        varchar title
+        varchar img
     }
 
     SCRIMS {
         int id PK
-        int team_a_id FK
-        int team_b_id FK
-        int map_id FK
-        int elo_min
-        int elo_max
-        timestamp date
+        int teamA FK
+        int teamB FK
+        int mapId FK
         varchar horaire
         timestamp created_at
         timestamp updated_at
     }
 
     MATCHES {
-        int id PK
-        int team_a_id FK
-        int team_b_id FK
-        int score_a
-        int score_b
-        int map_id FK
-        timestamp played_at
-        timestamp created_at
+        varchar id PK
+        varchar teamA
+        varchar teamB
+        int scoreA
+        int scoreB
     }
 
     NOTIFICATIONS {
-        int id PK
+        varchar id PK
         varchar type
         varchar title
         varchar subtitle
         varchar timestamp
-        int user_id FK
-        timestamp created_at
     }
 
     SCRIM_ANNOUNCEMENTS {
-        int id PK
-        int team_id FK
-        varchar team_name
+        varchar id PK
+        varchar teamName
         varchar timestamp
-        timestamp created_at
     }
 
-    USERS ||--o| TEAM_MEMBERS : "is member of"
-    TEAMS ||--o{ TEAM_MEMBERS : "has members"
+    USERS ||--o{ TEAMS : "captain of"
     TEAMS ||--o{ SCRIMS : "team A"
     TEAMS ||--o{ SCRIMS : "team B"
     TEAMS ||--o{ MATCHES : "team A"
     TEAMS ||--o{ MATCHES : "team B"
     MAPS ||--o{ SCRIMS : "played on"
-    MAPS ||--o{ MATCHES : "played on"
-    USERS ||--o{ NOTIFICATIONS : "receives"
     TEAMS ||--o{ SCRIM_ANNOUNCEMENTS : "creates"
+
+    note right of USERS : "faceit_id: liaison avec<br/>API FACEIT externe<br/>⚠️ Stats NON stockées"
+    note right of MAPS : "title: nom de la map<br/>img: URL image"

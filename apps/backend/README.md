@@ -16,4 +16,4 @@ Le backend sera implémenté ici. Pour l'instant, seul json-server est configur�
 - Authentification
 - Gestion des équipes
 - Gestion des scrims
-- Intégration FACEIT API
+- Intégration FACEIT API (accès temps réel aux statistiques - non stockées en base)
