@@ -28,7 +28,7 @@ export const forgotPassword = async (req, res) => {
     { expiresIn: "15m" }
   );
 
-  const link = `http://localhost:4000/reset-password/${token}`;
+  const link = `http://localhost:5173/reset-password/${token}`;
   await sendResetPasswordMail(user.email, link);
 
   res.sendStatus(200);

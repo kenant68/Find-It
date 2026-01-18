@@ -4,6 +4,8 @@ import ProtectedRoute from "../ProtectedRoute.jsx";
 import Home from "../../pages/home/Home.jsx";
 import Register from "../../pages/auth/Register.jsx";
 import Login from "../../pages/auth/Login.jsx";
+import ForgotPassword from "../../pages/auth/ForgotPassword.jsx";
+import ResetPassword from "../../pages/auth/ResetPassword.jsx";
 import Dashboard from "../../pages/dashboard/Dashboard.jsx";
 import Matchs from "../../pages/matchs/Matchs.jsx";
 import Scrims from "../../pages/scrims/Scrims.jsx";
@@ -27,6 +29,14 @@ export const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password/:token",
+        element: <ResetPassword />,
       },
       {
         path: "dashboard",
