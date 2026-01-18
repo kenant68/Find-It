@@ -4,105 +4,113 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import NavbarMobile from "../../components/NavbarMobile/NavbarMobile.jsx";
 import CardJoueur from "../../components/CardJoueur/CardJoueur.jsx";
 import TeamStatsSection from "../../components/TeamStatsSection/TeamStatsSection.jsx";
-import { getAvatar } from "../../utils/avatarUtils.js";
+import { getTeams, getTeamWithMembers, getFaceitStats, getImageUrl } from "../../utils/api.js";
+import { useAuth } from "../../utils/auth.jsx";
 
 const Team = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
-  const [recentResults, setRecentResults] = useState("");
+  const [recentResults] = useState("W L W W L");
   const [teamStats, setTeamStats] = useState(null);
-  const [teamName, setTeamName] = useState("");
+  const [teamName, setTeamName] = useState("Mon équipe");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadTeamData = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const [membersRes, teamsRes, statsRes] = await Promise.all([
-          fetch("http://localhost:3000/teamMembers"),
-          fetch("http://localhost:3000/teams"),
-          fetch("http://localhost:3000/faceit_stats"),
-        ]);
+        setLoading(true);
+        setError(null);
 
-        if (!membersRes.ok || !teamsRes.ok || !statsRes.ok) {
-          throw new Error("Erreur lors du chargement des données de l'équipe");
-        }
+        const allTeams = await getTeams();
 
-        const [membersData, teamsData, statsData] = await Promise.all([
-          membersRes.json(),
-          teamsRes.json(),
-          statsRes.json(),
-        ]);
-
-        let recentResults = "W L W W L";
-        let currentTeam = null;
-
-        try {
-          const dbRes = await fetch("http://localhost:3000/");
-          if (dbRes.ok) {
-            const dbData = await dbRes.json();
-            recentResults = dbData.teamRecentResults || "W L W W L";
-            currentTeam = dbData.currentTeam || null;
+        let userTeam = null;
+        for (const team of allTeams) {
+          try {
+            const teamWithMembers = await getTeamWithMembers(team.id);
+            const isMember = teamWithMembers.members.some(member => member.userId === user.id);
+            if (isMember) {
+              userTeam = teamWithMembers;
+              break;
+            }
+          } catch (err) {
+            console.warn(`Erreur vérification équipe ${team.id}:`, err);
           }
-        } catch (e) {
-          console.warn(
-            "Impossible de charger db.json, utilisation des valeurs par défaut"
-          );
         }
 
-        const membersArray = Array.isArray(membersData)
-          ? membersData
-          : [membersData];
-        const membersWithAvatars = membersArray.map((member) => ({
-          ...member,
-          avatar: getAvatar(member.avatar),
-        }));
+        if (userTeam) {
+          setTeamName(userTeam.name);
 
-        setTeamMembers(membersWithAvatars);
-        setRecentResults(recentResults);
+          let totalElo = 0;
+          let totalWins = 0;
+          let totalMatches = 0;
+          let membersWithElo = 0;
 
-        if (currentTeam && currentTeam.id) {
-          const team = (teamsData || []).find(
-            (t) => t.id == currentTeam.id || t.id === currentTeam.id
-          );
-          setTeamName(team ? team.name : currentTeam.name);
-        } else if (teamsData && teamsData.length > 0) {
-          setTeamName(teamsData[0].name);
-        }
+          const membersWithStats = await Promise.all(
+            userTeam.members.map(async (member) => {
+              try {
+                const faceitStats = await getFaceitStats(member.user.id);
+                
+                if (faceitStats) {
+                  if (faceitStats.elo) {
+                    totalElo += parseInt(faceitStats.elo) || 0;
+                    membersWithElo++;
+                  }
+                  totalWins += parseInt(faceitStats.wins) || 0;
+                  totalMatches += parseInt(faceitStats.matches_played) || 0;
+                }
 
-        if (statsData && statsData.length > 0) {
-          const stats = Array.isArray(statsData) ? statsData : [statsData];
-          const totalElo = stats.reduce(
-            (sum, stat) => sum + parseInt(stat.elo || 0),
-            0
-          );
-          const totalWins = stats.reduce(
-            (sum, stat) => sum + parseInt(stat.wins || 0),
-            0
-          );
-          const totalMatches = stats.reduce(
-            (sum, stat) => sum + parseInt(stat.matches_played || 0),
-            0
+                return {
+                  ...member.user,
+                  isLeader: member.isLeader,
+                  avatar: getImageUrl(member.user.avatarUrl),
+                  elo: faceitStats?.elo || 0,
+                  faceitLevel: faceitStats?.elo ? Math.min(10, Math.max(1, Math.floor(parseInt(faceitStats.elo) / 250))) : null,
+                };
+              } catch (err) {
+                console.warn(`Stats FACEIT non disponibles pour ${member.user.username}`);
+                return {
+                  ...member.user,
+                  isLeader: member.isLeader,
+                  avatar: getImageUrl(member.user.avatarUrl),
+                  elo: 0,
+                  faceitLevel: null,
+                };
+              }
+            })
           );
 
-          const teamWinRate =
-            totalMatches > 0 ? (totalWins / totalMatches) * 100 : 0;
+          setTeamMembers(membersWithStats);
+
+          const averageElo = membersWithElo > 0 ? Math.round(totalElo / membersWithElo) : 0;
+          const winRate = totalMatches > 0 ? ((totalWins / totalMatches) * 100).toFixed(1) : "0";
 
           setTeamStats({
-            averageElo:
-              stats.length > 0 ? Math.round(totalElo / stats.length) : 0,
-            winRate: teamWinRate.toFixed(1),
+            averageElo: averageElo,
+            winRate: winRate,
             totalMatches: totalMatches,
           });
+        } else {
+          setTeamName("Aucune équipe");
+          setTeamMembers([]);
+          setTeamStats(null);
         }
       } catch (error) {
-        console.error(
-          "Erreur lors du chargement des données de l'équipe:",
-          error
-        );
+        console.error("Erreur lors du chargement des données de l'équipe:", error);
+        setError("Impossible de charger les données de l'équipe");
+      } finally {
+        setLoading(false);
       }
     };
 
     loadTeamData();
-  }, []);
+  }, [user]);
 
   return (
     <div className={styles.pageWrapper}>

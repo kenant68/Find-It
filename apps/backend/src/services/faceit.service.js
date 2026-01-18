@@ -4,6 +4,8 @@ async function fetchFromFaceitAPI(endpoint) {
   try {
     const apiKey = process.env.FACEIT_API_KEY || "";
 
+    console.log(`[FACEIT] API Key configured: ${apiKey ? 'YES' : 'NO'}`);
+
     if (!apiKey || apiKey.trim() === "") {
       console.error("[FACEIT] FACEIT_API_KEY is not set or empty");
       throw new Error("FACEIT_API_KEY_NOT_SET");
@@ -334,8 +336,15 @@ export async function getFaceitStatsByUserId(userId, faceitIdOrNickname) {
   }
 
   const playerData = await fetchFromFaceitAPI(`/players/${playerId}`);
-  const statsData = await fetchFromFaceitAPI(`/players/${playerId}/stats/cs2`)
-    .catch(() => fetchFromFaceitAPI(`/players/${playerId}/stats/csgo`).catch(() => ({})));
 
-  return await formatFaceitStats(playerData, statsData, userId);
+  const statsData = await fetchFromFaceitAPI(`/players/${playerId}/stats/cs2`)
+    .catch(async () => {
+      return await fetchFromFaceitAPI(`/players/${playerId}/stats/csgo`).catch(() => {
+        return {};
+      });
+    });
+
+  const formattedStats = await formatFaceitStats(playerData, statsData, userId);
+
+  return formattedStats;
 }

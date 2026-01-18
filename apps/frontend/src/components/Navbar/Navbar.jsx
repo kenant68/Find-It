@@ -9,7 +9,6 @@ import castleIcon from "../../assets/navbar/castle.svg";
 import teamsIcon from "../../assets/teams.png";
 import matchsIcon from "../../assets/matchs.png";
 import announceIcon from "../../assets/announce.png";
-import notificationIcon from "../../assets/notifications.png";
 import logo from "../../assets/logo.png";
 
 export default function Navbar({ isCollapsed, setIsCollapsed }) {
@@ -49,24 +48,24 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
         <ul className={styles.navList}>
           <li>
             <NavLink
-              to="/teams"
+              to="/my-team"
               className={({ isActive }) =>
                 isActive ? `${styles.link} ${styles.active}` : styles.link
               }
             >
-              <img src={castleIcon} className={styles.iconSvg} alt="teams" />
+              <img src={castleIcon} className={styles.iconSvg} alt="my-team" />
               {!collapsed && <span>Mon Equipe</span>}
             </NavLink>
           </li>
 
           <li>
             <NavLink
-              to="/other-teams"
+              to="/teams"
               className={({ isActive }) =>
                 isActive ? `${styles.link} ${styles.active}` : styles.link
               }
             >
-              <img src={teamsIcon} className={styles.icon} alt="other-teams" />
+              <img src={teamsIcon} className={styles.icon} alt="teams" />
               {!collapsed && <span>Equipes</span>}
             </NavLink>
           </li>
@@ -92,22 +91,6 @@ export default function Navbar({ isCollapsed, setIsCollapsed }) {
             >
               <img src={announceIcon} className={styles.icon} alt="announces" />
               {!collapsed && <span>Annonces</span>}
-            </NavLink>
-          </li>
-
-          <li>
-            <NavLink
-              to="/notifications"
-              className={({ isActive }) =>
-                isActive ? `${styles.link} ${styles.active}` : styles.link
-              }
-            >
-              <img
-                src={notificationIcon}
-                className={styles.icon}
-                alt="notifications"
-              />
-              {!collapsed && <span>Notifications</span>}
             </NavLink>
           </li>
         </ul>

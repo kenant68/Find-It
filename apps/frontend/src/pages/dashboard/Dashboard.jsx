@@ -6,7 +6,6 @@ import Card from "../../components/Card/Card.jsx";
 import CardScrims from "../../components/CardScrims/CardScrims.jsx";
 import CardTeamMates from "../../components/CardTeamMates/CardTeamMates.jsx";
 import CardStats from "../../components/CardStats/CardStats.jsx";
-import CardFavStat from "../../components/CardFavStat/CardFavStat.jsx";
 
 const Dashboard = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -37,10 +36,6 @@ const Dashboard = () => {
             <div className={styles.rightColumn}>
               <Card>
                 <CardTeamMates />
-              </Card>
-
-              <Card>
-                <CardFavStat />
               </Card>
             </div>
           </div>

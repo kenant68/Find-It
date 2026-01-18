@@ -126,3 +126,8 @@
     box-sizing: border-box;
   }
 }
+
+/* Styles pour le contenu du profil */
+.profileContent {
+  position: relative;
+}

@@ -105,3 +105,34 @@
     justify-content: center;
   }
 }
+
+
+.loading,
+.error {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+}
+
+.error {
+  color: rgba(255, 100, 100, 0.9);
+}
+
+.noTeam {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.noTeam p {
+  margin: 0 0 16px 0;
+}
+
+.noTeam p:last-child {
+  margin-bottom: 0;
+  opacity: 0.7;
+  font-size: 16px;
+}

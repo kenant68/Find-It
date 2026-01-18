@@ -30,7 +30,7 @@ export async function createUser(userData) {
   let { username, email, password, region, avatarUrl, faceitId, faceitLevel, steamUrl, discordUsername } = userData;
   if (!username || !email || !password) throw new Error("INVALID_PAYLOAD");
 
-  username = username.trim().toLowerCase();
+  username = username.trim();
   email = email.trim().toLowerCase();
 
   const emailPattern = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
@@ -45,6 +45,7 @@ export async function createUser(userData) {
 }
 
 export async function updateUser(id, userData) {
+  console.log(`[USERS SERVICE] Updating user ${id} with data:`, userData);
   const existingUser = await findById(id);
   if (!existingUser) throw new Error("USER_NOT_FOUND");
 

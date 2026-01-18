@@ -1,15 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../../App.jsx";
+import ProtectedRoute from "../ProtectedRoute.jsx";
 import Home from "../../pages/home/Home.jsx";
 import Register from "../../pages/auth/Register.jsx";
 import Login from "../../pages/auth/Login.jsx";
+import ForgotPassword from "../../pages/auth/ForgotPassword.jsx";
+import ResetPassword from "../../pages/auth/ResetPassword.jsx";
 import Dashboard from "../../pages/dashboard/Dashboard.jsx";
-import Notifications from "../../pages/notifications/Notifications.jsx";
 import Matchs from "../../pages/matchs/Matchs.jsx";
 import Scrims from "../../pages/scrims/Scrims.jsx";
 import Team from "../../pages/team/Team.jsx";
-import Profil from "../../pages/profil/Profil.jsx";
 import OtherTeams from "../../pages/other-teams/OtherTeams.jsx";
+import Profil from "../../pages/profil/Profil.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -29,32 +31,68 @@ export const router = createBrowserRouter([
         element: <Login />,
       },
       {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password/:token",
+        element: <ResetPassword />,
+      },
+      {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "teams",
-        element: <Team />,
+        element: (
+          <ProtectedRoute>
+            <OtherTeams />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "my-team",
+        element: (
+          <ProtectedRoute>
+            <Team />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "matchs",
-        element: <Matchs />,
+        element: (
+          <ProtectedRoute>
+            <Matchs />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "announces",
-        element: <Scrims />,
-      },
-      {
-        path: "notifications",
-        element: <Notifications />,
+        element: (
+          <ProtectedRoute>
+            <Scrims />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "profil",
-        element: <Profil />,
+        element: (
+          <ProtectedRoute>
+            <Profil />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "other-teams",
-        element: <OtherTeams />,
+        element: (
+          <ProtectedRoute>
+            <OtherTeams />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

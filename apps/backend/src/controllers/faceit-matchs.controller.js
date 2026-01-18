@@ -24,12 +24,10 @@ export async function getFaceitStatsHandler(req, res) {
         .json({ error: { message: "FACEIT ID not configured for this user", code: "FACEIT_ID_NOT_CONFIGURED" } });
     }
 
-    const stats = await getFaceitStatsByUserId(user.faceitId);
+    const stats = await getFaceitStatsByUserId(Number(userId), user.faceitId);
 
     res.json(stats);
   } catch (err) {
-    console.error("Error fetching FACEIT stats:", err);
-
     if (err.message === "FACEIT_PLAYER_NOT_FOUND") {
       return res
         .status(404)
@@ -89,8 +87,6 @@ export async function getRecentMatchesHandler(req, res) {
       limit: limit
     });
   } catch (err) {
-    console.error("Error fetching recent FACEIT matches:", err);
-
     if (err.message === "FACEIT_PLAYER_NOT_FOUND") {
       return res
         .status(404)

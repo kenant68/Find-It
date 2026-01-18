@@ -40,17 +40,6 @@
   object-fit: cover;
 }
 
-.avatarContainer::after {
-  content: "∞";
-  position: absolute;
-  color: #ffd700;
-  font-size: 18px;
-  font-weight: 700;
-  pointer-events: none;
-  z-index: 1;
-  line-height: 1;
-  text-shadow: 0 0 4px rgba(255, 215, 0, 0.5);
-}
 
 .username {
   color: white;

@@ -58,11 +58,68 @@
   object-fit: contain;
 }
 
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.editSectionButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editSectionButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.editSectionButton img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.editSectionButton:hover img {
+  opacity: 1;
+}
+
+.sectionSubtitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
 .regionText {
   margin: 0;
   color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
   font-weight: 500;
+}
+
+.faceitText {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.faceitConfigured {
+  background: linear-gradient(135deg, #ff5500, #ff8c00) !important;
+}
+
+.faceitNotConfigured {
+  background: rgba(255, 255, 255, 0.05) !important;
+  opacity: 0.6;
 }
 
 @media (max-width: 768px) {
