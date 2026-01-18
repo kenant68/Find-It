@@ -321,9 +321,6 @@ export async function getFaceitStatsByPlayerId(faceitPlayerIdOrNickname) {
 }
 
 export async function getFaceitStatsByUserId(userId, faceitIdOrNickname) {
-  console.log(`[FACEIT] Starting stats retrieval for userId: ${userId}, faceitIdOrNickname: ${faceitIdOrNickname}`);
-
-
   if (!userId) {
     throw new Error("USER_ID_REQUIRED");
   }
@@ -333,31 +330,21 @@ export async function getFaceitStatsByUserId(userId, faceitIdOrNickname) {
   }
 
   let playerId = faceitIdOrNickname;
-  console.log(`[FACEIT] Initial playerId: ${playerId}`);
 
   if (!isUUID(faceitIdOrNickname)) {
-    console.log(`[FACEIT] Not a UUID, searching by nickname: ${faceitIdOrNickname}`);
     playerId = await getPlayerIdByNickname(faceitIdOrNickname);
-    console.log(`[FACEIT] Found playerId from nickname: ${playerId}`);
   }
 
-  console.log(`[FACEIT] Fetching player data for: ${playerId}`);
   const playerData = await fetchFromFaceitAPI(`/players/${playerId}`);
-  console.log(`[FACEIT] Player data retrieved:`, playerData.nickname);
 
-  console.log(`[FACEIT] Fetching CS2 stats for: ${playerId}`);
   const statsData = await fetchFromFaceitAPI(`/players/${playerId}/stats/cs2`)
     .catch(async () => {
-      console.log(`[FACEIT] CS2 stats failed, trying CSGO`);
       return await fetchFromFaceitAPI(`/players/${playerId}/stats/csgo`).catch(() => {
-        console.log(`[FACEIT] CSGO stats also failed, using empty object`);
         return {};
       });
     });
 
-  console.log(`[FACEIT] Formatting stats for user: ${userId}`);
   const formattedStats = await formatFaceitStats(playerData, statsData, userId);
-  console.log(`[FACEIT] Stats formatted successfully`);
 
   return formattedStats;
 }
