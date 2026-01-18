@@ -84,7 +84,7 @@ const AuthcardLogin = ({ title }) => {
             <Link to="/register" className={styles.linkToRegister}>
               Créer un compte
             </Link>
-            <Link to="/" className={styles.passwdForgotten}>
+            <Link to="/forgot-password" className={styles.passwdForgotten}>
               Mot de passe oublié
             </Link>
           </div>
