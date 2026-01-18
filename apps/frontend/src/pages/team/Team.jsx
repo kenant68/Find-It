@@ -10,7 +10,7 @@ import { useAuth } from "../../utils/auth.jsx";
 const Team = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [teamMembers, setTeamMembers] = useState([]);
-  const [recentResults, setRecentResults] = useState("W L W W L");
+  const [recentResults] = useState("W L W W L");
   const [teamStats, setTeamStats] = useState(null);
   const [teamName, setTeamName] = useState("Mon équipe");
   const [loading, setLoading] = useState(true);
@@ -47,15 +47,31 @@ const Team = () => {
         if (userTeam) {
           setTeamName(userTeam.name);
 
+          let totalElo = 0;
+          let totalWins = 0;
+          let totalMatches = 0;
+          let membersWithElo = 0;
+
           const membersWithStats = await Promise.all(
             userTeam.members.map(async (member) => {
               try {
                 const faceitStats = await getFaceitStats(member.user.id);
+                
+                if (faceitStats) {
+                  if (faceitStats.elo) {
+                    totalElo += parseInt(faceitStats.elo) || 0;
+                    membersWithElo++;
+                  }
+                  totalWins += parseInt(faceitStats.wins) || 0;
+                  totalMatches += parseInt(faceitStats.matches_played) || 0;
+                }
+
                 return {
                   ...member.user,
                   isLeader: member.isLeader,
                   avatar: getImageUrl(member.user.avatarUrl),
-                  faceitLevel: faceitStats?.elo ? Math.floor(parseInt(faceitStats.elo) / 100) : 10,
+                  elo: faceitStats?.elo || 0,
+                  faceitLevel: faceitStats?.elo ? Math.min(10, Math.max(1, Math.floor(parseInt(faceitStats.elo) / 250))) : null,
                 };
               } catch (err) {
                 console.warn(`Stats FACEIT non disponibles pour ${member.user.username}`);
@@ -63,7 +79,8 @@ const Team = () => {
                   ...member.user,
                   isLeader: member.isLeader,
                   avatar: getImageUrl(member.user.avatarUrl),
-                  faceitLevel: 10, 
+                  elo: 0,
+                  faceitLevel: null,
                 };
               }
             })
@@ -71,18 +88,14 @@ const Team = () => {
 
           setTeamMembers(membersWithStats);
 
-          
-          const validStats = membersWithStats.filter(m => m.faceitLevel && m.faceitLevel > 0);
-          if (validStats.length > 0) {
-            const totalElo = validStats.reduce((sum, m) => sum + (m.faceitLevel * 100), 0);
-            const averageElo = Math.round(totalElo / validStats.length);
+          const averageElo = membersWithElo > 0 ? Math.round(totalElo / membersWithElo) : 0;
+          const winRate = totalMatches > 0 ? ((totalWins / totalMatches) * 100).toFixed(1) : "0";
 
-            setTeamStats({
-              averageElo: averageElo,
-              winRate: "65.2", // Valeur temporaire
-              totalMatches: 42, // Valeur temporaire
-            });
-          }
+          setTeamStats({
+            averageElo: averageElo,
+            winRate: winRate,
+            totalMatches: totalMatches,
+          });
         } else {
           setTeamName("Aucune équipe");
           setTeamMembers([]);
