@@ -23,6 +23,10 @@ const apiRequest = async (endpoint, options = {}) => {
             throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
         }
 
+        if (response.status === 204) {
+            return null;
+        }
+
         return await response.json();
     } catch (error) {
         console.error(`API Error [${options.method || 'GET'} ${endpoint}]:`, error);
@@ -211,8 +215,4 @@ export const joinTeam = async (teamId) => {
 
 export const getUserTeam = async () => {
     return apiRequest('/teams/my-team');
-};
-
-export const getScrimsByTeam = async (teamId) => {
-    return apiRequest(`/teams/${teamId}/scrims`);
 };
