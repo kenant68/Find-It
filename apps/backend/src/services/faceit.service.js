@@ -3,12 +3,12 @@ const FACEIT_API_BASE_URL = "https://open.faceit.com/data/v4";
 async function fetchFromFaceitAPI(endpoint) {
   try {
     const apiKey = process.env.FACEIT_API_KEY || "";
-    
+
     if (!apiKey || apiKey.trim() === "") {
       console.error("[FACEIT] FACEIT_API_KEY is not set or empty");
       throw new Error("FACEIT_API_KEY_NOT_SET");
     }
-    
+
     const url = `${FACEIT_API_BASE_URL}${endpoint}`;
 
     const response = await fetch(url, {
@@ -21,7 +21,7 @@ async function fetchFromFaceitAPI(endpoint) {
       const errorText = await response.text();
       console.error(`FACEIT API Error: ${response.status} ${response.statusText} - ${errorText}`);
       console.error(`FACEIT API URL: ${url}`);
-      
+
       if (response.status === 404) {
         throw new Error("FACEIT_PLAYER_NOT_FOUND");
       }
@@ -98,52 +98,70 @@ async function getRecentMatches(playerId) {
 
       if (!alternateData || !alternateData.items || alternateData.items.length === 0) {
         console.log(`[FACEIT] Still no matches found`);
-        return "";
+        return [];
       }
 
-      const results = alternateData.items.map(match => {
-        if (!match.teams || !match.teams.faction1 || !match.teams.faction2) {
-          console.log(`[FACEIT] Match missing teams data`);
-          return null;
-        }
-
-        const inFaction1 = match.teams.faction1.roster?.some(p => p.player_id === playerId);
-        const playerTeam = inFaction1 ? 'faction1' : 'faction2';
-
-        const won = match.results?.winner === playerTeam;
-        return won ? 'W' : 'L';
-      }).filter(r => r !== null);
-
-      return results.join(' ');
+      return alternateData.items.map(match => formatMatchDetails(match, playerId)).filter(m => m !== null);
     }
 
-    const results = matchesData.items.map(match => {
-      if (!match.teams || !match.teams.faction1 || !match.teams.faction2) {
-        console.log(`[FACEIT] Match missing teams data`);
-        return null;
-      }
-
-      const inFaction1 = match.teams.faction1.roster?.some(p => p.player_id === playerId);
-      const playerTeam = inFaction1 ? 'faction1' : 'faction2';
-
-      const won = match.results?.winner === playerTeam;
-      return won ? 'W' : 'L';
-    }).filter(r => r !== null);
-
-    return results.join(' ');
+    return matchesData.items.map(match => formatMatchDetails(match, playerId)).filter(m => m !== null);
   } catch (error) {
     console.error(`[FACEIT] Failed to fetch recent matches: ${error.message}`);
     console.error(`[FACEIT] Error stack:`, error.stack);
-    return "";
+    return [];
+  }
+}
+
+function formatMatchDetails(match, playerId) {
+  try {
+    if (!match.teams || !match.teams.faction1 || !match.teams.faction2 || !match.results) {
+      console.log(`[FACEIT] Match missing required data`);
+      return null;
+    }
+
+    const inFaction1 = match.teams.faction1.roster?.some(p => p.player_id === playerId);
+    const playerFaction = inFaction1 ? 'faction1' : 'faction2';
+    const opponentFaction = inFaction1 ? 'faction2' : 'faction1';
+
+    const playerTeam = match.teams[playerFaction];
+    const opponentTeam = match.teams[opponentFaction];
+
+    const won = match.results.winner === playerFaction;
+
+    const playerScore = match.results.score?.[playerFaction] || 0;
+    const opponentScore = match.results.score?.[opponentFaction] || 0;
+
+    return {
+      matchId: match.match_id,
+      playedAt: match.finished_at ? new Date(match.finished_at * 1000).toISOString() : new Date().toISOString(),
+      map: match.voting?.map?.pick?.[0] || match.map || null,
+      result: won ? 'win' : 'loss',
+      score: `${playerScore}-${opponentScore}`,
+      playerScore: playerScore,
+      opponentScore: opponentScore,
+      playerTeam: {
+        name: playerTeam.name || 'Unknown',
+        score: playerScore
+      },
+      opponentTeam: {
+        name: opponentTeam.name || 'Unknown',
+        score: opponentScore
+      },
+      eloChange: match.elo ? (won ? `+${match.elo[playerFaction]}` : match.elo[playerFaction]) : null,
+      matchUrl: `https://www.faceit.com/en/cs2/room/${match.match_id}`
+    };
+  } catch (error) {
+    console.error(`[FACEIT] Error formatting match details:`, error);
+    return null;
   }
 }
 
 function parseNumericStat(value) {
   if (!value) return 0;
-  
+
   const strValue = String(value).replace(/,/g, '');
   const numValue = parseFloat(strValue);
-  
+
   return isNaN(numValue) ? 0 : numValue;
 }
 
@@ -199,7 +217,7 @@ function calculateFavoriteMap(statsData) {
 async function calculateWinstreak(playerId) {
   try {
     const matchesData = await fetchFromFaceitAPI(`/players/${playerId}/history?game=cs2&limit=20`);
-    
+
     if (!matchesData || !matchesData.items || matchesData.items.length === 0) {
       return 0;
     }
@@ -209,11 +227,11 @@ async function calculateWinstreak(playerId) {
 
     for (const match of matchesData.items) {
       if (!match.teams || !match.results) continue;
-      
+
       const inFaction1 = match.teams.faction1.roster?.some(p => p.player_id === playerId);
       const playerTeam = inFaction1 ? 'faction1' : 'faction2';
       const won = match.results.winner === playerTeam;
-      
+
       if (lastResult === null) {
         lastResult = won;
         currentStreak = won ? 1 : -1;
@@ -234,22 +252,22 @@ async function calculateWinstreak(playerId) {
 async function formatFaceitStats(playerData, statsData, userId) {
   const cs2Game = playerData?.games?.cs2 || playerData?.games?.csgo || {};
   const lifetime = statsData?.lifetime || {};
-  
+
   const matches = parseInt(lifetime.Matches || "0", 10);
   const wins = parseInt(lifetime.Wins || "0", 10);
   const winRate = lifetime["Win Rate %"] || (matches > 0 ? ((wins / matches) * 100).toFixed(2) + "%" : "0%");
-  
+
   const headshotPercent = lifetime["Headshot %"] || (lifetime["Average Headshots %"] || null);
-  
+
   const kdRatioFromAPI = lifetime["Average K/D Ratio"] || lifetime["K/D Ratio"];
   let kdRatio = null;
-  
+
   if (kdRatioFromAPI) {
     kdRatio = parseNumericStat(kdRatioFromAPI).toFixed(2);
   } else {
     const kills = parseNumericStat(lifetime["Total Kills"] || lifetime["Kills"]);
     const deaths = parseNumericStat(lifetime["Total Deaths"] || lifetime["Deaths"]);
-    
+
     if (deaths > 0) {
       kdRatio = (kills / deaths).toFixed(2);
     }
@@ -281,7 +299,7 @@ export async function getFaceitStatsByPlayerId(faceitPlayerIdOrNickname) {
   }
 
   let playerId = faceitPlayerIdOrNickname;
-  
+
   if (!isUUID(faceitPlayerIdOrNickname)) {
     playerId = await getPlayerIdByNickname(faceitPlayerIdOrNickname);
   }
@@ -303,7 +321,7 @@ export async function getFaceitStatsByUserId(userId, faceitIdOrNickname) {
   }
 
   let playerId = faceitIdOrNickname;
-  
+
   if (!isUUID(faceitIdOrNickname)) {
     playerId = await getPlayerIdByNickname(faceitIdOrNickname);
   }
