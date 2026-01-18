@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authMiddleware } from "../middleware/auth.middleware.js";
 import {
   getUsers,
   getUserById,
@@ -16,16 +17,16 @@ router.get("/", getUsers);
 
 router.get("/:id", getUserById);
 
-router.get("/username/:username", getUserByUsernameHandler);
+router.get("/username/:username", authMiddleware, getUserByUsernameHandler);
 
-router.get("/email/:email", getUserByEmailHandler);
+router.get("/email/:email", authMiddleware, getUserByEmailHandler);
 
 router.post("/", createUserHandler);
 
-router.put("/:id", updateUserHandler);
+router.put("/:id", authMiddleware, updateUserHandler);
 
-router.put("/:id/password", updatePasswordHandler);
+router.put("/:id/password", authMiddleware, updatePasswordHandler);
 
-router.delete("/:id", deleteUserHandler);
+router.delete("/:id", authMiddleware, deleteUserHandler);
 
 export default router;

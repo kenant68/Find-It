@@ -5,6 +5,7 @@ import scrimsRouter from "./scrims.js";
 import matchesRouter from "./matches.js";
 import mapsRouter from "./maps.js";
 import faceitRouter, { usersRouter as faceitUsersRouter } from "./faceit.js";
+import faceitMatchsRouter from "./faceit-matchs.js";
 import authRouter from "./auth.js";
 
 const router = Router();
@@ -20,6 +21,7 @@ router.use("/scrims", scrimsRouter);
 router.use("/matches", matchesRouter);
 router.use("/maps", mapsRouter);
 router.use("/faceit-stats", faceitRouter);
+router.use("/faceit-matches", faceitMatchsRouter);
 router.use("/auth", authRouter);
 
 export default router;

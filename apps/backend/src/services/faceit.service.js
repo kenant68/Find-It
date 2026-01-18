@@ -120,6 +120,13 @@ function formatMatchDetails(match, playerId) {
     }
 
     const inFaction1 = match.teams.faction1.roster?.some(p => p.player_id === playerId);
+    const inFaction2 = match.teams.faction2.roster?.some(p => p.player_id === playerId);
+
+    if (!inFaction1 && !inFaction2) {
+      console.log(`[FACEIT] Player ${playerId} not found in match ${match.match_id} rosters`);
+      return null;
+    }
+
     const playerFaction = inFaction1 ? 'faction1' : 'faction2';
     const opponentFaction = inFaction1 ? 'faction2' : 'faction1';
 

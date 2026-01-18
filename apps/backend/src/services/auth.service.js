@@ -12,6 +12,10 @@ export const loginService = async (email, password) => {
   const match = await bcrypt.compare(password, user.passwordHash);
   if (!match) throw new Error("INVALID_CREDENTIALS");
 
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.trim() === '') {
+    throw new Error("JWT_SECRET non configuré - contactez l'administrateur");
+  }
+
   return jwt.sign(
     { id: user.id },
     process.env.JWT_SECRET,
