@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../../App.jsx";
+import ProtectedRoute from "../ProtectedRoute.jsx";
 import Home from "../../pages/home/Home.jsx";
 import Register from "../../pages/auth/Register.jsx";
 import Login from "../../pages/auth/Login.jsx";
@@ -30,31 +31,59 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "teams",
-        element: <Team />,
+        element: (
+          <ProtectedRoute>
+            <Team />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "matchs",
-        element: <Matchs />,
+        element: (
+          <ProtectedRoute>
+            <Matchs />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "announces",
-        element: <Scrims />,
+        element: (
+          <ProtectedRoute>
+            <Scrims />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "notifications",
-        element: <Notifications />,
+        element: (
+          <ProtectedRoute>
+            <Notifications />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "profil",
-        element: <Profil />,
+        element: (
+          <ProtectedRoute>
+            <Profil />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "other-teams",
-        element: <OtherTeams />,
+        element: (
+          <ProtectedRoute>
+            <OtherTeams />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
