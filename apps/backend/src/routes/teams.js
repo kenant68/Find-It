@@ -6,6 +6,9 @@ import {
   getTeamByIdWithMembersHandler,
   getTeamByNameHandler,
   createTeamHandler,
+  claimTeamHandler,
+  getUserTeamHandler,
+  joinTeamHandler,
   updateTeamHandler,
   deleteTeamHandler,
   addTeamMemberHandler,
@@ -22,6 +25,9 @@ router.get("/:id/scrims", getScrimsByTeamHandler);
 router.get("/:id/members", getTeamByIdWithMembersHandler);
 router.get("/:id", getTeamById);
 router.post("/", authMiddleware, createTeamHandler);
+router.post("/:id/claim", authMiddleware, claimTeamHandler);
+router.get("/my-team", authMiddleware, getUserTeamHandler);
+router.post("/:id/join", authMiddleware, joinTeamHandler);
 router.put("/:id", authMiddleware, updateTeamHandler);
 router.delete("/:id", authMiddleware, deleteTeamHandler);
 

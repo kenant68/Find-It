@@ -197,6 +197,22 @@ export const getTeamByName = async (name) => {
     return apiRequest(`/teams/name/${name}`);
 };
 
+export const claimTeam = async (teamId) => {
+    return apiRequest(`/teams/${teamId}/claim`, {
+        method: 'POST',
+    });
+};
+
+export const joinTeam = async (teamId) => {
+    return apiRequest(`/teams/${teamId}/join`, {
+        method: 'POST',
+    });
+};
+
+export const getUserTeam = async () => {
+    return apiRequest('/teams/my-team');
+};
+
 export const getScrimsByTeam = async (teamId) => {
     return apiRequest(`/teams/${teamId}/scrims`);
 };

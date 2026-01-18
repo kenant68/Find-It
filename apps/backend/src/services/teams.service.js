@@ -95,7 +95,6 @@ export async function deleteTeam(id) {
   return await remove(id);
 }
 
-// === TEAM MEMBERS ===
 
 export async function addTeamMember(teamId, userId, isLeader = false) {
   const team = await findById(teamId);
@@ -103,7 +102,6 @@ export async function addTeamMember(teamId, userId, isLeader = false) {
     throw new Error("TEAM_NOT_FOUND");
   }
 
-  // Vérifier si l'utilisateur n'est pas déjà membre
   const existingMember = await findMember(teamId, userId);
   if (existingMember) {
     throw new Error("USER_ALREADY_MEMBER");
@@ -140,6 +138,69 @@ export async function removeTeamMember(teamId, userId) {
   }
 
   return await removeMember(teamId, userId);
+}
+
+export async function joinTeam(teamId, userId) {
+  const team = await findById(teamId);
+  if (!team) {
+    throw new Error("TEAM_NOT_FOUND");
+  }
+
+  const existingMember = await findMember(teamId, userId);
+  if (existingMember) {
+    throw new Error("USER_ALREADY_MEMBER_OF_THIS_TEAM");
+  }
+
+  const allTeams = await findAll();
+  for (const otherTeam of allTeams) {
+    if (otherTeam.id !== teamId) {
+      const teamWithMembers = await findByIdWithMembers(otherTeam.id);
+      const isMemberOfOtherTeam = teamWithMembers.members.some(member => member.userId === userId);
+      if (isMemberOfOtherTeam) {
+        throw new Error("USER_ALREADY_IN_ANOTHER_TEAM");
+      }
+    }
+  }
+
+  return await addMember(teamId, userId, false);
+}
+
+export async function getUserTeam(userId) {
+  const allTeams = await findAll();
+  const captainTeam = allTeams.find(team => team.captainId === userId);
+  if (captainTeam) {
+    return captainTeam;
+  }
+
+  for (const team of allTeams) {
+    const teamWithMembers = await findByIdWithMembers(team.id);
+    const member = teamWithMembers.members.find(m => m.userId === userId);
+    if (member) {
+      return team;
+    }
+  }
+  return null;
+}
+
+export async function claimTeamOwnership(teamId, userId) {
+  const team = await findById(teamId);
+  if (!team) {
+    throw new Error("TEAM_NOT_FOUND");
+  }
+
+  if (team.captainId) {
+    throw new Error("TEAM_ALREADY_HAS_CAPTAIN");
+  }
+
+
+  await update(teamId, { captainId: userId });
+
+  const existingMember = await findMember(teamId, userId);
+  if (!existingMember) {
+    await addMember(teamId, userId, true); //;
+  }
+
+  return team;
 }
 
 export async function leaveTeam(userId) {

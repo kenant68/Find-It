@@ -8,7 +8,10 @@ import {
   deleteTeam,
   addTeamMember,
   removeTeamMember,
+  joinTeam,
   leaveTeam,
+  getUserTeam,
+  claimTeamOwnership,
 } from "../services/teams.service.js";
 
 export async function getTeams(req, res) {
@@ -113,6 +116,86 @@ export async function createTeamHandler(req, res) {
       return res
         .status(409)
         .json({ error: { message: "You are already captain of a team", code: "USER_ALREADY_CAPTAIN" } });
+    }
+
+    res
+      .status(500)
+      .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
+  }
+}
+
+export async function getUserTeamHandler(req, res) {
+  try {
+    const userId = req.user.id;
+    const team = await getUserTeam(userId);
+
+    if (team) {
+      res.json(team);
+    } else {
+      res.json(null);
+    }
+  } catch (err) {
+    console.error("Error getting user team:", err);
+    res
+      .status(500)
+      .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
+  }
+}
+
+export async function claimTeamHandler(req, res) {
+  try {
+    const teamId = Number(req.params.id);
+    const userId = req.user.id;
+
+    const team = await claimTeamOwnership(teamId, userId);
+    res.json(team);
+  } catch (err) {
+    console.error("Error claiming team:", err);
+
+    if (err.message === "TEAM_NOT_FOUND") {
+      return res
+        .status(404)
+        .json({ error: { message: "Team not found", code: "TEAM_NOT_FOUND" } });
+    }
+
+    if (err.message === "TEAM_ALREADY_HAS_CAPTAIN") {
+      return res
+        .status(409)
+        .json({ error: { message: "This team already has a captain", code: "TEAM_HAS_CAPTAIN" } });
+    }
+
+    res
+      .status(500)
+      .json({ error: { message: "Internal server error", code: "INTERNAL_ERROR" } });
+  }
+}
+
+export async function joinTeamHandler(req, res) {
+  try {
+    const teamId = Number(req.params.id);
+    const userId = req.user.id;
+
+    const member = await joinTeam(teamId, userId);
+    res.status(201).json(member);
+  } catch (err) {
+    console.error("Error joining team:", err);
+
+    if (err.message === "TEAM_NOT_FOUND") {
+      return res
+        .status(404)
+        .json({ error: { message: "Team not found", code: "TEAM_NOT_FOUND" } });
+    }
+
+    if (err.message === "USER_ALREADY_MEMBER_OF_THIS_TEAM") {
+      return res
+        .status(409)
+        .json({ error: { message: "You are already a member of this team", code: "USER_ALREADY_MEMBER" } });
+    }
+
+    if (err.message === "USER_ALREADY_IN_ANOTHER_TEAM") {
+      return res
+        .status(409)
+        .json({ error: { message: "You are already a member of another team", code: "USER_ALREADY_IN_TEAM" } });
     }
 
     res

@@ -58,6 +58,17 @@
   font-weight: 500;
 }
 
+.teamStatus {
+  padding: 8px 12px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 6px;
+  color: rgba(76, 175, 80, 0.9);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .pageTitle {
   margin: 0;
   color: #ffffff;

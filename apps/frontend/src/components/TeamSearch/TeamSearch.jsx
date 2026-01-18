@@ -6,7 +6,7 @@ import CardLong from "../CardLong/CardLong.jsx";
 import Button from "../button/Button.jsx";
 import Modal from "../Modal/Modal.jsx";
 import Input from "../Input/Input.jsx";
-import { getTeams, createTeam, deleteTeam } from "../../utils/api.js";
+import { getTeams, createTeam, deleteTeam, joinTeam, getUserTeam, claimTeam } from "../../utils/api.js";
 import { useAuth } from "../../utils/auth.jsx";
 import teamsIcon from "../../assets/teams.png";
 import arrowDownIcon from "../../assets/other-teams/arrow-down.svg";
@@ -30,6 +30,9 @@ const TeamSearch = () => {
   });
   const [isCreating, setIsCreating] = useState(false);
   const [canCreateTeam, setCanCreateTeam] = useState(false);
+  const [userTeamId, setUserTeamId] = useState(null);
+  const [isJoining, setIsJoining] = useState(false);
+  const [claimableTeams, setClaimableTeams] = useState([]);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -46,10 +49,33 @@ const TeamSearch = () => {
         setAvailableRegions(regions);
 
         if (user?.id) {
-          const isAlreadyCaptain = data.some(team => team.captainId === user.id);
-          setCanCreateTeam(!isAlreadyCaptain);
+          console.log("User ID:", user.id, "Type:", typeof user.id);
+          console.log("Teams data:", data.map(t => ({ id: t.id, captainId: t.captainId, name: t.name })));
+
+          const userAsCaptain = data.find(team => team.captainId === user.id);
+          console.log("User as captain:", userAsCaptain);
+
+ 
+          const userTeams = data.filter(team =>
+            !team.captainId && team.name.toLowerCase().includes('musashiii')
+          );
+          console.log("Claimable teams:", userTeams);
+          setClaimableTeams(userTeams);
+
+          if (userAsCaptain) {
+            console.log("User is captain of team:", userAsCaptain.name);
+            setUserTeamId(userAsCaptain.id);
+            setCanCreateTeam(false);
+          } else {
+            console.log("User is not captain, can create/join teams");
+            setUserTeamId(null);
+            setCanCreateTeam(true);
+          }
         } else {
+          console.log("No user logged in");
+          setUserTeamId(null);
           setCanCreateTeam(false);
+          setClaimableTeams([]);
         }
       } catch (err) {
         setError(err.message);
@@ -129,6 +155,58 @@ const TeamSearch = () => {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const handleClaimTeam = async (teamId) => {
+    try {
+      setIsJoining(true);
+      await claimTeam(teamId);
+      setUserTeamId(teamId); 
+      setCanCreateTeam(false); 
+
+      const updatedTeams = await getTeams();
+      setTeams(updatedTeams);
+
+      setClaimableTeams(prev => prev.filter(team => team.id !== teamId));
+    } catch (err) {
+      setError(err.message || "Erreur lors de la revendication de l'équipe");
+    } finally {
+      setIsJoining(false);
+    }
+  };
+
+  const handleJoinTeam = async (teamId) => {
+    if (!user?.id) {
+      setError("Vous devez être connecté pour rejoindre une équipe");
+      return;
+    }
+
+    if (userTeamId) {
+      setError("Vous êtes déjà membre d'une équipe. Quittez-la d'abord pour en rejoindre une autre.");
+      return;
+    }
+
+    try {
+      setIsJoining(true);
+      await joinTeam(teamId);
+      setUserTeamId(teamId); 
+      setCanCreateTeam(false); 
+
+      const updatedTeams = await getTeams();
+      setTeams(updatedTeams);
+    } catch (err) {
+      if (err.message?.includes("USER_ALREADY_MEMBER")) {
+        setError("Vous êtes déjà membre de cette équipe");
+      } else if (err.message?.includes("USER_ALREADY_IN_TEAM") || err.message?.includes("already in a team")) {
+        setError("Vous êtes déjà dans une équipe. Quittez-la d'abord pour en rejoindre une autre.");
+        setUserTeamId(-1); 
+        setCanCreateTeam(false);
+      } else {
+        setError(err.message || "Erreur lors de la demande de rejoindre l'équipe");
+      }
+    } finally {
+      setIsJoining(false);
+    }
   };
 
   const getRegionDisplay = (region) => {
@@ -231,18 +309,51 @@ const TeamSearch = () => {
             {filteredTeams.length === 0 ? (
               <p className={styles.emptyMessage}>Aucune équipe trouvée</p>
             ) : (
-              filteredTeams.map((team) => (
-                <CardLong
-                  key={team.id}
-                  icon={teamsIcon}
-                  title={team.name}
-                  subtitle={`ELO moyen : ${team.eloAvg ? team.eloAvg : 'N/A'}`}
-                  timestamp={getRegionDisplay(team.region)}
-                  onDelete={() => handleDeleteTeam(team.id)}
-                  deleteIcon={deleteIcon}
-                  bubbleVariant="pink"
-                />
-              ))
+              filteredTeams.map((team) => {
+                const isUserTeam = team.id === userTeamId;
+                const isCaptain = team.captainId === user?.id;
+                const canJoin = !isUserTeam && !userTeamId && !!user?.id;
+                const canClaim = claimableTeams.some(ct => ct.id === team.id);
+                console.log(`Team ${team.name}: isUserTeam=${isUserTeam}, userTeamId=${userTeamId}, isCaptain=${isCaptain}, canJoin=${canJoin}, canClaim=${canClaim}`);
+
+                return (
+                  <CardLong
+                    key={team.id}
+                    icon={teamsIcon}
+                    title={team.name}
+                    subtitle={`ELO moyen : ${team.eloAvg ? team.eloAvg : 'N/A'}`}
+                    timestamp={getRegionDisplay(team.region)}
+                    onDelete={isCaptain ? () => handleDeleteTeam(team.id) : undefined}
+                    deleteIcon={deleteIcon}
+                    actionButton={
+                      isUserTeam ? (
+                        <span className={styles.teamStatus}>Votre équipe</span>
+                      ) : canClaim ? (
+                        <Button
+                          text={isJoining ? "Revendiquer..." : "Revendiquer"}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleClaimTeam(team.id);
+                          }}
+                          disabled={isJoining}
+                          size="small"
+                        />
+                      ) : canJoin ? (
+                        <Button
+                          text={isJoining ? "Rejoindre..." : "Rejoindre"}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleJoinTeam(team.id);
+                          }}
+                          disabled={isJoining}
+                          size="small"
+                        />
+                      ) : null
+                    }
+                    bubbleVariant="pink"
+                  />
+                );
+              })
             )}
           </div>
         </div>
