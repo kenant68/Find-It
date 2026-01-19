@@ -17,7 +17,6 @@ sequenceDiagram
     API->>API: Calcul statistiques dérivées<br/>(win_rate, fav_map, etc.)
     API-->>Frontend: JSON (faceit_stats)
 
-    Note over API,Faceit: ⚠️ Données NON stockées en base<br/>Récupérées en temps réel uniquement
 
     Frontend->>Frontend: Formatage pour affichage
     Frontend-->>User: Affichage des statistiques FACEIT
