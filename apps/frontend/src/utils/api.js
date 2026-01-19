@@ -1,5 +1,5 @@
-const API_BASE = 'http://localhost:4000/api';
-const BACKEND_URL = 'http://localhost:4000';
+const API_BASE = 'http://tekken.cda-alt.ovh/api';
+const BACKEND_URL = 'http://tekken.cda-alt.ovh';
 
 export const getImageUrl = (url) => {
     if (!url) return null;
