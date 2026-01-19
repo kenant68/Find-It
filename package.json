@@ -12,6 +12,6 @@
     "dev:all": "pnpm --parallel --filter \"./apps/*\" dev"
   },
   "devDependencies": {
-    "pnpm": "^10.18.1"
+    "pnpm": "^10.27.0"
   }
 }
