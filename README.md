@@ -5,6 +5,9 @@
 ![React](https://img.shields.io/badge/React-19.1-blue)
 ![Vite](https://img.shields.io/badge/Vite-7.1-purple)
 ![pnpm](https://img.shields.io/badge/pnpm-10.18-orange)
+![Status](https://img.shields.io/badge/status-on%20hold-yellow)
+
+> ⚠️ **Ce projet est actuellement en suspens et n'est pas terminé.** Le développement est pausé pour le moment.
 
 A modern web platform designed for Counter-Strike players to organize and manage their scrims (training matches). The platform enables teams to schedule matches, access FACEIT statistics in real-time, manage team members, and coordinate training sessions efficiently.
 
